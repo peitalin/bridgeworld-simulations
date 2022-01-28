@@ -3,8 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import plot
 
-from matplotlib.animation import FuncAnimation
-
 # x-axis data points
 cycles = np.linspace(0, 12, 13) # 1 to 13 cycles - 4 months
 
@@ -28,7 +26,6 @@ cycles = np.linspace(0, 12, 13) # 1 to 13 cycles - 4 months
 # 30~50% of legions are staking
 # ~30% are questing/crafting
 # ~20% are summoning
-
 
 
 def predict_max_legion_population(cycle, num_genesis_legions=3473):
@@ -56,24 +53,5 @@ def plot_legion_population():
     plt.grid()
     plt.legend()
     plt.show()
-
-
-
-2weeks - 20%
-1month - 40%
-3months - 100%
-6months - 150%
-12months - 200%
-
-
-dates = [0.5,1,3,6,12]
-naive_boost = [.2, 0.4, 1.2, 2.4, 4.8]
-log_boost = [0.2, 0.336,0.788,1.223,1.757]
-plt.plot(dates, naive_boost, label='linear')
-plt.plot(dates, log_boost, label='log transformed')
-plt.title("Boosts for veLocks")
-plt.xlabel("months lockup")
-plt.ylabel("boost x")
-plt.show()
 
 
