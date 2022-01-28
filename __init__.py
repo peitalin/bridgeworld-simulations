@@ -10,7 +10,7 @@ from plots.user_boosts import plot_yield_inside_mine
 # graph_parts_boost()
 
 # # varying legions
-plot_yield_inside_mine(3, legion_boost=1, linestyle=":", color="blue")
+# plot_yield_inside_mine(3, legion_boost=1, linestyle=":", color="blue")
 # # common: 50% boost
 # plot_yield_inside_mine(3, legion_boost=(1 + 0.5*3), linestyle=":", color="purple")
 # # all-class: 200% boost
@@ -35,7 +35,7 @@ plot_atlas_harvest_comparison_1(0)
 #
 #
 # # In the beginning Atlas has no parts
-plot_atlas_harvest_comparison_2(0)
+# plot_atlas_harvest_comparison_2(0)
 # # Later stage, Atlas may have parts (also may elect another Harvester as "the Atlas mine")
 # plot_atlas_harvest_comparison_2(400)
 
