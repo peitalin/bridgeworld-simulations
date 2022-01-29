@@ -7,9 +7,9 @@ LEGIONS_BOOST_FACTOR = 0.5
 # they stack together to determine overall boost
 # parts_boost should probably be bigger than legions (as a craft item)
 
-ATLAS_MINE_BONUS = 2
+ATLAS_MINE_BONUS = 4
 # atlas mine gets a default boost
-ATLAS_AUM = 60
+EXPECTED_ATLAS_AUM = 60
 # Estimated AUM for Atlas Mine
 # generally it will have a much larger AUM than other harvesters, 50mil~80mil vs 10mil
 

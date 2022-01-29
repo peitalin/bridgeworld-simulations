@@ -9,7 +9,7 @@ from matplotlib.animation import FuncAnimation
 
 # parameters for configuring boosts
 from parameters import PARTS_BOOST_FACTOR, LEGIONS_BOOST_FACTOR
-from parameters import ATLAS_MINE_BONUS, ATLAS_AUM, MAX_HARVESTER_PARTS, MAX_EXTRACTORS
+from parameters import ATLAS_MINE_BONUS, EXPECTED_ATLAS_AUM, MAX_HARVESTER_PARTS, MAX_EXTRACTORS
 from parameters import MIN_LEGIONS, MAX_LEGIONS
 from parameters import TIME_LOCK_BOOST_PARAMS, LEGION_BOOST_PARAMS, LEGION_RANK_PARAMS
 from parameters import EXTRACTOR_BOOST_PARAMS, TREASURES_BOOST_PARAMS
@@ -26,7 +26,7 @@ def compare_harvester_yield_2harvesters(parts1=20, members1=20, parts2=20, membe
         parts2, members2 for harvester 2
     """
 
-    EXPECTED_AUM_ATLAS = ATLAS_AUM # 80mil in atlas mine, about 80% supply staked
+    EXPECTED_AUM_ATLAS = EXPECTED_ATLAS_AUM # 80mil in atlas mine, about 80% supply staked
     AUM_CAP_HARVESTER = 10 # 10mil cap in harvesters
     avg_legion_rank = 2
 

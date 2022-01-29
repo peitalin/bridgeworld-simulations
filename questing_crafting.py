@@ -374,6 +374,7 @@ def func_animate(i):
 
     ## Every loop of i is 2 days
     day = i * 2
+    global days
     days.append(day) # 2 days per tick
 
     global legions_questing

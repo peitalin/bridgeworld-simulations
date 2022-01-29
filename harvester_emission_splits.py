@@ -5,7 +5,7 @@ from matplotlib.animation import FuncAnimation
 
 # parameters for configuring boosts
 from parameters import PARTS_BOOST_FACTOR, LEGIONS_BOOST_FACTOR
-from parameters import ATLAS_MINE_BONUS, ATLAS_AUM, MAX_HARVESTER_PARTS, MAX_EXTRACTORS
+from parameters import ATLAS_MINE_BONUS, EXPECTED_ATLAS_AUM, MAX_HARVESTER_PARTS, MAX_EXTRACTORS
 from parameters import MIN_LEGIONS, MAX_LEGIONS
 from parameters import AUM_CAP_HARVESTER
 from parameters import TIME_LOCK_BOOST_PARAMS, LEGION_BOOST_PARAMS, LEGION_RANK_PARAMS
@@ -14,131 +14,113 @@ from parameters import EXTRACTOR_BOOST_PARAMS, TREASURES_BOOST_PARAMS
 from harvester_boosts import total_harvester_boost
 
 
-atlas = {
-    'parts': 20,
-    # legions: 200,
-    # avg_legion_rank: 1,
-}
 
-# harvester1 = {
-#     'parts': 20,
-#     'legions': 200,
-#     'avg_legion_rank': 1,
-#     'extractors': [],
-# }
+def calculate_harvester_splits(harvesters=[], debug=True):
 
-
-# def calculate_harvester_splits():
-
-
-def compare_harvester_yield(harvesters=[], debug=True):
-
-    EXPECTED_AUM_ATLAS = ATLAS_AUM # 60mil in atlas mine, about 80% supply staked
     AUM_CAP_HARVESTER = 10 # 10mil cap in harvesters
+    NUM_MIL_USER_STAKES = 1 # 1mil
+    # NUM_MIL_USER_STAKES = 0.1 # 100k
 
-    # num_millions_user_stakes = 0.01 # 10k
-    num_millions_user_stakes = 1 # 1mil
-
-    harvester_boosts = []
-
-    for harvester in harvesters:
-
-        parts = harvester['parts']
-        legions = harvester['legions']
-        avg_legion_rank = harvester['avg_legion_rank']
-        extractors = harvester['extractors']
-        members = legions / 3 # 3 legions per user
-
-        boost = total_harvester_boost(num_parts=parts, num_legions=legions,
-            # extractors=['large_extractor','large_extractor','large_extractor','large_extractor','large_extractor'],
-            extractors=[],
-            avg_legion_rank=avg_legion_rank
+    #################################################
+    ### 1. Calculate harvester boosts
+    #################################################
+    atlas_boost = total_harvester_boost(
+        num_parts=0,
+        num_legions=0,
+        avg_legion_rank=1,
+        extractors=[],
+        is_atlas=True
+    )
+    harvester_boosts = [
+        total_harvester_boost(
+            num_parts=h['parts'],
+            num_legions=h['legions'],
+            avg_legion_rank=h['avg_legion_rank'],
+            extractors=h['extractors'],
         )
-        harvester_boosts.append(boost)
+        for h in harvesters
+    ]
 
-    # original atlas mine is treated as a harvester with uncapped AUM
-    # it has 0 harvester parts to begin with,
-    boost_atlas = total_harvester_boost(num_parts=0, num_legions=0, extractors=[], avg_legion_rank=1, is_atlas=True)
-
-
-    harvester_points = []
-    # set harvester base points = 100
-    atlas_points = boost_atlas * 100
-
-    for boost in harvester_boosts:
-        hpoints = boost * 100
-        harvester_points.append(hpoints)
-
-    points_total = atlas_points + np.sum(harvester_points)
-
-    # Calculate percentage share of total emissions split between Atlas and Harvester 1
-    mine_pct_share_atlas = atlas_points / points_total
-
-    mine_pct_shares = []
-    for i, p in enumerate(harvester_points):
-        mine_pct_share_harvester = p / points_total
-        mine_pct_shares.append(mine_pct_share_harvester)
-
-    # a user's share of total emission, staying inside Atlas mine, vs. Harvester 1
-    user_pct_share_atlas = num_millions_user_stakes/EXPECTED_AUM_ATLAS * mine_pct_share_atlas
-    user_pct_shares = []
-    for i, mine_pct_share in enumerate(mine_pct_shares):
-        user_pct_share = num_millions_user_stakes/AUM_CAP_HARVESTER * mine_pct_share
-        user_pct_shares.append(user_pct_share)
+    #################################################
+    ### 2. Calculate Mining Power for each mine
+    #################################################
+    # Set each mine at 100 mining power to begin with
+    # then boost it according to their parts + legions + extractors
+    atlas_mining_power = atlas_boost * 100
+    harvester_mining_powers = [hboost * 100 for hboost in harvester_boosts]
+    total_mining_power = atlas_mining_power + np.sum(harvester_mining_powers)
 
 
+    #################################################
+    ### 3. Calculate share of emissions for each mine
+    #################################################
+    mine_pct_share_atlas = atlas_mining_power / total_mining_power
+    mine_pct_shares = [p/total_mining_power for p in harvester_mining_powers]
 
+
+    #################################################
+    ### 4. Calculate a user's share of total emission inside different mines
+    #################################################
+    # a user's share of total emission, staying inside Atlas mine, vs. another Harvester
+    user_pct_share_atlas = NUM_MIL_USER_STAKES/EXPECTED_ATLAS_AUM  * mine_pct_share_atlas
+    user_pct_shares = [
+        NUM_MIL_USER_STAKES/AUM_CAP_HARVESTER * mine_pct_share
+        for mine_pct_share in mine_pct_shares
+    ]
+
+    ### For printing only
     if debug:
         # harvester params
         for i, harvester in enumerate(harvesters):
+            j = i + 1
             parts = harvester['parts']
             legions = harvester['legions']
             avg_legion_rank = harvester['avg_legion_rank']
             extractors = harvester['extractors']
             members = legions / 3 # 3 legions per user
-            print("\n============================================")
-            print("Harvester {} has:")
-            print("{} parts, {} total legions\n".format(i, parts, legions))
-
+            print("\n\n============================================\n\n")
+            print("Harv_{} has {} parts, {} total legions\n".format(j, parts, legions))
 
         # boosts
-        print("Atlas gets:\t{:.2f}x boost".format(boost_atlas))
+        print("Atlas gets:\t{:.2f}x boost".format(atlas_boost))
         for i, boost in enumerate(harvester_boosts):
-            print("Harvester_{} gets:\t{:.2f}x boost\n".format(i, boost))
-
+            j = i + 1
+            print("Harv_{} gets:\t{:.2f}x boost\n".format(j, boost))
 
         # emission shares/splits
         print("Atlas gets:\t{:.2%} of emissions".format(mine_pct_share_atlas))
-        for i, p in enumerate(harvester_points):
-            print("Harv_{} gets:\t{:.2%} of emissions\n".format(i, mine_pct_share_harvester))
+        for i, mine_pct_share_harvester in enumerate(mine_pct_shares):
+            j = i + 1
+            print("Harv_{} gets:\t{:.2%} of emissions\n".format(j, mine_pct_share_harvester))
 
-
-        print("For a whale with {} mil:".format(num_millions_user_stakes))
+        # user shares of emissions
+        print("For a whale with {} mil:".format(NUM_MIL_USER_STAKES))
         print("being in Atlas with {AUM}m AUM gives you:\t 1/{AUM} * {MINE_PCT:.4f} = {USER_PCT:.2%} of emissions".format(
-            AUM=EXPECTED_AUM_ATLAS,
+            AUM=EXPECTED_ATLAS_AUM ,
             MINE_PCT=mine_pct_share_atlas,
             USER_PCT=user_pct_share_atlas
         ))
-
-        for i, mine_pct_share in enumerate(mine_pct_shares):
-            print("{millions}m in Harvester_{i} with 10m AUM gives you:\t 1/{AUM_CAP} * {MINE_PCT:.4f} = {USER_PCT:.2%}".format(
-                millions=num_millions_user_stakes,
-                i=i,
+        for i, pct_share in enumerate(zip(mine_pct_shares, user_pct_shares)):
+            j = i + 1
+            (mine_pct_share, user_pct_share) = pct_share
+            print("{millions}m in Harvester_{j} with 10m AUM gives you:\t 1/{AUM_CAP} * {MINE_PCT:.4f} = {USER_PCT:.2%}".format(
+                millions=NUM_MIL_USER_STAKES,
+                j=j,
                 AUM_CAP=AUM_CAP_HARVESTER,
                 MINE_PCT=mine_pct_share,
                 USER_PCT=user_pct_share
             ))
-            print("\nAn entrepreneurial whale can potentially get a {:.2%} / {:.2%}\n= {:.2f}x improvement in yield".format(
+            print("\nA whale can get a {:.2%} / {:.2%}\n= {:.2f}x improvement in yield".format(
                 user_pct_share,
                 user_pct_share_atlas,
                 user_pct_share / user_pct_share_atlas
             ))
-            print("for collecting {} harvester parts, a guild of {} users, {} legions".format(parts, members, legions))
-            print("\nNote: assumes he can deploy his full amount in the 10m cap harvester")
-            print("he will get an even better yield initially before the 10m cap is reached")
+            print("for collecting {:.0f} harvester parts, a guild of {:.0f} users, {:.0f} legions".format(parts, members, legions))
+            print("\nNOTE 1: Assumes he can deploy his full amount in the 10m cap harvester")
+            print("NOTE 2: Yield may be MUCH, MUCH higher initially before the 10m cap is reached")
 
     return (
-        boost_atlas,
+        atlas_boost,
         mine_pct_share_atlas,
         user_pct_share_atlas,
         harvester_boosts,

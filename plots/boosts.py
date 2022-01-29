@@ -8,7 +8,7 @@ from matplotlib.pyplot import plot
 
 # parameters for configuring boosts
 from parameters import PARTS_BOOST_FACTOR, LEGIONS_BOOST_FACTOR
-from parameters import ATLAS_MINE_BONUS, ATLAS_AUM, MAX_HARVESTER_PARTS, MAX_EXTRACTORS
+from parameters import ATLAS_MINE_BONUS, EXPECTED_ATLAS_AUM, MAX_HARVESTER_PARTS, MAX_EXTRACTORS
 from parameters import MIN_LEGIONS, MAX_LEGIONS
 from parameters import TIME_LOCK_BOOST_PARAMS, LEGION_BOOST_PARAMS, LEGION_RANK_PARAMS
 from parameters import EXTRACTOR_BOOST_PARAMS, TREASURES_BOOST_PARAMS

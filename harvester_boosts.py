@@ -5,7 +5,7 @@ from matplotlib.animation import FuncAnimation
 
 # parameters for configuring boosts
 from parameters import PARTS_BOOST_FACTOR, LEGIONS_BOOST_FACTOR
-from parameters import ATLAS_MINE_BONUS, ATLAS_AUM, MAX_HARVESTER_PARTS, MAX_EXTRACTORS
+from parameters import ATLAS_MINE_BONUS, EXPECTED_ATLAS_AUM, MAX_HARVESTER_PARTS, MAX_EXTRACTORS
 from parameters import MIN_LEGIONS, MAX_LEGIONS
 from parameters import TIME_LOCK_BOOST_PARAMS, LEGION_BOOST_PARAMS, LEGION_RANK_PARAMS
 from parameters import EXTRACTOR_BOOST_PARAMS, TREASURES_BOOST_PARAMS
@@ -67,15 +67,21 @@ def legions_boost_harvester(num, max=MAX_LEGIONS, avg_legion_rank=1, boost_facto
 
 
 
-def extractors_boost_harvester(extractors, max_parts=MAX_EXTRACTORS):
+def extractors_boost_harvester(extractors, max_extractors=MAX_EXTRACTORS):
     """
         extractors: ['small_extractor', 'medium_extractor', 'large_extractor']
-        max_parts: number of extractors to achieve max boost
+        max_extractors: maximum number of extractors effective at any point in time
     """
-    assert len(extractors) <= max_parts
+
+    # assert len(extractors) <= max_parts
+    ## don't assert extractor length, allow people to accidentally apply and waste
+    ## their extractor boost if they are not careful
+
+    # take the first 5 extractor boosts
+    top_five_extractors = extractors[:5]
 
     extractors_boost = 0
-    for d in extractors:
+    for d in top_five_extractors:
         dboost = EXTRACTOR_BOOST_PARAMS[d]
         extractors_boost += dboost
 
@@ -124,11 +130,9 @@ def user_boost_inside_harvester(time_lock_deposit='none', legions=[], treasures=
         time_lock_deposits: "none" | "2_weeks" | "1_month" | "3_months" | "6_months"
         legions: ['gen0_common', 'gen0_rare', 'gen0_uncommon']
         treasures: ['honeycomb', 'grin']
-        # consumables: ['small_extractor']
     """
 
     assert len(legions) <= 3
-    # assert len(consumables) <= 5
     assert len(treasures) <= 20
 
     ##### Time lock Boost
@@ -150,18 +154,11 @@ def user_boost_inside_harvester(time_lock_deposit='none', legions=[], treasures=
     for t in treasures:
         treasures_boost += get_treasure_boost(name=t, boost=3)
 
-    # ##### Consumables Boost
-    # consumables_boost = 0
-    # for c in consumables:
-    #     consumables_boost += EXTRACTORS_BOOST_PARAMS[c]
-
     total_boost = 1 + time_lock_boost + legions_boost + treasures_boost
-        # + consumables_boost
 
     print("time_lock_boost: ", time_lock_boost)
     print("legions_boost: ", legions_boost)
     print("treasures_boost: ", treasures_boost)
-    # print("consumables_boost: ", consumables_boost)
     print("total_boost: ", total_boost)
 
     return total_boost
@@ -172,7 +169,6 @@ def user_boost_inside_harvester(time_lock_deposit='none', legions=[], treasures=
 #     '2_weeks',
 #     legions=['gen0_common', 'gen0_uncommon', 'gen0_rare'],
 #     treasures=['honeycomb', 'grin'],
-#     consumables=['small_extractor']
 # )
 ## Example 2: (matches example in Alex's excel)
 # user_boost_inside_harvester(
@@ -187,18 +183,12 @@ def user_boost_inside_harvester(time_lock_deposit='none', legions=[], treasures=
 #        'castle',
 #        'thread_of_divine_silk', 'thread_of_divine_silk',
 #     ],
-#     consumables=[
-#         'small_extractor',
-#         'medium_extractor', 'medium_extractor',
-#         'large_extractor', 'large_extractor',
-#     ]
 # )
 
 # user_boost_inside_harvester(
 #     '2_weeks',
 #     legions=['gen0_rare', 'gen0_rare'],
 #     treasures=['honeycomb', 'honeycomb', 'honeycomb'],
-#     consumables=[]
 # )
 
 
