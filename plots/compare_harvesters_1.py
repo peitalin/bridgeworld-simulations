@@ -51,14 +51,14 @@ from harvester_emission_splits import calculate_harvester_splits
 fig, (ax1, ax2, ax3) = plt.subplots(3)
 
 ## Array of x-axis data points
-x_boost_h1 = []
-x_boost_atlas = []
+y_user_pct_share_atlas = []
+y_boost_atlas = []
 
-x_mine_pct_share_h1 = []
-x_mine_pct_share_atlas = []
+y_mine_pct_share_h1 = []
+y_mine_pct_share_atlas = []
 
-x_user_pct_share_h1 = []
-x_user_pct_share_atlas = []
+y_user_pct_share_h1 = []
+y_user_pct_share_atlas = []
 
 days = []
 
@@ -70,17 +70,14 @@ _x_legions = np.linspace(0, 2000, num_obs) # 1 to 2000 legions
 # def calculate_x_axis_labels():
 
 #     ## Array of x-axis data points
-#     x_boost_h1 = []
-#     x_boost_h2 = []
-#     x_boost_atlas = []
+#     y_user_pct_share_atlas = []
+#     y_boost_atlas = []
 
-#     x_mine_pct_share_h1 = []
-#     x_mine_pct_share_h2 = []
-#     x_mine_pct_share_atlas = []
+#     y_mine_pct_share_h1 = []
+#     y_mine_pct_share_atlas = []
 
-#     x_user_pct_share_h1 = []
-#     x_user_pct_share_h2 = []
-#     x_user_pct_share_atlas = []
+#     y_user_pct_share_h1 = []
+#     y_user_pct_share_atlas = []
 
 
 #     num_obs = 501
@@ -109,29 +106,26 @@ _x_legions = np.linspace(0, 2000, num_obs) # 1 to 2000 legions
 #             debug=False
 #         )
 
-#         x_boost_h1.append(boost_h1)
-#         x_boost_h2.append(boost_h2)
-#         x_boost_atlas.append(boost_atlas)
+#         y_user_pct_share_atlas.append(boost_h1)
+#         y_boost_atlas.append(boost_atlas)
 
-#         x_mine_pct_share_h1.append(mine_pct_share_h1)
-#         x_mine_pct_share_h2.append(mine_pct_share_h2)
-#         x_mine_pct_share_atlas.append(mine_pct_share_atlas)
+#         y_mine_pct_share_h1.append(mine_pct_share_h1)
+#         y_mine_pct_share_atlas.append(mine_pct_share_atlas)
 
-#         x_user_pct_share_h1.append(user_pct_share_h1)
-#         x_user_pct_share_h2.append(user_pct_share_h2)
-#         x_user_pct_share_atlas.append(user_pct_share_atlas)
+#         y_user_pct_share_h1.append(user_pct_share_h1)
+#         y_user_pct_share_atlas.append(user_pct_share_atlas)
 
 
 #     boost_h1 = harvester_boosts[0]
 #     mine_pct_share_h1 = mine_pct_shares[0]
 #     user_pct_share_h1 = user_pct_shares[0]
 
-#     x_boost_h1.append(boost_h1)
-#     x_boost_atlas.append(boost_atlas)
-#     x_mine_pct_share_h1.append(mine_pct_share_h1)
-#     x_mine_pct_share_atlas.append(mine_pct_share_atlas)
-#     x_user_pct_share_atlas.append(user_pct_share_atlas)
-#     x_user_pct_share_h1.append(user_pct_share_h1)
+#     y_user_pct_share_atlas.append(boost_h1)
+#     y_boost_atlas.append(boost_atlas)
+#     y_mine_pct_share_h1.append(mine_pct_share_h1)
+#     y_mine_pct_share_atlas.append(mine_pct_share_atlas)
+#     y_user_pct_share_atlas.append(user_pct_share_atlas)
+#     y_user_pct_share_h1.append(user_pct_share_h1)
 
 
 
@@ -167,17 +161,17 @@ def draw_atlas_harvest_comparison_1(i):
     mine_pct_share_h1 = mine_pct_shares[0]
     user_pct_share_h1 = user_pct_shares[0]
 
-    x_boost_h1.append(boost_h1)
-    x_boost_atlas.append(boost_atlas)
-    x_mine_pct_share_h1.append(mine_pct_share_h1)
-    x_mine_pct_share_atlas.append(mine_pct_share_atlas)
-    x_user_pct_share_atlas.append(user_pct_share_atlas)
-    x_user_pct_share_h1.append(user_pct_share_h1)
+    y_user_pct_share_atlas.append(boost_h1)
+    y_boost_atlas.append(boost_atlas)
+    y_mine_pct_share_h1.append(mine_pct_share_h1)
+    y_mine_pct_share_atlas.append(mine_pct_share_atlas)
+    y_user_pct_share_atlas.append(user_pct_share_atlas)
+    y_user_pct_share_h1.append(user_pct_share_h1)
 
 
     #### Plot 1
     ax1.clear()
-    # ax1.plot(days, y_boost_h1, label="H1 boost ranges from 1x to {:.1f}x max".format(x_boost_h1[-1]))
+    # ax1.plot(days, y_boost_h1, label="H1 boost ranges from 1x to {:.1f}x max".format(y_user_pct_share_atlas[-1]))
     ax1.plot(days, y_boost_h1, label="H1 boost ranges from 1x to {:.1f}x max".format(3), color='royalblue')
     # ax1.plot([], label="Atlas is {}x boost by default (configurable)".format(ATLAS_MINE_BONUS), color='red')
     ax1.set(xlabel='(parts, legions)', ylabel='Boost Multiplier')
@@ -188,11 +182,11 @@ def draw_atlas_harvest_comparison_1(i):
 
     #### Plot 2
     ax2.clear()
-    ax2.plot(x_mine_pct_share_h1, label="H1 Share", color='royalblue')
-    ax2.plot(x_mine_pct_share_atlas, label="Atlas Share", color='red')
+    ax2.plot(y_mine_pct_share_h1, label="H1 Share", color='royalblue')
+    ax2.plot(y_mine_pct_share_atlas, label="Atlas Share", color='red')
     ax2.set(xlabel='Boost (x)', ylabel='% share of emissions')
     ## plot 2 x-ticks
-    # boost_xticks = ["{:.1f}x".format(b) for b in [x_boost_h1[0], x_boost_h1[100], x_boost_h1[200], x_boost_h1[300], x_boost_h1[400], x_boost_h1[500]]]
+    # boost_xticks = ["{:.1f}x".format(b) for b in [y_user_pct_share_atlas[0], y_user_pct_share_atlas[100], y_user_pct_share_atlas[200], y_user_pct_share_atlas[300], y_user_pct_share_atlas[400], y_user_pct_share_atlas[500]]]
     # boost_xticks = ["{:.1f}x".format(b) for b in [1,1.5,2,2.5,3,3.5]]
     # ax2.set_xticks([0, 100, 200, 300, 400, 500])
     # ax2.set_xticklabels(boost_xticks, fontsize=7)
@@ -206,8 +200,8 @@ def draw_atlas_harvest_comparison_1(i):
 
     #### Plot 3
     ax3.clear()
-    ax3.plot(x_user_pct_share_h1, label='$1m in H1', color='royalblue')
-    ax3.plot(x_user_pct_share_atlas, label='$1m in Atlas', color='red')
+    ax3.plot(y_user_pct_share_h1, label='$1m in H1', color='royalblue')
+    ax3.plot(y_user_pct_share_atlas, label='$1m in Atlas', color='red')
     # # plot 3 x-ticks
     # ax3.set_xticks([0, 100, 200, 300, 400, 500])
     # ax3.set_xticklabels(['(0,0)', '(100, 400)', '(200, 800)', '(300, 1200)', '(400, 1600)', '(500, 2000)'], fontsize=8)
