@@ -7,9 +7,9 @@ LEGIONS_BOOST_FACTOR = 0.5
 # they stack together to determine overall boost
 # parts_boost should probably be bigger than legions (as a craft item)
 
-ATLAS_MINE_BONUS = 4
+ATLAS_MINE_BONUS = 2
 # atlas mine gets a default boost
-EXPECTED_ATLAS_AUM = 60
+EXPECTED_ATLAS_AUM = 70
 # Estimated AUM for Atlas Mine
 # generally it will have a much larger AUM than other harvesters, 50mil~80mil vs 10mil
 
@@ -23,6 +23,23 @@ MAX_HARVESTER_PARTS = 500
 # harvester parts boosts maxes out at 500
 MAX_EXTRACTORS = 5
 # extractor boosts maxes out at 5
+
+
+## Double check these MAGIC emission numbers
+MAGIC_EMISSIONS_BY_YEAR = {
+    1: 43_464_251,
+    2: 21_732_125,
+    3: 10_866_063,
+    4: 5_433_031,
+    5: 2_716_516,
+    6: 1_358_258,
+    7: 679_129,
+    8: 339_564,
+    9: 169_782,
+    10: 84_891,
+    11: 42_446,
+    12: 21_223,
+}
 
 TIME_LOCK_BOOST_PARAMS = {
     'none': 0, # 0% bonus

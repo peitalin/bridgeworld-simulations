@@ -13,9 +13,7 @@ We can boost the harvester by
   - staking more legions on the harvester
   - staking legions that have higher rarities/rank
 
-Both parts and legions boosts are quadratic, they have diminishing returns as you stake more parts and legions
-![image](https://user-images.githubusercontent.com/4037878/148647127-9295714d-1ac5-48f7-b809-326d96e18d14.png)
-
+Both parts and legions boosts are quadratic, they have diminishing returns as you stake more parts and legions.
 When a harvester is boosted, the extra yield comes at the expense of the other harvesters (including Atlas mine).
 It works like Curve's veCRV gauge boosts
 
@@ -27,7 +25,7 @@ The `total_harvester_boost` function in the `harvestor_boosts.py` script calcula
 For each harvester (there may be more than 2) run the `total_harvester_boost` function. Example:
 ```python
 boost_harvester_1 = total_harvester_boost(num_parts=200, num_legions=600, avg_legion_rank=1)
-   
+
 # original atlas mine is treated as a harvester with uncapped AUM
 # it has 0 harvester parts to begin with, and can have up to 2000 staked legions to boost its mining (avg legion rank 1)
 atlas_parts = 0
@@ -85,18 +83,18 @@ user_boost =  user_boost_inside_harvester(
 original_deposit_size = 0.1
 boosted_deposit_size = original_deposit_size * user_boost
 
-# 100k in Harv_1 with 10m AUM cap gives you:	
+# 100k in Harv_1 with 10m AUM cap gives you:
 # boosted_deposit_size / (10m + boosted_deposit_size - original_deposit_size) = user's share of harvester 1's emissions
 # we add the extra AUM from the boosted_deposit_size to the denominator AUM
 
-users_share_of_harvester = boosted_deposit_size / (10 + boosted_deposit_size - original_deposit_size) 
+users_share_of_harvester = boosted_deposit_size / (10 + boosted_deposit_size - original_deposit_size)
 print("users_share_of_harvester is {:.4%}".format(users_share_of_harvester))
 # users_share_of_harvester is 5.2768%
 
 ```
- 
 
- 
+
+
 
 
 If you want to print out the plots of competition in emissions between atlas and the other harvesters, run:
