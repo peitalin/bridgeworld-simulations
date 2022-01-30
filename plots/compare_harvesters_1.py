@@ -261,7 +261,7 @@ def draw_atlas_harvest_comparison(i):
         h4.increment_parts(parts_to_increment)
         h4.increment_legions(legions_to_increment)
         harvesters = [ h1, h2, h3, h4, h5, h6 ]
-        expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*4
+        expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*3.5
     elif day < 150:
         h1.activate()
         h2.activate()
@@ -279,7 +279,7 @@ def draw_atlas_harvest_comparison(i):
         h5.increment_parts(parts_to_increment)
         h5.increment_legions(legions_to_increment)
         harvesters = [ h1, h2, h3, h4, h5, h6 ]
-        expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*5
+        expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*4
     else:
         h1.activate()
         h2.activate()
@@ -301,8 +301,11 @@ def draw_atlas_harvest_comparison(i):
         h6.increment_legions(legions_to_increment)
         harvesters = [ h1, h2, h3, h4, h5, h6 ]
         # last harvester comes out, but not as much AUM flows from Atlas
-        # because it's all already locked
-        expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*5.5
+        # because it's all already locked.
+        # 85mil locked
+        # 45mil MAGIC locked for 1 year
+        # https://twitter.com/bjornsamuel/status/1486957771979427844
+        expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*4
 
     (
         boost_atlas,
@@ -380,7 +383,8 @@ def draw_atlas_harvest_comparison(i):
         days,
         y_mine_pct_shares['atlas'],
         label="Atlas {:.2f}x boost | Share {:.2%}".format(ATLAS_MINE_BONUS, mine_pct_share_atlas),
-        color='red'
+        color='red',
+        linestyle="--",
     )
     ax2.set(xlabel='', ylabel='% share of emissions')
     # plot 2 y-ticks
@@ -394,7 +398,8 @@ def draw_atlas_harvest_comparison(i):
         days,
         y_user_magic_yield['atlas'],
         label='Atlas: 1m/{:.0f}m: {:.2%}% APR in MAGIC'.format(expected_atlas_aum, atlas_user_magic_yield),
-        color='red'
+        color='red',
+        linestyle="--",
     )
     # plot 3 y-ticks
     yticks_pct = [0, 0.5, 1, 1.5, 2, 2.5]
@@ -407,7 +412,7 @@ def draw_atlas_harvest_comparison(i):
     ax3.set_title("User with 1m MAGIC: APR in different mines", size=10)
 
     ax2.set(xlabel='days | day {}'.format(day), ylabel='% share of emissions')
-    ax3.set(xlabel='days | day {}'.format(day), ylabel='% share of emissions')
+    ax3.set(xlabel='days | day {}'.format(day), ylabel='APR % in MAGIC')
 
     # ax1.grid(color='black', alpha=0.1)
     ax2.grid(color='black', alpha=0.1)
@@ -422,7 +427,7 @@ def draw_atlas_harvest_comparison(i):
 
 def run_harvester_split_simulation_1():
 
-    fig.suptitle('Emission Splits: Atlas vs. 6 Harvesters over time')
+    fig.suptitle('Atlas {}x Boost (45m locked 12months) vs. 6 Harvesters'.format(ATLAS_MINE_BONUS))
     fig.set_size_inches(12, 9)
 
     ani = FuncAnimation(
