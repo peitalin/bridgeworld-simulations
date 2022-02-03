@@ -18,7 +18,7 @@ from harvester_boosts import get_treasure_boost, parts_boost_harvester, legions_
 from harvester_boosts import extractors_boost_harvester, total_harvester_boost, user_boost_inside_harvester
 from harvester_boosts import calculate_avg_legion_rank
 
-from plots.compare_harvesters_1 import calculate_harvester_splits
+from plots.compare_6_harvesters import calculate_harvester_splits
 
 
 #################################

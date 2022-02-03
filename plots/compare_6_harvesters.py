@@ -34,9 +34,6 @@ from harvester_emission_splits import calculate_harvester_splits
 # harvesters will launch roughly every month
 
 
-# fig, (ax1, ax2, ax3) = plt.subplots(3)
-fig, (ax2, ax3) = plt.subplots(2)
-
 ## Array of y-axis data points
 y_boosts = {
     0: [],
@@ -154,13 +151,13 @@ class Harvester:
         self.is_active = True
 
     def increment_parts(self, parts=1):
-        if self.parts + parts <= 500:
+        if self.parts + parts <= MAX_HARVESTER_PARTS:
             self.parts += parts
         else:
             self.parts = MAX_HARVESTER_PARTS
 
     def increment_legions(self, legions=1):
-        if self.legions + legions <= 2000:
+        if self.legions + legions <= MAX_LEGIONS:
             self.legions += legions
         else:
             self.legions = MAX_LEGIONS
@@ -173,13 +170,21 @@ class Harvester:
         self.extractors.append(extractor)
 
 
+extractors = [
+    'large_extractor',
+    'large_extractor',
+    'large_extractor',
+    'large_extractor',
+    'large_extractor',
+]
+
 all_harvesters = [
-    Harvester(id=0, parts=0, legions=0, active_from=0),
-    Harvester(id=1, parts=0, legions=0, active_from=30),
-    Harvester(id=2, parts=0, legions=0, active_from=60),
-    Harvester(id=3, parts=0, legions=0, active_from=90),
-    Harvester(id=4, parts=0, legions=0, active_from=120),
-    Harvester(id=5, parts=0, legions=0, active_from=150),
+    Harvester(id=0, parts=0, legions=0, active_from=0, extractors=extractors),
+    Harvester(id=1, parts=0, legions=0, active_from=30, extractors=extractors),
+    Harvester(id=2, parts=0, legions=0, active_from=60, extractors=extractors),
+    Harvester(id=3, parts=0, legions=0, active_from=90, extractors=extractors),
+    Harvester(id=4, parts=0, legions=0, active_from=120, extractors=extractors),
+    # Harvester(id=5, parts=0, legions=0, active_from=150, extractors=extractors),
 ]
 
 
@@ -203,10 +208,12 @@ def draw_atlas_harvest_comparison(i):
     # members = _x_members[day]
     # legions = _x_legions[day]
 
-    # 16hrs to make 2 parts, 3 parts every 2 days
-    parts_to_increment = 3 * 3
+    # 16hrs to make 2 parts
+    # lets say 10 parts are made every 2 days
+    parts_to_increment = 100
 
-    legions_to_increment = 20 * 3
+    # assume 100 legions are added a day
+    legions_to_increment = 200
     # # lets assume 20 new users (60 legions) every 2 days
     # if day < 10:
     #     legions_to_increment = 20 * 3
@@ -218,13 +225,13 @@ def draw_atlas_harvest_comparison(i):
     h3 = all_harvesters[2]
     h4 = all_harvesters[3]
     h5 = all_harvesters[4]
-    h6 = all_harvesters[5]
+    # h6 = all_harvesters[5]
 
     if day < 30:
         h1.activate()
         h1.increment_parts(parts_to_increment)
         h1.increment_legions(legions_to_increment)
-        harvesters = [ h1, h2, h3, h4, h5, h6 ]
+        harvesters = [ h1, h2, h3, h4, h5]
         expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER
     elif day < 60:
         h1.activate()
@@ -233,7 +240,7 @@ def draw_atlas_harvest_comparison(i):
         h1.increment_legions(legions_to_increment)
         h2.increment_parts(parts_to_increment)
         h2.increment_legions(legions_to_increment)
-        harvesters = [ h1, h2, h3, h4, h5, h6 ]
+        harvesters = [ h1, h2, h3, h4, h5]
         expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*2
     elif day < 90:
         h1.activate()
@@ -245,7 +252,7 @@ def draw_atlas_harvest_comparison(i):
         h2.increment_legions(legions_to_increment)
         h3.increment_parts(parts_to_increment)
         h3.increment_legions(legions_to_increment)
-        harvesters = [ h1, h2, h3, h4, h5, h6 ]
+        harvesters = [ h1, h2, h3, h4, h5]
         expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*3
     elif day < 120:
         h1.activate()
@@ -260,7 +267,7 @@ def draw_atlas_harvest_comparison(i):
         h3.increment_legions(legions_to_increment)
         h4.increment_parts(parts_to_increment)
         h4.increment_legions(legions_to_increment)
-        harvesters = [ h1, h2, h3, h4, h5, h6 ]
+        harvesters = [ h1, h2, h3, h4, h5]
         expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*3.5
     elif day < 150:
         h1.activate()
@@ -278,7 +285,7 @@ def draw_atlas_harvest_comparison(i):
         h4.increment_legions(legions_to_increment)
         h5.increment_parts(parts_to_increment)
         h5.increment_legions(legions_to_increment)
-        harvesters = [ h1, h2, h3, h4, h5, h6 ]
+        harvesters = [ h1, h2, h3, h4, h5]
         expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*4
     else:
         h1.activate()
@@ -286,7 +293,7 @@ def draw_atlas_harvest_comparison(i):
         h3.activate()
         h4.activate()
         h5.activate()
-        h6.activate()
+        # h6.activate()
         h1.increment_parts(parts_to_increment)
         h1.increment_legions(legions_to_increment)
         h2.increment_parts(parts_to_increment)
@@ -297,9 +304,9 @@ def draw_atlas_harvest_comparison(i):
         h4.increment_legions(legions_to_increment)
         h5.increment_parts(parts_to_increment)
         h5.increment_legions(legions_to_increment)
-        h6.increment_parts(parts_to_increment)
-        h6.increment_legions(legions_to_increment)
-        harvesters = [ h1, h2, h3, h4, h5, h6 ]
+        # h6.increment_parts(parts_to_increment)
+        # h6.increment_legions(legions_to_increment)
+        harvesters = [ h1, h2, h3, h4, h5]
         # last harvester comes out, but not as much AUM flows from Atlas
         # because it's all already locked.
         # 85mil locked
@@ -425,8 +432,13 @@ def draw_atlas_harvest_comparison(i):
 
 
 
-def run_harvester_split_simulation_1():
 
+fig, (ax2, ax3) = plt.subplots(2)
+
+
+def run_harvester_split_simulation_6():
+
+    # fig, (ax1, ax2, ax3) = plt.subplots(3)
     fig.suptitle('Atlas {}x Boost (45m locked 12months) vs. 6 Harvesters'.format(ATLAS_MINE_BONUS))
     fig.set_size_inches(12, 9)
 

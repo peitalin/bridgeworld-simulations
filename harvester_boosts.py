@@ -4,9 +4,10 @@ from matplotlib.pyplot import plot
 from matplotlib.animation import FuncAnimation
 
 # parameters for configuring boosts
-from parameters import PARTS_BOOST_FACTOR, LEGIONS_BOOST_FACTOR
+from parameters import PARTS_BOOST_FACTOR, LEGIONS_BOOST_FACTOR, DISTANCE_BOOST_FACTOR
 from parameters import ATLAS_MINE_BONUS, EXPECTED_ATLAS_AUM, MAX_HARVESTER_PARTS, MAX_EXTRACTORS
 from parameters import MIN_LEGIONS, MAX_LEGIONS
+from parameters import MAX_MAP_HEIGHT, MAX_MAP_WIDTH
 from parameters import TIME_LOCK_BOOST_PARAMS, LEGION_BOOST_PARAMS, LEGION_RANK_PARAMS
 from parameters import EXTRACTOR_BOOST_PARAMS, TREASURES_BOOST_PARAMS
 
@@ -105,6 +106,51 @@ def calculate_avg_legion_rank(legions):
 
     avg_rank = summed_rank / len(legions)
     return avg_rank
+
+
+def calculate_distance_from_atlas(
+    h_coordinates={ 'x': 0, 'y': 0, 'z': 0},
+    atlas_coordinates={ 'x': 0, 'y': 0, 'z': 0},
+):
+    """
+        calculates the euclidean distance between a harvester, and atlas mine
+        h_coordinates: position of harvester on map
+        atlas_coordinates: position of atlas on map, default center on (0, 0)
+    """
+    h = h_coordinates
+    a = atlas_coordinates
+    # calculate euclidean distance 2 dimensions
+    d2 = np.sqrt( (h['x'] - a['x'])**2 + (h['y'] - a['y'])**2 )
+    return d2
+    # euclidean distance 3 dimensions, flying harvesters like Laputa?
+    # d3 = np.sqrt( (h['x'] - a['x'])**2 + (h['y'] - a['y'])**2 + (h['z'] - a['z'])**2 )
+
+
+def distance_boost_harvester(
+    h_coordinates={ 'x': 0, 'y': 0, 'z': 0},
+    map_height=MAX_MAP_HEIGHT,
+    map_width=MAX_MAP_WIDTH,
+    boost_factor=DISTANCE_BOOST_FACTOR
+):
+    """
+        harvester coordinates: (x, y)
+
+        map_height: number of tiles the map is in height
+        map_width: number of tiles the map is in width
+            used to calculate max_distance for boosts
+    """
+
+    # store once on initialize(), and maybe recalc on map resize function
+    max_distance = calculate_distance_from_atlas({ 'x': map_width/2, 'y': map_height/2, 'z': 0 })
+
+    h = h_coordinates
+    d = calculate_distance_from_atlas({
+        'x': h['x'],
+        'y': h['y'],
+        'z': h['z']
+    })
+
+    return 1 + (2*d - d**2/max_distance) / max_distance * boost_factor
 
 
 

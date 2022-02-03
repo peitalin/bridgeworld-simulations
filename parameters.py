@@ -1,13 +1,12 @@
 
 # for devs/team to calibrate
-PARTS_BOOST_FACTOR = 1
-LEGIONS_BOOST_FACTOR = 0.5
-# parts boost maxes out at 100%
-# legions boosts max out at 50% boost
-# they stack together to determine overall boost
+PARTS_BOOST_FACTOR = 1 # 100% is 2x boost (1 + 100%)
+LEGIONS_BOOST_FACTOR = 0.5 # 50% is 1.5x boost (1 + 50%)
+DISTANCE_BOOST_FACTOR = 1 # 100% is 2x boost (1 + 100%)
+# these boosts stack together multiplicatively to determine overall boost
 # parts_boost should probably be bigger than legions (as a craft item)
 
-ATLAS_MINE_BONUS = 3
+ATLAS_MINE_BONUS = 5
 # atlas mine gets a default boost
 
 EXPECTED_ATLAS_AUM = 85
@@ -22,10 +21,14 @@ AUM_CAP_HARVESTER = 10
 MIN_LEGIONS = 1
 MAX_LEGIONS = 2000
 # legions boosts maxes out at 2000 staked legions
-MAX_HARVESTER_PARTS = 500
+MAX_HARVESTER_PARTS = 1000
 # harvester parts boosts maxes out at 500
 MAX_EXTRACTORS = 5
 # extractor boosts maxes out at 5
+
+# Geographical Map params
+MAX_MAP_HEIGHT = 100
+MAX_MAP_WIDTH = 100
 
 
 ## Double check these MAGIC emission numbers
