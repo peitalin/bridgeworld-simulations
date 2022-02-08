@@ -75,8 +75,7 @@ def extractors_boost_harvester(extractors, max_extractors=MAX_EXTRACTORS):
     """
 
     # assert len(extractors) <= max_parts
-    ## don't assert extractor length, allow people to accidentally apply and waste
-    ## their extractor boost if they are not careful
+    ### For gas reasons, need a limit on number of extractors that can be deposited
 
     # take the first 5 extractor boosts
     top_five_extractors = extractors[:5]
