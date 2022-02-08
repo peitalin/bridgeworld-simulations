@@ -166,6 +166,11 @@ def total_harvester_boost(num_parts, num_legions, extractors=[], avg_legion_rank
         return modifier_legions_boost * modifier_parts_boost * modifier_extractors_boost
 
 
+#######################################
+######## Individual Level Boosts
+#######################################
+
+# To determine user's mining power within a harvester, and to boost LP size for rewards
 
 def user_boost_inside_harvester(time_lock_deposit='none', legions=[], treasures=[]):
     """
