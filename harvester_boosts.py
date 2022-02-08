@@ -13,6 +13,19 @@ from parameters import EXTRACTOR_BOOST_PARAMS, TREASURES_BOOST_PARAMS
 
 
 
+
+# *Tweak Genesis Legion’s impact on harvester boosts:*
+# *Set legionBoost max legions = 3000 for max boost*
+# *increase avg_legion_rank’s effect on this boost*
+# *Increase all-class and uncommon’s impact on avg_legion_rank.*
+
+
+#### Have a cap based on wallet's boost
+# E.g. 3x max boost = 2.5mil MAGIC, default might be like 500k MAGIC
+
+
+
+
 def get_treasure_boost(name, boost=3):
     """
         Gets each treasures mining boost, default is multiplied by 3
@@ -20,7 +33,7 @@ def get_treasure_boost(name, boost=3):
         boost: adjustable boost parameter for devs to scale the boost
         treasures have when stacking them in the mine
     """
-    return treasures_boost_params[name] * boost
+    return TREASURES_BOOST_PARAMS[name] * boost
 
 
 
@@ -220,25 +233,53 @@ def user_boost_inside_harvester(time_lock_deposit='none', legions=[], treasures=
 #     treasures=['honeycomb', 'grin'],
 # )
 ## Example 2: (matches example in Alex's excel)
-# user_boost_inside_harvester(
-#     '6_months',
-#     legions=['gen0_rare', 'gen0_rare', 'gen0_1_1'],
-#     treasures=[
-#        'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb',
-#        'grin',
-#        'bottomless_elixir', 'bottomless_elixir', 'bottomless_elixir',
-#        'cap_of_invisibility', 'cap_of_invisibility', 'cap_of_invisibility', 'cap_of_invisibility',
-#        'ancient_relic', 'ancient_relic',
-#        'castle',
-#        'thread_of_divine_silk', 'thread_of_divine_silk',
-#     ],
-# )
+user_boost_inside_harvester(
+    '6_months',
+    legions=['gen0_rare', 'gen0_rare', 'gen0_1_1'],
+    # legions=['gen0_rare', 'gen0_rare', 'gen0_rare'],
+    # legions=['gen0_common'],
+    treasures=[
+       'honeycomb', 'honeycomb',
+       'honeycomb', 'honeycomb', 'honeycomb',
+       'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb',
+       'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb',
+       'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb',
+    #    'grin',
+    #    'bottomless_elixir', 'bottomless_elixir', 'bottomless_elixir',
+    #    'cap_of_invisibility', 'cap_of_invisibility', 'cap_of_invisibility', 'cap_of_invisibility',
+    #    'ancient_relic', 'ancient_relic',
+    #    'castle',
+    #    'thread_of_divine_silk', 'thread_of_divine_silk',
+    ],
+)
 
 # user_boost_inside_harvester(
 #     '2_weeks',
 #     legions=['gen0_rare', 'gen0_rare'],
 #     treasures=['honeycomb', 'honeycomb', 'honeycomb'],
 # )
+
+
+def calculate_deposit_cap_per_address(boost, default_cap=200_000):
+    """
+        Works out a wallet's deposit cap, based on its individual-level NFTboost
+        (staked legions + treasures => NFTboost)
+
+        default_cap = 200,000 MAGIC
+
+        Then caps would look something like:
+        • Guilds like clocksnatcher with 1/1, 2x all-class + 20x honeycomb
+            • cap is ~2.8mil MAGIC
+        • Smaller guilds with 3x all-class + 20x honeycomb
+            • cap is ~2mil MAGIC
+        • Stakers with no NFTs
+            • cap is 200k MAGIC
+        • middle-class folk with 1x genesis legion + 2 honeycombs
+            • cap is around ~360k MAGIC
+    """
+    # remember to add the 1 to NFTBoost since it starts at 0% if no NFTs are present
+    # see user-level boosts in whitepaper
+    return (1 + NFTBoost) * default_cap
 
 
 
