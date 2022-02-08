@@ -382,6 +382,8 @@ broken_treasures = {
     't5': 0,
 }
 days = [] # x-axis is days
+pct_crafting = []
+pct_questing = []
 
 fig, (ax1, ax2, ax3) = plt.subplots(1,3, gridspec_kw={'width_ratios': [1,1,1]})
 fig.set_size_inches(15, 8)
@@ -445,6 +447,9 @@ def func_animate(i):
     else:
         pct_legions_to_questing = 0.5
     print("\n\npct_legions questing: ", pct_legions_to_questing)
+
+    pct_questing.append(pct_legions_to_questing)
+    pct_crafting.append(1-pct_legions_to_questing)
 
 
     ## Reset population of legions crafting vs questing every iteration
@@ -573,11 +578,8 @@ def func_animate(i):
 
     # minted plots
     ax2.clear()
-    # ax2.plot(days, created_treasures_array['t5'], label="t5", color=colors['t5'])
-    # ax2.plot(days, created_treasures_array['t4'], label="t4", color=colors['t4'])
-    # ax2.plot(days, created_treasures_array['t3'], label="t3", color=colors['t3'])
-    # ax2.plot(days, created_treasures_array['t2'], label="t2", color=colors['t2'])
-    # ax2.plot(days, created_treasures_array['t1'], label="t1", color=colors['t1'])
+    ax2.plot(days, pct_crafting, label="%legions crafting", color='blue', linestyle='-', alpha=0.5)
+    ax2.plot(days, pct_questing, label="%legions questing", color='red', linestyle='-', alpha=0.5)
 
     ax2.set_xlim([0,FRAMES])
     ax2.set_ylim([0,1])
@@ -640,13 +642,26 @@ def func_animate(i):
     ax1.set_yticks(ax1_yticks)
     ax1.set_yticklabels(ax1_yticklabels, fontsize=8)
 
+    ax2_yticks = [
+        0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1
+    ]
+    ax2_yticklabels = [
+        '10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%'
+    ]
+    ax2.set_yticks(ax2_yticks)
+    ax2.set_yticklabels(ax2_yticklabels, fontsize=8)
+
 
     fig.suptitle(
-        'DAY: {} | {} crafting | {} questing | {} summoning => {:.0%} to questing'.format(
+        # 'DAY: {} | {} crafting | {} questing | {} summoning => {:.0%} to questing'.format(
+        #     day,
+        #     len_legions_crafting,
+        #     len_legions_questing,
+        #     len_legions_summoning,
+        #     pct_legions_to_questing,
+        # ),
+        'DAY: {} | {:.0%} questing'.format(
             day,
-            len_legions_crafting,
-            len_legions_questing,
-            len_legions_summoning,
             pct_legions_to_questing,
         ),
         fontsize=14
