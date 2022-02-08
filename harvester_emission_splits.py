@@ -66,6 +66,7 @@ def calculate_harvester_splits(
     ### 4. Calculate a user's share of total emission inside different mines
     #################################################
     # a user's share of total emission, staying inside Atlas mine, vs. another Harvester
+    # ASSUMING the user has no individual-level boosts (e.g timeLock boost, etc)
     user_pct_share_atlas = num_mil_user_stakes/expected_atlas_aum  * mine_pct_share_atlas
     user_pct_shares = [
         num_mil_user_stakes/AUM_CAP_HARVESTER * mine_pct_share
