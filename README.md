@@ -14,7 +14,9 @@
 ```
 
 `parameters.py` contains all the configurable parameters
+
 `harvester_boosts.py` contain the functions that work out harvester boosts and mining-power
+
 `harvester_emission_splits` contains the logic for calculating the boost/mining-power for an arbitrary number of harvesters to work out how incoming MAGIC emissions should be split.
 
 These three files will probably be relevant to the emissions splitting middelware in Solidity.
