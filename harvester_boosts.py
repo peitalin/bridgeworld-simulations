@@ -109,8 +109,8 @@ def calculate_avg_legion_rank(legions):
 
 
 def calculate_distance_from_atlas(
-    h_coordinates={ 'x': 0, 'y': 0, 'z': 0},
-    atlas_coordinates={ 'x': 0, 'y': 0, 'z': 0},
+    h_coordinates={ 'x': 0, 'y': 0 },
+    atlas_coordinates={ 'x': 0, 'y': 0 },
 ):
     """
         calculates the euclidean distance between a harvester, and atlas mine
@@ -127,7 +127,7 @@ def calculate_distance_from_atlas(
 
 
 def distance_boost_harvester(
-    h_coordinates={ 'x': 0, 'y': 0, 'z': 0},
+    h_coordinates={ 'x': 0, 'y': 0},
     map_height=MAX_MAP_HEIGHT,
     map_width=MAX_MAP_WIDTH,
     boost_factor=DISTANCE_BOOST_FACTOR
@@ -141,13 +141,12 @@ def distance_boost_harvester(
     """
 
     # store once on initialize(), and maybe recalc on map resize function
-    max_distance = calculate_distance_from_atlas({ 'x': map_width/2, 'y': map_height/2, 'z': 0 })
+    max_distance = calculate_distance_from_atlas({ 'x': map_width/2, 'y': map_height/2 })
 
     h = h_coordinates
     d = calculate_distance_from_atlas({
         'x': h['x'],
         'y': h['y'],
-        'z': h['z']
     })
 
     return 1 + (2*d - d**2/max_distance) / max_distance * boost_factor
