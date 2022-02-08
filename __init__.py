@@ -8,38 +8,19 @@ from plots.compare_harvesters_2 import plot_atlas_harvest_comparison_2
 from plots.compare_distance import run_distance_boost_simulation
 from plots.user_boosts import plot_yield_inside_mine
 
-## Graph Parts Boost
+
+####### Harvesters Yield Competition Simultion #######
+# run_harvester_split_simulation_6()
+
+####### Distance Boost Simulation ######
+run_distance_boost_simulation()
+
+
+
+
+###### Graph Parts Boost
 # graph_parts_boost()
 
 # Graph Distance Boost
+###### Graph Parts Boost
 # graph_distance_boost()
-
-# # varying legions
-# plot_yield_inside_mine(3, legion_boost=1, linestyle=":", color="blue")
-# # common: 50% boost
-# plot_yield_inside_mine(3, legion_boost=(1 + 0.5*3), linestyle=":", color="purple")
-# # all-class: 200% boost
-# plot_yield_inside_mine(3, legion_boost=(1 + 2*3), linestyle=":", color="red")
-#
-# plt.legend()
-# plt.show()
-
-# # varying treasure boosts
-# plot_yield_inside_mine(1, legion_boost=2*2*2, linestyle=":")
-# plot_yield_inside_mine(3, legion_boost=2*2*2, linestyle="-.")
-
-
-
-#### Plot competition dynamics between Atlas mine and other harvesters
-## uncomment the function calls below and run them in ipython
-
-# # In the beginning Atlas has no parts
-# run_harvester_split_simulation_6()
-
-# # In the beginning Atlas has no parts
-# plot_atlas_harvest_comparison_2()
-# # Later stage, Atlas may have parts (also may elect another Harvester as "the Atlas mine")
-# plot_atlas_harvest_comparison_2()
-
-
-run_distance_boost_simulation()
