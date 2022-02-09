@@ -226,38 +226,27 @@ def user_boost_inside_harvester(time_lock_deposit='none', legions=[], treasures=
     return total_boost
 
 
-## Example: calling the function
+## Example: (matches example in Alex's excel)
 # user_boost_inside_harvester(
-#     '2_weeks',
-#     legions=['gen0_common', 'gen0_uncommon', 'gen0_rare'],
-#     treasures=['honeycomb', 'grin'],
+#     '6_months',
+#     # legions=['gen0_rare', 'gen0_rare', 'gen0_1_1'],
+#     legions=['gen0_rare', 'gen0_rare', 'gen0_rare'],
+#     # legions=['gen0_common'],
+#     treasures=[
+#        'honeycomb', 'honeycomb',
+#        'honeycomb', 'honeycomb', 'honeycomb',
+#        'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb',
+#     #    'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb',
+#     #    'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb',
+#     #    'grin',
+#     #    'bottomless_elixir', 'bottomless_elixir', 'bottomless_elixir',
+#     #    'cap_of_invisibility', 'cap_of_invisibility', 'cap_of_invisibility', 'cap_of_invisibility',
+#     #    'ancient_relic', 'ancient_relic',
+#     #    'castle',
+#     #    'thread_of_divine_silk', 'thread_of_divine_silk',
+#     ],
 # )
-## Example 2: (matches example in Alex's excel)
-user_boost_inside_harvester(
-    '6_months',
-    legions=['gen0_rare', 'gen0_rare', 'gen0_1_1'],
-    # legions=['gen0_rare', 'gen0_rare', 'gen0_rare'],
-    # legions=['gen0_common'],
-    treasures=[
-       'honeycomb', 'honeycomb',
-       'honeycomb', 'honeycomb', 'honeycomb',
-       'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb',
-       'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb',
-       'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb',
-    #    'grin',
-    #    'bottomless_elixir', 'bottomless_elixir', 'bottomless_elixir',
-    #    'cap_of_invisibility', 'cap_of_invisibility', 'cap_of_invisibility', 'cap_of_invisibility',
-    #    'ancient_relic', 'ancient_relic',
-    #    'castle',
-    #    'thread_of_divine_silk', 'thread_of_divine_silk',
-    ],
-)
 
-# user_boost_inside_harvester(
-#     '2_weeks',
-#     legions=['gen0_rare', 'gen0_rare'],
-#     treasures=['honeycomb', 'honeycomb', 'honeycomb'],
-# )
 
 
 def calculate_deposit_cap_per_address(boost, default_cap=200_000):

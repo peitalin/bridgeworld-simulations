@@ -142,16 +142,12 @@ class Legion:
             lvl = self._get_craft_difficulty()
 
         gained_exp = 10
-        if self.craft_lvl == 1:
+        if lvl == 'easy':
             gained_exp = 10
-        elif self.craft_lvl == 2:
+        elif lvl == 'medium':
             gained_exp = 20
-        elif self.craft_lvl == 3:
-            gained_exp = 20
-        elif self.craft_lvl == 4:
-            gained_exp = 80
-        elif self.craft_lvl == 5:
-            gained_exp = 80
+        elif lvl == 'hard':
+            gained_exp = 40
 
         broken = see_if_treasures_break(craft_lvl=lvl)
         # print('broken: ', broken)
@@ -263,18 +259,18 @@ QUEST_LVL_TIERS = {
 # total questing points needed to hit lvls
 CRAFT_LVL_TIERS = {
     "level_1": 0,
-    "level_2": 100,
-    "level_3": 280,
-    "level_4": 640,
-    "level_5": 1060,
-    "level_6": 1620,
+    "level_2": 140,
+    "level_3": 300,
+    "level_4": 460,
+    "level_5": 620,
+    "level_6": 1100,
     # incremental increases in levels require:
-    # "level_1": 100,
-    # "level_2": 180,
-    # "level_3": 360,
-    # "level_4": 420,
-    # "level_5": 560,
-    # "level_5": 560,
+    # "level_1": 140,
+    # "level_2": 160,
+    # "level_3": 160,
+    # "level_4": 160,
+    # "level_5": 480,
+    # "level_5": 480,
 }
 
 QUEST_TIMES = {
@@ -284,8 +280,8 @@ QUEST_TIMES = {
 }
 
 CRAFT_TIMES = {
-    "easy": 12,
-    "medium": 16,
+    "easy": 24,
+    "medium": 36,
     "hard": 48,
 }
 
@@ -304,23 +300,24 @@ def see_if_treasures_break(craft_lvl='easy'):
 
     if craft_lvl == 'easy':
         treasures = [
-            't4',
-            't5','t5'
+            't5', 't5', 't5', 't5',
+            't4', 't4',
+            't3',
         ]
     if craft_lvl == 'medium':
         treasures = [
-            't2',
-            't3',
+            't5', 't5', 't5', 't5', 't5',
             't4', 't4',
-            't5', 't5', 't5', 't5',
+            't3', 't3', 't3',
+            't2', 't2',
+            't1',
         ]
     if craft_lvl == 'hard':
         treasures = [
-            't1',
-            't2', 't2',
+            't5', 't5', 't5', 't5', 't5',
+            't4', 't4', 't4',
             't3',
-            't4', 't4',
-            't5', 't5', 't5',
+            't2', 't2',
         ]
 
     broken = []
@@ -515,7 +512,7 @@ def func_animate(i):
             # hard craft take 48hrs, 48/48 = 1 times
             # how many times you can craft in 2 days
             num_times_craft = int(hours_in_2_days / CRAFT_TIMES['hard'])
-            [l2.craft('medium') for x in range(num_times_craft)]
+            [l2.craft('hard') for x in range(num_times_craft)]
 
         elif l2.craft_lvl >= 3:
             # medium craft take 16hrs, 48/16 = 3 times
