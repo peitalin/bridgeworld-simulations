@@ -1,6 +1,6 @@
 
-from plots.boosts import graph_total_harvester_boost_varying_legions
-from plots.boosts import graph_parts_boost, graph_distance_boost
+# from plots.plot_boosts import graph_total_harvester_boost_varying_legions
+# from plots.plot_boosts import graph_parts_boost, graph_distance_boost
 
 from plots.compare_6_harvesters import run_harvester_split_simulation_6
 from plots.compare_harvesters_2 import plot_atlas_harvest_comparison_2

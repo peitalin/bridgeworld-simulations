@@ -21,6 +21,7 @@ from harvester_boosts import extractors_boost_harvester, total_harvester_boost, 
 from harvester_boosts import calculate_avg_legion_rank
 
 from harvester_math_middleman import calculate_harvester_splits
+from harvester_factory import Harvester
 
 # initialize variables, overwritten on 1st pass of simulation
 ax1 = 1
@@ -101,77 +102,6 @@ _x_legions = np.linspace(0, MAX_LEGIONS, num_obs) # 1 to 2000 legions
 # user stakes 1 mil MAGIC in mines
 NUM_MIL_USER_STAKES = 1
 
-
-class Harvester:
-
-    def __init__(
-        self,
-        id,
-        parts=0,
-        legions=0,
-        avg_legion_rank=2,
-        extractors=[],
-        is_atlas=False,
-        is_active=False,
-        active_from=0,
-    ):
-        self.id = id
-        self.parts = 1
-        self.legions = 1
-        self.avg_legion_rank = avg_legion_rank
-        self.extractors = extractors
-        self.is_atlas = is_atlas
-        self.is_active = False # dormant by default
-        self.active_from = active_from # day which harvester comes online
-
-    def __repr__(self):
-        return """
-        Harvester:\t{id}
-        Parts:\t{parts}
-        Legions:\t{legions}
-        Avg Legion Rank:\t{avg_legion_rank}
-        Extractors:\t{extractors}
-        """.format(
-            id=self.id,
-            parts=self.parts,
-            legions=self.legions,
-            avg_legion_rank=self.avg_legion_rank,
-            extractors=self.extractors,
-        )
-
-    def __getitem__(self, item):
-        if item == 'id':
-            return self.id
-        if item == 'parts':
-            return self.parts
-        if item == 'legions':
-            return self.legions
-        if item == 'avg_legion_rank':
-            return self.avg_legion_rank
-        if item == 'extractors':
-            return self.extractors
-
-    def activate(self):
-        self.is_active = True
-
-    def increment_parts(self, parts=1):
-        if self.parts + parts <= MAX_HARVESTER_PARTS:
-            self.parts += parts
-        else:
-            self.parts = MAX_HARVESTER_PARTS
-
-    def increment_legions(self, legions=1):
-        if self.legions + legions <= MAX_LEGIONS:
-            self.legions += legions
-        else:
-            self.legions = MAX_LEGIONS
-
-    def set_avg_legion_rank(self, avg_legion_rank):
-        if avg_legion_rank <= 5:
-            self.avg_legion_rank = avg_legion_rank
-
-    def add_extractor(self, extractor):
-        self.extractors.append(extractor)
 
 
 extractors = [
