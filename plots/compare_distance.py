@@ -198,7 +198,7 @@ def run_distance_boost_simulation():
     global im
 
     fig, (ax1, ax2) = plt.subplots(1,2, gridspec_kw={'width_ratios': [1, 1]})
-    image_name = 'map.jpg'
+    image_name = 'plots/map.jpg'
     im = plt.imread(image_name)
 
     fig.suptitle('Harvester Location, Distance Boosts vs. Probability of Smol Attack')

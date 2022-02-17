@@ -4,6 +4,12 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import plot
 from matplotlib.animation import FuncAnimation
 
+#################################################
+#################################################
+##### Questing and Crafting Simulations
+#################################################
+#################################################
+
 # 20%
 PR_DROP_LOOT_FROM_QUEST = 0.2
 

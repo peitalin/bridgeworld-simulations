@@ -20,7 +20,7 @@ from harvester_boosts import get_treasure_boost, parts_boost_harvester, legions_
 from harvester_boosts import extractors_boost_harvester, total_harvester_boost, user_boost_inside_harvester
 from harvester_boosts import calculate_avg_legion_rank
 
-from harvester_emission_splits import calculate_harvester_splits
+from harvester_math_middleman import calculate_harvester_splits
 
 # initialize variables, overwritten on 1st pass of simulation
 ax1 = 1
@@ -222,17 +222,12 @@ def draw_atlas_harvest_comparison(i):
     # members = _x_members[day]
     # legions = _x_legions[day]
 
-    # 16hrs to make 2 parts
-    # lets say 10 parts are made every 2 days
+    # 36hrs to make a part
+    # lets say 100 parts are made every 2 days between ~50 users
     parts_to_increment = 100
 
-    # assume 100 legions are added a day
+    # assume 200 legions are added every 2 days
     legions_to_increment = 200
-    # # lets assume 20 new users (60 legions) every 2 days
-    # if day < 10:
-    #     legions_to_increment = 20 * 3
-    # elif
-    #     legions_to_increment = 2 * 3
 
     h1 = all_harvesters[0]
     h2 = all_harvesters[1]

@@ -3,6 +3,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import plot
 
+#################################################
+#################################################
+##### Summoning Calculations
+#################################################
+#################################################
+
+
 # x-axis data points
 cycles = np.linspace(0, 12, 13) # 1 to 13 cycles - 4 months
 
