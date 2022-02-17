@@ -7,7 +7,7 @@ from plots.compare_harvesters_2 import plot_atlas_harvest_comparison_2
 
 from plots.compare_distance import run_distance_boost_simulation
 from plots.user_boosts import plot_yield_inside_mine
-from harvester_boosts import user_boost_inside_harvester
+from harvester_boost_count import user_boost_inside_harvester
 
 
 ####### Harvesters Yield Competition Simultion #######

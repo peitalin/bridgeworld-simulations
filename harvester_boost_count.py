@@ -178,6 +178,7 @@ def total_harvester_boost(num_parts, num_legions, extractors=[], avg_legion_rank
         return modifier_legions_boost * modifier_parts_boost * modifier_extractors_boost
 
 
+
 #######################################
 ######## Individual Level Boosts
 #######################################
@@ -246,29 +247,6 @@ def user_boost_inside_harvester(time_lock_deposit='none', legions=[], treasures=
 #     #    'thread_of_divine_silk', 'thread_of_divine_silk',
 #     ],
 # )
-
-
-
-def calculate_deposit_cap_per_address(boost, default_cap=200_000):
-    """
-        Works out a wallet's deposit cap, based on its individual-level NFTboost
-        (staked legions + treasures => NFTboost)
-
-        default_cap = 200,000 MAGIC
-
-        Then caps would look something like:
-        • Guilds like clocksnatcher with 1/1, 2x all-class + 20x honeycomb
-            • cap is ~2.8mil MAGIC
-        • Smaller guilds with 3x all-class + 20x honeycomb
-            • cap is ~2mil MAGIC
-        • Stakers with no NFTs
-            • cap is 200k MAGIC
-        • middle-class folk with 1x genesis legion + 2 honeycombs
-            • cap is around ~360k MAGIC
-    """
-    # remember to add the 1 to NFTBoost since it starts at 0% if no NFTs are present
-    # see user-level boosts in whitepaper
-    return (1 + NFTBoost) * default_cap
 
 
 

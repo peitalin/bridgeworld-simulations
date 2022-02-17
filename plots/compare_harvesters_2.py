@@ -14,9 +14,9 @@ from parameters import MIN_LEGIONS, MAX_LEGIONS
 from parameters import TIME_LOCK_BOOST_PARAMS, LEGION_BOOST_PARAMS, LEGION_RANK_PARAMS
 from parameters import EXTRACTOR_BOOST_PARAMS, TREASURES_BOOST_PARAMS
 
-from harvester_boosts import get_treasure_boost, parts_boost_harvester, legions_boost_harvester
-from harvester_boosts import extractors_boost_harvester, total_harvester_boost, user_boost_inside_harvester
-from harvester_boosts import calculate_avg_legion_rank
+from harvester_boost_count import get_treasure_boost, parts_boost_harvester, legions_boost_harvester
+from harvester_boost_count import extractors_boost_harvester, total_harvester_boost
+from harvester_boost_count import calculate_avg_legion_rank
 
 
 

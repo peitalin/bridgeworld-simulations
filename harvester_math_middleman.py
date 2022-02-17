@@ -11,18 +11,10 @@ from parameters import AUM_CAP_HARVESTER
 from parameters import TIME_LOCK_BOOST_PARAMS, LEGION_BOOST_PARAMS, LEGION_RANK_PARAMS
 from parameters import EXTRACTOR_BOOST_PARAMS, TREASURES_BOOST_PARAMS
 
-from harvester_boosts import total_harvester_boost
+from harvester_boost_count import total_harvester_boost
 
 
-
-def calculate_harvester_splits(
-    harvesters=[],
-    expected_atlas_aum=EXPECTED_ATLAS_AUM,
-    debug=True,
-    num_mil_user_stakes=1, # 1mil
-    # num_mil_user_stakes=0.1, # 100k
-    ):
-
+def calculate_harvester_boosts(harvesters=[]):
     #################################################
     ### 1. Calculate harvester boosts
     #################################################
@@ -44,16 +36,50 @@ def calculate_harvester_splits(
         else 0
         for h in harvesters
     ]
+    return (
+        atlas_boost,
+        harvester_boosts,
+    )
 
+
+# getRealMagicReward = emissions_based_on_utilization
+def emissions_based_on_utilization(util=0):
+
+    if util < 0.3:
+        # if utilization < 30%, no emissions
+        return 0
+    elif util < 0.4:
+        # if 30% < utilization < 40%, 50% emissions
+        return 0.5
+    elif util < 0.5:
+        # if 40% < utilization < 50%, 60% emissions
+        return 0.6
+    elif util < 0.6:
+        # if 50% < utilization < 60%, 80% emissions
+        return 0.8
+    else:
+        # 100% emissions above 60% utilization
+        return 1
+
+
+
+
+
+def calculate_emission_share(
+    atlas,
+    harvesters=[],
+    expected_atlas_aum=EXPECTED_ATLAS_AUM,
+    debug=True,
+    num_mil_user_stakes=1, # 1mil
+):
     #################################################
     ### 2. Calculate Mining Power for each mine
     #################################################
     # Set each mine at 100 mining power to begin with
     # then boost it according to their parts + legions + extractors
-    atlas_mining_power = atlas_boost * 100
-    harvester_mining_powers = [hboost * 100 for hboost in harvester_boosts]
+    atlas_mining_power = atlas.getMiningBoost() * 100 * emissions_based_on_utilization(1)
+    harvester_mining_powers = [h.getMiningBoost() * 100 for h in harvesters]
     total_mining_power = atlas_mining_power + np.sum(harvester_mining_powers)
-
 
     #################################################
     ### 3. Calculate share of emissions for each mine
@@ -62,6 +88,19 @@ def calculate_harvester_splits(
     mine_pct_shares = [p/total_mining_power for p in harvester_mining_powers]
 
 
+    return (
+        mine_pct_share_atlas,
+        mine_pct_shares,
+    )
+
+
+
+def calculate_user_pct_shares(
+    mine_pct_share_atlas,
+    mine_pct_shares=[],
+    expected_atlas_aum=EXPECTED_ATLAS_AUM,
+    num_mil_user_stakes=1, # 1mil
+):
     #################################################
     ### 4. Calculate a user's share of total emission inside different mines
     #################################################
@@ -72,29 +111,14 @@ def calculate_harvester_splits(
         num_mil_user_stakes/AUM_CAP_HARVESTER * mine_pct_share
         for mine_pct_share in mine_pct_shares
     ]
-
-
-    _debug_print_harvester_splits(
-        debug=debug,
-        harvesters=harvesters,
-        harvester_boosts=harvester_boosts,
-        atlas_boost=atlas_boost,
-        user_pct_share_atlas=user_pct_share_atlas,
-        mine_pct_share_atlas=mine_pct_share_atlas,
-        mine_pct_shares=mine_pct_shares,
-        user_pct_shares=user_pct_shares,
-        num_mil_user_stakes=num_mil_user_stakes,
-    )
-
-
     return (
-        atlas_boost,
-        mine_pct_share_atlas,
         user_pct_share_atlas,
-        harvester_boosts,
-        mine_pct_shares,
         user_pct_shares,
     )
+
+
+
+
 
 
 

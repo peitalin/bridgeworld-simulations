@@ -5,7 +5,7 @@
 ```
 ├── "README.md"
 ├── "__init__.py"
-├── "harvester_boosts.py"
+├── "harvester_boost_count.py"
 ├── "harvester_math_middleman.py"
 ├── "parameters.py"
 ├── "plots/"
@@ -15,7 +15,7 @@
 
 `parameters.py` contains all the configurable parameters
 
-`harvester_boosts.py` contain the functions that work out harvester boosts and mining-power
+`harvester_boost_count.py` contain the functions that work out harvester boosts and mining-power
 
 `harvester_math_middleman` contains the logic for calculating the boost/mining-power for an arbitrary number of harvesters to work out how incoming MAGIC emissions should be split.
 

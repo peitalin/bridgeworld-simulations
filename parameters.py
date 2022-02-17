@@ -21,7 +21,7 @@ AUM_CAP_HARVESTER = 10
 MIN_LEGIONS = 1
 MAX_LEGIONS = 2000
 # legions boosts maxes out at 2000 staked legions
-MAX_HARVESTER_PARTS = 1000
+MAX_HARVESTER_PARTS = 500
 # harvester parts boosts maxes out at 500
 MAX_EXTRACTORS = 5
 # extractor boosts maxes out at 5
@@ -29,6 +29,9 @@ MAX_EXTRACTORS = 5
 # Geographical Map params
 MAX_MAP_HEIGHT = 100
 MAX_MAP_WIDTH = 100
+
+# total circulating magic supply
+TOTAL_MAGIC_SUPPLY = 140_000_000
 
 
 ## Double check these MAGIC emission numbers

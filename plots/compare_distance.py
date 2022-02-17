@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
 from parameters import MAX_MAP_HEIGHT, MAX_MAP_WIDTH
-from harvester_boosts import distance_boost_harvester, calculate_distance_from_atlas
+from harvester_boost_count import distance_boost_harvester, calculate_distance_from_atlas
 
 
 

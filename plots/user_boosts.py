@@ -14,11 +14,11 @@ from parameters import MIN_LEGIONS, MAX_LEGIONS
 from parameters import TIME_LOCK_BOOST_PARAMS, LEGION_BOOST_PARAMS, LEGION_RANK_PARAMS
 from parameters import EXTRACTOR_BOOST_PARAMS, TREASURES_BOOST_PARAMS
 
-from harvester_boosts import get_treasure_boost, parts_boost_harvester, legions_boost_harvester
-from harvester_boosts import extractors_boost_harvester, total_harvester_boost, user_boost_inside_harvester
-from harvester_boosts import calculate_avg_legion_rank
+from harvester_boost_count import get_treasure_boost, parts_boost_harvester, legions_boost_harvester
+from harvester_boost_count import extractors_boost_harvester, total_harvester_boost
+from harvester_boost_count import calculate_avg_legion_rank
 
-from plots.compare_6_harvesters import calculate_harvester_splits
+from harvester_math_middleman import calculate_emission_share, calculate_harvester_boosts, calculate_user_pct_shares
 
 
 #################################
@@ -52,16 +52,34 @@ def plot_yield_inside_mine(treasure_multiplier=1, legion_boost=1, linestyle='-',
         }
     ]
 
-    (
-        boost_atlas,
-        mine_pct_share_atlas,
-        user_pct_share_atlas,
-        harvester_boosts,
-        mine_pct_shares,
-        user_pct_shares,
-    ) = calculate_harvester_splits(harvesters=harvesters, debug=True)
 
-    boost_h1 = harvester_boosts[0]
+    (
+        mine_pct_share_atlas,
+        mine_pct_shares,
+    ) = calculate_emission_share(
+        atlas=atlas,
+        harvesters=harvesters,
+        expected_atlas_aum=expected_atlas_aum,
+        debug=False,
+        num_mil_user_stakes=NUM_MIL_USER_STAKES
+    )
+
+    (
+        atlas_boost,
+        harvester_boosts,
+    ) = calculate_harvester_boosts(harvesters)
+
+    (
+        user_pct_share_atlas,
+        user_pct_shares,
+    ) = calculate_user_pct_shares(
+        mine_pct_share_atlas=mine_pct_share_atlas,
+        mine_pct_shares=mine_pct_shares,
+        expected_atlas_aum=expected_atlas_aum,
+        num_mil_user_stakes=NUM_MIL_USER_STAKES
+    )
+
+    boost_h1 = harvester_boost_count[0]
     mine_pct_share_h1 = mine_pct_shares[0]
     user_pct_share_h1 = user_pct_shares[0]
 

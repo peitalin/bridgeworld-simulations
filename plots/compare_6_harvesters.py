@@ -16,12 +16,12 @@ from parameters import TIME_LOCK_BOOST_PARAMS, LEGION_BOOST_PARAMS, LEGION_RANK_
 from parameters import EXTRACTOR_BOOST_PARAMS, TREASURES_BOOST_PARAMS
 from parameters import MAGIC_EMISSIONS_BY_YEAR
 
-from harvester_boosts import get_treasure_boost, parts_boost_harvester, legions_boost_harvester
-from harvester_boosts import extractors_boost_harvester, total_harvester_boost, user_boost_inside_harvester
-from harvester_boosts import calculate_avg_legion_rank
+from harvester_boost_count import get_treasure_boost, parts_boost_harvester, legions_boost_harvester
+from harvester_boost_count import extractors_boost_harvester, total_harvester_boost
+from harvester_boost_count import calculate_avg_legion_rank
 
-from harvester_math_middleman import calculate_harvester_splits
-from harvester_factory import Harvester
+from harvester_factory import Harvester, HarvesterFactory
+from harvester_math_middleman import calculate_emission_share, calculate_harvester_boosts, calculate_user_pct_shares
 
 # initialize variables, overwritten on 1st pass of simulation
 ax1 = 1
@@ -121,20 +121,19 @@ active_from_day = {
     'h6': 130,
 }
 
-all_harvesters = [
-    Harvester(id=0, parts=0, legions=0, active_from=active_from_day['h1'], extractors=extractors),
-    Harvester(id=1, parts=0, legions=0, active_from=active_from_day['h2'], extractors=extractors),
-    Harvester(id=2, parts=0, legions=0, active_from=active_from_day['h3'], extractors=extractors),
-    Harvester(id=3, parts=0, legions=0, active_from=active_from_day['h4'], extractors=extractors),
-    Harvester(id=4, parts=0, legions=0, active_from=active_from_day['h5'], extractors=extractors),
-    Harvester(id=5, parts=0, legions=0, active_from=active_from_day['h6'], extractors=extractors),
-]
+harvester_factory = HarvesterFactory()
+
+harvester_factory.create_harvester(id=0)
+harvester_factory.create_harvester(id=1)
+harvester_factory.create_harvester(id=2)
+harvester_factory.create_harvester(id=3)
+harvester_factory.create_harvester(id=4)
+harvester_factory.create_harvester(id=5)
 
 
 def init_plot(i=0):
     # do nothing, prevents FuncAnim calling initialization twice
     return
-
 
 
 def draw_atlas_harvest_comparison(i):
@@ -145,7 +144,8 @@ def draw_atlas_harvest_comparison(i):
     # magic emissions for the first year
     magic_emissions = MAGIC_EMISSIONS_BY_YEAR[1]
 
-    global all_harvesters
+    # global all_harvesters
+    global harvester_factory
     global active_from
 
     # parts = _x_parts[day]
@@ -159,6 +159,9 @@ def draw_atlas_harvest_comparison(i):
     # assume 200 legions are added every 2 days
     legions_to_increment = 200
 
+    all_harvesters = harvester_factory['harvesters']
+
+    atlas = harvester_factory['atlas']
     h1 = all_harvesters[0]
     h2 = all_harvesters[1]
     h3 = all_harvesters[2]
@@ -257,26 +260,31 @@ def draw_atlas_harvest_comparison(i):
         # https://twitter.com/bjornsamuel/status/1486957771979427844
         expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*4
 
-    (
-        boost_atlas,
-        mine_pct_share_atlas,
-        user_pct_share_atlas,
-        harvester_boosts,
-        mine_pct_shares,
-        user_pct_shares,
-    ) = calculate_harvester_splits(
+
+    ( mine_pct_share_atlas, mine_pct_shares ) = calculate_emission_share(
+        atlas=atlas,
         harvesters=harvesters,
         expected_atlas_aum=expected_atlas_aum,
         debug=False,
         num_mil_user_stakes=NUM_MIL_USER_STAKES
     )
 
+    ( atlas_boost, harvester_boosts ) = calculate_harvester_boosts(harvesters)
+
+    ( user_pct_share_atlas, user_pct_shares ) = calculate_user_pct_shares(
+        mine_pct_share_atlas=mine_pct_share_atlas,
+        mine_pct_shares=mine_pct_shares,
+        expected_atlas_aum=expected_atlas_aum,
+        num_mil_user_stakes=NUM_MIL_USER_STAKES
+    )
+
+
     # clear plots to redraw
     # ax1.clear()
     ax2.clear()
     ax3.clear()
 
-    y_boosts['atlas'].append(boost_atlas)
+    y_boosts['atlas'].append(atlas_boost)
     y_mine_pct_shares['atlas'].append(mine_pct_share_atlas)
     y_user_pct_shares['atlas'].append(user_pct_share_atlas)
 
@@ -287,7 +295,8 @@ def draw_atlas_harvest_comparison(i):
     for h in harvesters:
 
         hid = h.id
-        active_from = round(h.active_from/2) # each i is 2 days
+        active_from = round(active_from_day["h{}".format(hid+1)] / 2)
+        # active_from = round(active_from/2) # each i is 2 days
         current_boost = harvester_boosts[hid]
         current_mine_pct_share = mine_pct_shares[hid]
         current_user_pct_share = user_pct_shares[hid]
