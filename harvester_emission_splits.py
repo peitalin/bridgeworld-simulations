@@ -73,6 +73,42 @@ def calculate_harvester_splits(
         for mine_pct_share in mine_pct_shares
     ]
 
+
+    _debug_print_harvester_splits(
+        debug=True,
+        harvesters=harvesters,
+        harvester_boosts=harvester_boosts,
+        atlas_boost=atlas_boost,
+        user_pct_share_atlas=user_pct_share_atlas,
+        mine_pct_share_atlas=mine_pct_share_atlas,
+        mine_pct_shares=mine_pct_shares,
+        user_pct_shares=user_pct_shares,
+        num_mil_user_stakes=num_mil_user_stakes,
+    )
+
+
+    return (
+        atlas_boost,
+        mine_pct_share_atlas,
+        user_pct_share_atlas,
+        harvester_boosts,
+        mine_pct_shares,
+        user_pct_shares,
+    )
+
+
+
+def _debug_print_harvester_splits(
+    debug=True,
+    harvesters=[],
+    harvester_boosts=[],
+    atlas_boost=1,
+    user_pct_share_atlas=0,
+    mine_pct_share_atlas=0,
+    mine_pct_shares=[],
+    user_pct_shares=[],
+    num_mil_user_stakes=0,
+):
     ### For printing only
     if debug:
         # harvester params
@@ -123,17 +159,6 @@ def calculate_harvester_splits(
             print("for collecting {:.0f} harvester parts, a guild of {:.0f} users, {:.0f} legions".format(parts, members, legions))
             print("\nNOTE 1: Assumes he can deploy his full amount in the {}m cap harvester".format(AUM_CAP_HARVESTER))
             print("NOTE 2: Yield may be MUCH, MUCH higher initially before the {}m cap is reached".format(AUM_CAP_HARVESTER))
-
-    return (
-        atlas_boost,
-        mine_pct_share_atlas,
-        user_pct_share_atlas,
-        harvester_boosts,
-        mine_pct_shares,
-        user_pct_shares,
-    )
-
-
 
 
 

@@ -11,10 +11,10 @@ from harvester_boosts import user_boost_inside_harvester
 
 
 ####### Harvesters Yield Competition Simultion #######
-# run_harvester_split_simulation_6()
+run_harvester_split_simulation_6()
 
 ####### Distance Boost Simulation ######
-run_distance_boost_simulation()
+# run_distance_boost_simulation()
 
 
 

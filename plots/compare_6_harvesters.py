@@ -22,6 +22,10 @@ from harvester_boosts import calculate_avg_legion_rank
 
 from harvester_emission_splits import calculate_harvester_splits
 
+# initialize variables, overwritten on 1st pass of simulation
+ax1 = 1
+ax2 = 1
+ax3 = 1
 
 
 #################################
@@ -433,11 +437,16 @@ def draw_atlas_harvest_comparison(i):
 
 
 
-fig, (ax2, ax3) = plt.subplots(2)
 
 
 def run_harvester_split_simulation_6():
 
+    global fig
+    global ax1
+    global ax2
+    global ax3
+
+    fig, (ax2, ax3) = plt.subplots(2)
     # fig, (ax1, ax2, ax3) = plt.subplots(3)
     fig.suptitle('Atlas {}x Boost (45m locked 12months) vs. 6 Harvesters'.format(ATLAS_MINE_BONUS))
     fig.set_size_inches(12, 9)

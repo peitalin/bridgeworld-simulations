@@ -11,14 +11,15 @@ from harvester_boosts import distance_boost_harvester, calculate_distance_from_a
 
 
 
+# initialize variables, overwritten on 1st pass of simulation
+ax1 = 1
+ax2 = 1
+im = 1
+# params
 nobs = 100
 ymax = MAX_MAP_HEIGHT/2
 xmax = MAX_MAP_WIDTH/2
 
-# coords = [
-#     (x,y) for (x,y) in
-#     zip(np.linspace(-xmax, xmax, nobs), np.linspace(-ymax, ymax, nobs))
-# ]
 coords1 = [
     (x,y) for (x,y) in
     zip(np.linspace(-50, -25, 25), np.linspace(-50, -25, 25))
@@ -188,11 +189,17 @@ def init_plot(i=0):
     return
 
 
-fig, (ax1, ax2) = plt.subplots(1,2, gridspec_kw={'width_ratios': [1, 1]})
-image_name = 'map.jpg'
-im = plt.imread(image_name)
 
 def run_distance_boost_simulation():
+
+    global ax1
+    global ax2
+    global fig
+    global im
+
+    fig, (ax1, ax2) = plt.subplots(1,2, gridspec_kw={'width_ratios': [1, 1]})
+    image_name = 'map.jpg'
+    im = plt.imread(image_name)
 
     fig.suptitle('Harvester Location, Distance Boosts vs. Probability of Smol Attack')
     fig.set_size_inches(12, 6)
