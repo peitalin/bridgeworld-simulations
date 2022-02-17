@@ -286,15 +286,30 @@ CRAFT_TIMES = {
 }
 
 
+# TREASURE_BREAK_PR = {
+#     "grin": 0.00597,
+#     "honeycomb": 0.00597,
+#     "t1": 0.03275,
+#     "t2": 0.06440,
+#     "t3": 0.08203,
+#     "t4": 0.11293,
+#     "t5": 0.18104,
+# }
 TREASURE_BREAK_PR = {
-    "grin": 0.00597,
-    "honeycomb": 0.00597,
-    "t1": 0.03275,
-    "t2": 0.06440,
-    "t3": 0.08203,
-    "t4": 0.11293,
+    "grin": 0.0,
+    "honeycomb": 0.0,
+    "t1": 0.027,
+    "t2": 0.054,
+    "t3": 0.069,
+    "t4": 0.113,
     "t5": 0.18104,
 }
+
+# t1: 3.2% => 2.7%
+# t2: 6.4% => 5.4%
+# t3: 8.2% => 6.9%
+# t4: unchanged
+# t5: unchanged
 
 def see_if_treasures_break(craft_lvl='easy'):
 
