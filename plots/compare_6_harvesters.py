@@ -182,13 +182,22 @@ extractors = [
     'large_extractor',
 ]
 
+active_from_day = {
+    'h1': 30,
+    'h2': 50,
+    'h3': 70,
+    'h4': 90,
+    'h5': 110,
+    'h6': 130,
+}
+
 all_harvesters = [
-    Harvester(id=0, parts=0, legions=0, active_from=0, extractors=extractors),
-    Harvester(id=1, parts=0, legions=0, active_from=30, extractors=extractors),
-    Harvester(id=2, parts=0, legions=0, active_from=60, extractors=extractors),
-    Harvester(id=3, parts=0, legions=0, active_from=90, extractors=extractors),
-    Harvester(id=4, parts=0, legions=0, active_from=120, extractors=extractors),
-    # Harvester(id=5, parts=0, legions=0, active_from=150, extractors=extractors),
+    Harvester(id=0, parts=0, legions=0, active_from=active_from_day['h1'], extractors=extractors),
+    Harvester(id=1, parts=0, legions=0, active_from=active_from_day['h2'], extractors=extractors),
+    Harvester(id=2, parts=0, legions=0, active_from=active_from_day['h3'], extractors=extractors),
+    Harvester(id=3, parts=0, legions=0, active_from=active_from_day['h4'], extractors=extractors),
+    Harvester(id=4, parts=0, legions=0, active_from=active_from_day['h5'], extractors=extractors),
+    Harvester(id=5, parts=0, legions=0, active_from=active_from_day['h6'], extractors=extractors),
 ]
 
 
@@ -207,6 +216,7 @@ def draw_atlas_harvest_comparison(i):
     magic_emissions = MAGIC_EMISSIONS_BY_YEAR[1]
 
     global all_harvesters
+    global active_from
 
     # parts = _x_parts[day]
     # members = _x_members[day]
@@ -229,15 +239,19 @@ def draw_atlas_harvest_comparison(i):
     h3 = all_harvesters[2]
     h4 = all_harvesters[3]
     h5 = all_harvesters[4]
-    # h6 = all_harvesters[5]
+    h6 = all_harvesters[5]
 
-    if day < 30:
+
+    if day < active_from_day['h1']:
+        harvesters = [ h1, h2, h3, h4, h5 ]
+        expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER
+    elif active_from_day['h1'] <= day < active_from_day['h2']:
         h1.activate()
         h1.increment_parts(parts_to_increment)
         h1.increment_legions(legions_to_increment)
         harvesters = [ h1, h2, h3, h4, h5]
         expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER
-    elif day < 60:
+    elif active_from_day['h2'] <= day < active_from_day['h3']:
         h1.activate()
         h2.activate()
         h1.increment_parts(parts_to_increment)
@@ -246,7 +260,7 @@ def draw_atlas_harvest_comparison(i):
         h2.increment_legions(legions_to_increment)
         harvesters = [ h1, h2, h3, h4, h5]
         expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*2
-    elif day < 90:
+    elif active_from_day['h3'] <= day < active_from_day['h4']:
         h1.activate()
         h2.activate()
         h3.activate()
@@ -258,7 +272,7 @@ def draw_atlas_harvest_comparison(i):
         h3.increment_legions(legions_to_increment)
         harvesters = [ h1, h2, h3, h4, h5]
         expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*3
-    elif day < 120:
+    elif active_from_day['h4'] <= day < active_from_day['h5']:
         h1.activate()
         h2.activate()
         h3.activate()
@@ -273,7 +287,7 @@ def draw_atlas_harvest_comparison(i):
         h4.increment_legions(legions_to_increment)
         harvesters = [ h1, h2, h3, h4, h5]
         expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*3.5
-    elif day < 150:
+    elif active_from_day['h5'] <= day < active_from_day['h6']:
         h1.activate()
         h2.activate()
         h3.activate()
@@ -310,7 +324,7 @@ def draw_atlas_harvest_comparison(i):
         h5.increment_legions(legions_to_increment)
         # h6.increment_parts(parts_to_increment)
         # h6.increment_legions(legions_to_increment)
-        harvesters = [ h1, h2, h3, h4, h5]
+        harvesters = [ h1, h2, h3, h4, h5 ]
         # last harvester comes out, but not as much AUM flows from Atlas
         # because it's all already locked.
         # 85mil locked

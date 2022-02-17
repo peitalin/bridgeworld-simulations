@@ -75,7 +75,7 @@ def calculate_harvester_splits(
 
 
     _debug_print_harvester_splits(
-        debug=True,
+        debug=debug,
         harvesters=harvesters,
         harvester_boosts=harvester_boosts,
         atlas_boost=atlas_boost,
