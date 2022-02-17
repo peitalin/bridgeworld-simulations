@@ -6,11 +6,11 @@
 ├── "README.md"
 ├── "__init__.py"
 ├── "harvester_boost_count.py"
+├── "harvester_factory.py"
 ├── "harvester_math_middleman.py"
 ├── "parameters.py"
 ├── "plots/"
-├── "questing_crafting.py"
-└── "summoning.py"
+└── "legions/"
 ```
 
 `parameters.py` contains all the configurable parameters
@@ -27,5 +27,5 @@ or `run_distance_boost_simulation()` function then
 run `ipython -i __init__.py` to start simulations
 
 ### Simulation Instructions for Questing/Crafting and Treasure inflation/deflation over time
-run `ipython -i questing_crafting.py` to start Treasure crafting/questing simulations
+run `ipython -i legions/questing_crafting.py` to start Treasure crafting/questing simulations
 and its effect on treasure inflation/deflation
