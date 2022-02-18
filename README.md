@@ -7,7 +7,7 @@
 ├── "__init__.py"
 ├── "harvester_boost_count.py"
 ├── "harvester_factory.py"
-├── "harvester_math_middleman.py"
+├── "harvester_middleman.py"
 ├── "parameters.py"
 ├── "plots/"
 └── "legions/"
@@ -17,7 +17,7 @@
 
 `harvester_boost_count.py` contain the functions that work out harvester boosts and mining-power
 
-`harvester_math_middleman` contains the logic for calculating the boost/mining-power for an arbitrary number of harvesters to work out how incoming MAGIC emissions should be split.
+`harvester_middleman` contains the logic for calculating the boost/mining-power for an arbitrary number of harvesters to work out how incoming MAGIC emissions should be split.
 
 These three files will probably be relevant to the emissions splitting middelware in Solidity.
 

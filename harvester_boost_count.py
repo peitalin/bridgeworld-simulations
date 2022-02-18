@@ -183,27 +183,17 @@ def total_harvester_boost(num_parts, num_legions, extractors=[], avg_legion_rank
 ######## Individual Level Boosts
 #######################################
 
-# To determine user's mining power within a harvester, and to boost LP size for rewards
-
-def user_boost_inside_harvester(time_lock_deposit='none', legions=[], treasures=[]):
+def getNftBoost(legions=[], treasures=[]):
     """
-        Calculates the boost on user's deposit size inside the harvester
+        Calculates the boost on user's staked NFTs
 
         params:
-        time_lock_deposits: "none" | "2_weeks" | "1_month" | "3_months" | "6_months"
         legions: ['gen0_common', 'gen0_rare', 'gen0_uncommon']
         treasures: ['honeycomb', 'grin']
     """
 
     assert len(legions) <= 3
     assert len(treasures) <= 20
-
-    ##### Time lock Boost
-    try:
-        time_lock_boost = TIME_LOCK_BOOST_PARAMS[time_lock_deposit]
-    except KeyError:
-        time_lock_boost = TIME_LOCK_BOOST_PARAMS['none']
-
 
     ##### Legion Boost
     legions_boost = 0
@@ -217,12 +207,34 @@ def user_boost_inside_harvester(time_lock_deposit='none', legions=[], treasures=
     for t in treasures:
         treasures_boost += get_treasure_boost(name=t, boost=3)
 
-    total_boost = 1 + time_lock_boost + legions_boost + treasures_boost
+    total_nft_boost = legions_boost + treasures_boost
 
-    print("time_lock_boost: ", time_lock_boost)
-    print("legions_boost: ", legions_boost)
-    print("treasures_boost: ", treasures_boost)
-    print("total_boost: ", total_boost)
+    return total_nft_boost
+
+
+
+
+
+
+# To determine user's mining power within a harvester, and to boost LP size for rewards
+def total_user_boost_inside_harvester(time_lock_deposit='none', legions=[], treasures=[]):
+    """
+        Calculates the boost on user's deposit size inside the harvester
+
+        params:
+        time_lock_deposits: "none" | "2_weeks" | "1_month" | "3_months" | "6_months"
+        legions: ['gen0_common', 'gen0_rare', 'gen0_uncommon']
+        treasures: ['honeycomb', 'grin']
+    """
+
+    ##### Time lock Boost
+    try:
+        time_lock_boost = TIME_LOCK_BOOST_PARAMS[time_lock_deposit]
+    except KeyError:
+        time_lock_boost = TIME_LOCK_BOOST_PARAMS['none']
+
+    nft_boost = getNftBoost(legions, treasures)
+    total_boost = 1 + time_lock_boost + nft_boost
 
     return total_boost
 

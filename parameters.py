@@ -9,8 +9,8 @@ DISTANCE_BOOST_FACTOR = 1 # 100% is 2x boost (1 + 100%)
 ATLAS_MINE_BONUS = 5
 # atlas mine gets a default boost
 
-EXPECTED_ATLAS_AUM = 85
-# Estimated AUM for Atlas Mine
+EXPECTED_ATLAS_AUM = 90
+# Estimated AUM for Atlas Mine in millions
 # 85mil locked, 45mil MAGIC locked for 1 year
 # https://twitter.com/bjornsamuel/status/1486957771979427844
 # generally it will have a much larger AUM than other harvesters, 50mil~80mil vs 10mil
@@ -33,6 +33,8 @@ MAX_MAP_WIDTH = 100
 # total circulating magic supply
 TOTAL_MAGIC_SUPPLY = 140_000_000
 
+# A cap on total AUM a user can deposit in a harvester
+DEFAULT_USER_AUM_CAP = 200_000
 
 ## Double check these MAGIC emission numbers
 MAGIC_EMISSIONS_BY_YEAR = {

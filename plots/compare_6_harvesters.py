@@ -20,13 +20,13 @@ from harvester_boost_count import get_treasure_boost, parts_boost_harvester, leg
 from harvester_boost_count import extractors_boost_harvester, total_harvester_boost
 from harvester_boost_count import calculate_avg_legion_rank
 
+## prototype contracts
+from master_of_coin import MasterOfCoin
 from harvester_factory import Harvester, HarvesterFactory
-from harvester_math_middleman import calculate_emission_share, calculate_harvester_boosts, calculate_user_pct_shares
+from harvester_middleman import UtilizationMiddleman
 
-# initialize variables, overwritten on 1st pass of simulation
-ax1 = 1
-ax2 = 1
-ax3 = 1
+
+
 
 
 #################################
@@ -38,6 +38,10 @@ ax3 = 1
 # and more harvesters will come online (6 in total)
 # harvesters will launch roughly every month
 
+# initialize plot variables, overwritten on 1st pass of simulation
+ax1 = 1
+ax2 = 1
+ax3 = 1
 
 ## Array of y-axis data points
 y_boosts = {
@@ -50,7 +54,7 @@ y_boosts = {
     'atlas': [],
 }
 
-y_mine_pct_shares = {
+y_emissions_pct_shares = {
     0: [],
     1: [],
     2: [],
@@ -81,13 +85,21 @@ y_user_magic_yield = {
 }
 
 
+harvester_linestyle = [
+    '--',
+    ':',
+    ':',
+    ':',
+    ':',
+    ':',
+]
 harvester_colors = [
     'mediumorchid',
     'royalblue',
-    'dodgerblue',
     'mediumseagreen',
     'gold',
     'darkorange',
+    'black',
 ]
 
 ## x-axis is days
@@ -113,15 +125,22 @@ extractors = [
 ]
 
 active_from_day = {
+    ## Launch with 2 harvesters, then 1 every 20 days after
     'h1': 30,
-    'h2': 50,
-    'h3': 70,
-    'h4': 90,
-    'h5': 110,
-    'h6': 130,
+    'h2': 30,
+    'h3': 50,
+    'h4': 70,
+    'h5': 90,
+    'h6': 110,
 }
 
+
+master_of_coin = MasterOfCoin()
 harvester_factory = HarvesterFactory()
+middleman = UtilizationMiddleman(
+    master_of_coin=master_of_coin,
+    harvester_factory=harvester_factory,
+)
 
 harvester_factory.create_harvester(id=0)
 harvester_factory.create_harvester(id=1)
@@ -142,7 +161,7 @@ def draw_atlas_harvest_comparison(i):
     days.append(day)
 
     # magic emissions for the first year
-    magic_emissions = MAGIC_EMISSIONS_BY_YEAR[1]
+    MAGIC_EMISSIONS = MAGIC_EMISSIONS_BY_YEAR[1]
 
     # global all_harvesters
     global harvester_factory
@@ -160,8 +179,7 @@ def draw_atlas_harvest_comparison(i):
     legions_to_increment = 200
 
     all_harvesters = harvester_factory['harvesters']
-
-    atlas = harvester_factory['atlas']
+    atlas = harvester_factory['atlas_mine']
     h1 = all_harvesters[0]
     h2 = all_harvesters[1]
     h3 = all_harvesters[2]
@@ -169,16 +187,15 @@ def draw_atlas_harvest_comparison(i):
     h5 = all_harvesters[4]
     h6 = all_harvesters[5]
 
+    # harvesters = [ h1, h2, h3, h4, h5 ]
 
     if day < active_from_day['h1']:
-        harvesters = [ h1, h2, h3, h4, h5 ]
         expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER
-    elif active_from_day['h1'] <= day < active_from_day['h2']:
-        h1.activate()
-        h1.increment_parts(parts_to_increment)
-        h1.increment_legions(legions_to_increment)
-        harvesters = [ h1, h2, h3, h4, h5]
-        expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER
+    # elif active_from_day['h1'] <= day < active_from_day['h2']:
+    #     h1.activate()
+    #     h1.increment_parts(parts_to_increment)
+    #     h1.increment_legions(legions_to_increment)
+    #     expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER
     elif active_from_day['h2'] <= day < active_from_day['h3']:
         h1.activate()
         h2.activate()
@@ -186,7 +203,6 @@ def draw_atlas_harvest_comparison(i):
         h1.increment_legions(legions_to_increment)
         h2.increment_parts(parts_to_increment)
         h2.increment_legions(legions_to_increment)
-        harvesters = [ h1, h2, h3, h4, h5]
         expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*2
     elif active_from_day['h3'] <= day < active_from_day['h4']:
         h1.activate()
@@ -198,7 +214,6 @@ def draw_atlas_harvest_comparison(i):
         h2.increment_legions(legions_to_increment)
         h3.increment_parts(parts_to_increment)
         h3.increment_legions(legions_to_increment)
-        harvesters = [ h1, h2, h3, h4, h5]
         expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*3
     elif active_from_day['h4'] <= day < active_from_day['h5']:
         h1.activate()
@@ -213,7 +228,6 @@ def draw_atlas_harvest_comparison(i):
         h3.increment_legions(legions_to_increment)
         h4.increment_parts(parts_to_increment)
         h4.increment_legions(legions_to_increment)
-        harvesters = [ h1, h2, h3, h4, h5]
         expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*3.5
     elif active_from_day['h5'] <= day < active_from_day['h6']:
         h1.activate()
@@ -231,7 +245,6 @@ def draw_atlas_harvest_comparison(i):
         h4.increment_legions(legions_to_increment)
         h5.increment_parts(parts_to_increment)
         h5.increment_legions(legions_to_increment)
-        harvesters = [ h1, h2, h3, h4, h5]
         expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*4
     else:
         h1.activate()
@@ -252,7 +265,6 @@ def draw_atlas_harvest_comparison(i):
         h5.increment_legions(legions_to_increment)
         # h6.increment_parts(parts_to_increment)
         # h6.increment_legions(legions_to_increment)
-        harvesters = [ h1, h2, h3, h4, h5 ]
         # last harvester comes out, but not as much AUM flows from Atlas
         # because it's all already locked.
         # 85mil locked
@@ -261,19 +273,11 @@ def draw_atlas_harvest_comparison(i):
         expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*4
 
 
-    ( mine_pct_share_atlas, mine_pct_shares ) = calculate_emission_share(
-        atlas=atlas,
-        harvesters=harvesters,
-        expected_atlas_aum=expected_atlas_aum,
-        debug=False,
-        num_mil_user_stakes=NUM_MIL_USER_STAKES
-    )
+    ( atlas_boost, harvester_boosts ) = middleman.recalculate_harvester_boosts()
 
-    ( atlas_boost, harvester_boosts ) = calculate_harvester_boosts(harvesters)
+    ( emissions_pct_share_atlas, emissions_pct_shares ) = middleman.recalculate_emission_shares()
 
-    ( user_pct_share_atlas, user_pct_shares ) = calculate_user_pct_shares(
-        mine_pct_share_atlas=mine_pct_share_atlas,
-        mine_pct_shares=mine_pct_shares,
+    ( user_pct_share_atlas, user_pct_shares ) = middleman._calculate_user_pct_shares(
         expected_atlas_aum=expected_atlas_aum,
         num_mil_user_stakes=NUM_MIL_USER_STAKES
     )
@@ -285,48 +289,47 @@ def draw_atlas_harvest_comparison(i):
     ax3.clear()
 
     y_boosts['atlas'].append(atlas_boost)
-    y_mine_pct_shares['atlas'].append(mine_pct_share_atlas)
+    y_emissions_pct_shares['atlas'].append(emissions_pct_share_atlas)
     y_user_pct_shares['atlas'].append(user_pct_share_atlas)
 
-    atlas_user_magic_yield = magic_emissions * user_pct_share_atlas / (NUM_MIL_USER_STAKES * 1_000_000)
+    atlas_user_magic_yield = MAGIC_EMISSIONS * user_pct_share_atlas / (NUM_MIL_USER_STAKES * 1_000_000)
     y_user_magic_yield['atlas'].append(atlas_user_magic_yield)
 
     #### Plot 1 - Boosts
-    for h in harvesters:
+    for h in all_harvesters:
 
-        hid = h.id
-        active_from = round(active_from_day["h{}".format(hid+1)] / 2)
-        # active_from = round(active_from/2) # each i is 2 days
-        current_boost = harvester_boosts[hid]
-        current_mine_pct_share = mine_pct_shares[hid]
-        current_user_pct_share = user_pct_shares[hid]
-        current_user_magic_yield = magic_emissions * current_user_pct_share / (NUM_MIL_USER_STAKES * 1_000_000)
+        active_from = round(active_from_day["h{}".format(h.id+1)] / 2)
+        current_boost = h.getMiningBoost()
+        current_emissions_pct_share = emissions_pct_shares[h.id]
+        current_user_pct_share = user_pct_shares[h.id]
+        current_user_magic_yield = MAGIC_EMISSIONS * current_user_pct_share / (NUM_MIL_USER_STAKES * 1_000_000)
 
-        y_boosts[hid].append(current_boost)
-        y_mine_pct_shares[hid].append(current_mine_pct_share)
-        y_user_pct_shares[hid].append(current_user_pct_share)
-        y_user_magic_yield[hid].append(current_user_magic_yield)
+        y_boosts[h.id].append(current_boost)
+        y_emissions_pct_shares[h.id].append(current_emissions_pct_share)
+        y_user_pct_shares[h.id].append(current_user_pct_share)
+        y_user_magic_yield[h.id].append(current_user_magic_yield)
 
 
         if h.is_active:
             # ax1.plot(
             #     days[active_from:],
-            #     y_boosts[hid][active_from:],
+            #     y_boosts[h.id][active_from:],
             #     label="H{} boost {:.2f}x | {:.0f} parts {:.0f} legions".format(h.id, current_boost, h.parts, h.legions),
             #     color=harvester_colors[h.id],
             # )
 
             ax2.plot(
                 days[active_from:],
-                y_mine_pct_shares[hid][active_from:],
-                label="H{} {:.2f}x boost | Share {:.2%}".format(h.id, current_boost, current_mine_pct_share),
+                y_emissions_pct_shares[h.id][active_from:],
+                label="H{} {:.2f}x boost | Share {:.2%}".format(h.id, current_boost, current_emissions_pct_share),
                 color=harvester_colors[h.id],
+                linestyle=harvester_linestyle[h.id],
             )
 
             ax3.plot(
                 days[active_from:],
-                # y_user_pct_shares[hid][active_from:],
-                y_user_magic_yield[hid][active_from:],
+                # y_user_pct_shares[h.id][active_from:],
+                y_user_magic_yield[h.id][active_from:],
                 label='H{} 1m/{}m: {:.2%}% APR in MAGIC'.format(h.id, AUM_CAP_HARVESTER, current_user_magic_yield),
                 color=harvester_colors[h.id],
             )
@@ -340,8 +343,8 @@ def draw_atlas_harvest_comparison(i):
     #### Plot 2 - Harvester Emission Share
     ax2.plot(
         days,
-        y_mine_pct_shares['atlas'],
-        label="Atlas {:.2f}x boost | Share {:.2%}".format(ATLAS_MINE_BONUS, mine_pct_share_atlas),
+        y_emissions_pct_shares['atlas'],
+        label="Atlas {:.2f}x boost | Share {:.2%}".format(ATLAS_MINE_BONUS, emissions_pct_share_atlas),
         color='red',
         linestyle="--",
     )

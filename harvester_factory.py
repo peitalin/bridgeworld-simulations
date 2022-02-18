@@ -10,12 +10,25 @@ from parameters import MIN_LEGIONS, MAX_LEGIONS
 from parameters import MAX_MAP_HEIGHT, MAX_MAP_WIDTH
 from parameters import TIME_LOCK_BOOST_PARAMS, LEGION_BOOST_PARAMS, LEGION_RANK_PARAMS
 from parameters import EXTRACTOR_BOOST_PARAMS, TREASURES_BOOST_PARAMS
-from parameters import TOTAL_MAGIC_SUPPLY
+from parameters import TOTAL_MAGIC_SUPPLY, DEFAULT_USER_AUM_CAP
 
 from harvester_boost_count import total_harvester_boost
+from harvester_boost_count import getNftBoost
 
 
 class HarvesterFactory:
+    """
+        Deploys harvesters
+        * Governed by Admin
+        * Allows for multiple wallets to hold Admin role to support future “wars” smart contracts and disabling/deployment automation
+        * Stores harvester's configuration and exposes it to Middleman for rewards calculations
+        * Allows for disabling a Harvester
+            * Disabled harvester allows users only to exit
+            * Rewards for harvester are canceled
+            * Depositing and staking are disabled
+        * Defines “Total Supply” of MAGIC for utilization calculations
+    """
+
 
     def __init__(
         self,
@@ -26,8 +39,38 @@ class HarvesterFactory:
         self.admins = admins
         self.war_admins = war_admins
         self.total_magic_supply = total_magic_supply
-        self.atlas = Harvester(id='Atlas', is_atlas=True, is_active=True, aum_cap=None)
+        self.total_magic_supply_outside_harvesters = 0
+
+        atlas_staked = EXPECTED_ATLAS_AUM * 1_000_000
+
+        self.atlas_mine = Harvester(
+            id='Atlas',
+            is_atlas=True,
+            is_active=True,
+            aum_staked=atlas_staked, # pretend 0% of circulating supply staked for Atlas initially
+            aum_cap=total_magic_supply, # uncapped, but use total_magic_supply to calculate utilization
+        )
         self.harvesters = []
+
+    def __repr__(self):
+        ### Prints Harvester Details
+        return """
+        ========== Harvester Factory ==========
+        Total Circulating Supply: {supply:,} MAGIC
+        Total Supply Outside Harvesters: {supply_outside:,} MAGIC
+
+        Atlas AUM Staked: {atlas_aum_staked:,} MAGIC
+
+        Atlas Utilization: {atlas_util:.2%}
+        Harvester Utilizations: {utils}
+
+        """.format(
+            supply=self.total_magic_supply,
+            supply_outside=self.total_magic_supply_outside_harvesters,
+            atlas_aum_staked=self.atlas_mine.aum_staked,
+            atlas_util=self.atlas_mine.utilization,
+            utils=['h{}: {:.2%}'.format(h.id, h.utilization) for h in self.harvesters],
+        )
 
     def __getitem__(self, item):
         ### Lets you do harvester['parts'] to access its fields
@@ -37,8 +80,8 @@ class HarvesterFactory:
             return self.war_admins
         if item == 'total_magic_supply':
             return self.total_magic_supply
-        if item == 'atlas':
-            return self.atlas
+        if item == 'atlas_mine':
+            return self.atlas_mine
         if item == 'harvesters':
             return self.harvesters
 
@@ -50,16 +93,36 @@ class HarvesterFactory:
         self,
         id=0,
         aum_cap=10_000_000,
+        aum_staked=10_000_000,
     ):
         # require(self.war_admins.includes(msg.sender))
-        h = Harvester(id=id, aum_cap=aum_cap)
-        self.harvesters.append(h)
-        return h
+        existing_h = list(filter(lambda h: h.id == id, self.harvesters))
+
+        if len(existing_h) > 0:
+            print("harvester with that id already exists")
+        else:
+            # 1. create harvester and register with harvesterFactory
+            h = Harvester(id=id, aum_cap=aum_cap, aum_staked=aum_staked)
+            self.harvesters.append(h)
+
+            # 2. update total_supply for Atlas (its cap) for Atlas utilization calculations
+            self.update_atlas_cap_for_utilization()
+
+            return h
 
     def deactivate_harvester(self, harvester_id):
         # require(self.war_admins.includes(msg.sender))
-        h = next(h for h in self.harvesters if h['id'] == harvester_id)
+        h = next(h for h in self.harvesters if h.id == harvester_id)
         h.deactivate()
+        # update total_supply for Atlas (its cap) for Atlas utilization calculations
+        self.update_atlas_cap_for_utilization()
+
+
+    def update_atlas_cap_for_utilization(self):
+        total_harvester_aums = np.sum([h.aum_staked for h in self.harvesters])
+        total_supply_outside_harvesters = self.total_magic_supply - total_harvester_aums
+        self.atlas_mine.set_cap_for_atlas(total_supply_outside_harvesters)
+        self.total_magic_supply_outside_harvesters = total_supply_outside_harvesters
 
 
 
@@ -71,11 +134,12 @@ class Harvester:
         id,
         parts=0,
         legions=0,
-        avg_legion_rank=2,
+        avg_legion_rank=1,
         extractors=[],
         is_atlas=False,
         is_active=False, # dormant by default
         aum_cap=10_000_000,
+        aum_staked=10_000_000, # assume its full when created for demo purposes
     ):
         self.id = id
         self.parts = 1
@@ -85,20 +149,36 @@ class Harvester:
         self.is_atlas = is_atlas
         self.is_active = is_active
 
+        self.aum_staked = aum_staked
+        self.aum_cap = aum_cap
+        self.utilization = aum_staked / aum_cap
+        # only harvesters have utilization at harvester-level, Atlas utilization
+        # is calculated on total_circulating_supply of MAGIC
+        self.user_aums = {}
+
     def __repr__(self):
         ### Prints Harvester Details
         return """
-        Harvester:\t{id}
-        Parts:\t{parts}
-        Legions:\t{legions}
-        Avg Legion Rank:\t{avg_legion_rank}
-        Extractors:\t{extractors}
+        ========== Harvester: {id} ==========
+        Parts: {parts}
+        Legions: {legions}
+        Avg Legion Rank: {avg_legion_rank}
+        Extractors: {extractors}
+        AUM Staked: {aum_staked}
+        AUM Cap: {aum_cap}
+        Utilization: {utilization:.2%}
+        IsActive: {is_active}
+
         """.format(
             id=self.id,
             parts=self.parts,
             legions=self.legions,
             avg_legion_rank=self.avg_legion_rank,
             extractors=self.extractors,
+            aum_staked=self.aum_staked,
+            aum_cap=self.aum_cap,
+            utilization=self.utilization,
+            is_active=self.is_active,
         )
 
     def __getitem__(self, item):
@@ -113,6 +193,8 @@ class Harvester:
             return self.avg_legion_rank
         if item == 'extractors':
             return self.extractors
+        if item == 'utilization':
+            return self.utilization
 
     def activate(self):
         self.is_active = True
@@ -120,34 +202,60 @@ class Harvester:
     def deactivate(self):
         self.is_active = False
 
-    def increment_parts(self, parts=1):
-        if self.parts + parts <= MAX_HARVESTER_PARTS:
+    def stake_parts(self, parts=1):
+        if 0 < self.parts + parts <= MAX_HARVESTER_PARTS:
             self.parts += parts
-        else:
-            self.parts = MAX_HARVESTER_PARTS
 
-    def increment_legions(self, legions=1):
-        if self.legions + legions <= MAX_LEGIONS:
+    def stake_legions(self, legions=1):
+        if 0 < self.legions + legions <= MAX_LEGIONS:
             self.legions += legions
-        else:
-            self.legions = MAX_LEGIONS
+
+    def unstake_parts(self, parts=1):
+        if 0 <= self.parts + parts <= MAX_HARVESTER_PARTS:
+            self.parts -= parts
+
+    def unstake_legions(self, legions=1):
+        if 0 <= self.legions + legions <= MAX_LEGIONS:
+            self.legions -= legions
 
     def set_avg_legion_rank(self, avg_legion_rank):
         if avg_legion_rank <= 5:
             self.avg_legion_rank = avg_legion_rank
 
-    def add_extractor(self, extractor):
+    def stake_extractor(self, extractor):
         self.extractors.append(extractor)
 
-    def deposit(self, amount):
-        if self.is_active:
-            print('deposit')
-            # self.deposit.append(amount)
+    def get_user_aum_cap(self):
+        userNftBoost = getNftBoost()
+        # DEFAULT_USER_AUM_CAP = 200_00
+        return DEFAULT_USER_AUM_CAP * (1 + userNftBoost)
+
+    def deposit(self, amount, msg_sender_addr):
+
+        if self.user_aums.get(msg_sender_addr):
+            user_aum = self.user_aums.get(msg_sender_addr)
+        else:
+            user_aum = 0
+
+        new_user_aum = user_aum + amount
+
+        # check new deposit doesn't cause balance to exceed cap
+        assert(new_user_aum <= self.get_user_aum_cap())
+
+        if not self.is_active:
+            print("Harvester inactive, cannot deposit")
+        else:
+            new_aum = amount + self.aum_staked
+            if new_aum > self.aum_cap:
+                print("Deposit exceeds AUM cap: ", self.aum_cap)
+            else:
+                self.aum_staked += new_aum
+                self.user_aums[msg_sender_addr] = new_aum
+                self.utilization = new_aum / self.aum_cap # as a percentage of AUM cap
 
     def withdraw(self, amount):
-        print('withdraw')
-        # self.deposit.append(amount)
-
+        new_aum = self.aum_staked - amount
+        self.utilization = new_aum / self.aum_cap # as a percentage of AUM cap
 
     def getMiningBoost(self):
         if self.is_active:
@@ -160,6 +268,14 @@ class Harvester:
             )
         else:
             return 0
+
+    def set_cap_for_atlas(self, aum_cap):
+        # since Atlas is uncapped, it's cap is just the total_magic_supply circulating
+        # we use this cap to determine utilization for atlas
+        if self.is_atlas:
+            self.aum_cap = aum_cap
+            # update utilization for atlas
+            self.utilization = self.aum_staked / aum_cap
 
 
 

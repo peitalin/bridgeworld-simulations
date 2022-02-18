@@ -60,34 +60,34 @@ def compare_harvester_yield_2harvesters(parts1=20, members1=20, parts2=20, membe
     points_total = points_atlas + points_h1 + points_h2
 
     # Calculate percentage share of total emissions split between Atlas and Harvester 1 and Harvester 2
-    mine_pct_share_atlas = points_atlas / points_total
-    mine_pct_share_h1 = points_h1 / points_total
-    mine_pct_share_h2 = points_h2 / points_total
+    emissions_pct_share_atlas = points_atlas / points_total
+    emissions_pct_share_h1 = points_h1 / points_total
+    emissions_pct_share_h2 = points_h2 / points_total
     if debug:
-        print("Atlas gets:\t{:.2%} of emissions".format(mine_pct_share_atlas))
-        print("Harv_1 gets:\t{:.2%} of emissions\n".format(mine_pct_share_h1))
-        print("Harv_2 gets:\t{:.2%} of emissions\n".format(mine_pct_share_h2))
+        print("Atlas gets:\t{:.2%} of emissions".format(emissions_pct_share_atlas))
+        print("Harv_1 gets:\t{:.2%} of emissions\n".format(emissions_pct_share_h1))
+        print("Harv_2 gets:\t{:.2%} of emissions\n".format(emissions_pct_share_h2))
 
     # a user's share of total emission, staying inside Atlas mine, vs. Harvester 1 and Harvester 2
-    user_pct_share_atlas = num_millions_user_stakes/EXPECTED_AUM_ATLAS * mine_pct_share_atlas
-    user_pct_share_h1 = num_millions_user_stakes/10 * mine_pct_share_h1
-    user_pct_share_h2 = num_millions_user_stakes/10 * mine_pct_share_h2
+    user_pct_share_atlas = num_millions_user_stakes/EXPECTED_AUM_ATLAS * emissions_pct_share_atlas
+    user_pct_share_h1 = num_millions_user_stakes/10 * emissions_pct_share_h1
+    user_pct_share_h2 = num_millions_user_stakes/10 * emissions_pct_share_h2
 
     if debug:
         print("For a whale with 1mil:")
         print("1m in Atlas with {AUM}m AUM gives you:\t 1/{AUM} * {MINE_PCT:.4f} = {USER_PCT:.2%} of emissions".format(
             AUM=EXPECTED_AUM_ATLAS,
-            MINE_PCT=mine_pct_share_atlas,
+            MINE_PCT=emissions_pct_share_atlas,
             USER_PCT=user_pct_share_atlas
         ))
         print("1m in Harv_1 with 10m AUM gives you:\t 1/{AUM_CAP} * {MINE_PCT:.4f} = {USER_PCT:.2%}".format(
             AUM_CAP=AUM_CAP_HARVESTER,
-            MINE_PCT=mine_pct_share_h1,
+            MINE_PCT=emissions_pct_share_h1,
             USER_PCT=user_pct_share_h1
         ))
         print("1m in Harv_2 with 10m AUM gives you:\t 1/{AUM_CAP} * {MINE_PCT:.4f} = {USER_PCT:.2%}".format(
             AUM_CAP=AUM_CAP_HARVESTER,
-            MINE_PCT=mine_pct_share_h2,
+            MINE_PCT=emissions_pct_share_h2,
             USER_PCT=user_pct_share_h2
         ))
         print("\nAn entrepreneurial whale can potentially get a {:.2%} / {:.2%}\n= {:.2f}x improvement in yield".format(
@@ -103,9 +103,9 @@ def compare_harvester_yield_2harvesters(parts1=20, members1=20, parts2=20, membe
         boost_h1,
         boost_h2,
         boost_atlas,
-        mine_pct_share_h1,
-        mine_pct_share_h2,
-        mine_pct_share_atlas,
+        emissions_pct_share_h1,
+        emissions_pct_share_h2,
+        emissions_pct_share_atlas,
         user_pct_share_h1,
         user_pct_share_h2,
         user_pct_share_atlas,
@@ -125,9 +125,9 @@ def plot_atlas_harvest_comparison_2(atlas_parts=0):
     x_boost_h2 = []
     x_boost_atlas = []
 
-    x_mine_pct_share_h1 = []
-    x_mine_pct_share_h2 = []
-    x_mine_pct_share_atlas = []
+    x_emissions_pct_share_h1 = []
+    x_emissions_pct_share_h2 = []
+    x_emissions_pct_share_atlas = []
 
     x_user_pct_share_h1 = []
     x_user_pct_share_h2 = []
@@ -145,9 +145,9 @@ def plot_atlas_harvest_comparison_2(atlas_parts=0):
             boost_h1,
             boost_h2,
             boost_atlas,
-            mine_pct_share_h1,
-            mine_pct_share_h2,
-            mine_pct_share_atlas,
+            emissions_pct_share_h1,
+            emissions_pct_share_h2,
+            emissions_pct_share_atlas,
             user_pct_share_h1,
             user_pct_share_h2,
             user_pct_share_atlas,
@@ -165,9 +165,9 @@ def plot_atlas_harvest_comparison_2(atlas_parts=0):
         x_boost_h2.append(boost_h2)
         x_boost_atlas.append(boost_atlas)
 
-        x_mine_pct_share_h1.append(mine_pct_share_h1)
-        x_mine_pct_share_h2.append(mine_pct_share_h2)
-        x_mine_pct_share_atlas.append(mine_pct_share_atlas)
+        x_emissions_pct_share_h1.append(emissions_pct_share_h1)
+        x_emissions_pct_share_h2.append(emissions_pct_share_h2)
+        x_emissions_pct_share_atlas.append(emissions_pct_share_atlas)
 
         x_user_pct_share_h1.append(user_pct_share_h1)
         x_user_pct_share_h2.append(user_pct_share_h2)
@@ -177,9 +177,9 @@ def plot_atlas_harvest_comparison_2(atlas_parts=0):
         print("boost_h2: ", boost_h2)
         print("boost_atlas: ", boost_atlas)
 
-        print("mine_pct_share_h1: ", mine_pct_share_h1)
-        print("mine_pct_share_h2: ", mine_pct_share_h2)
-        print("mine_pct_share_atlas: ", mine_pct_share_atlas)
+        print("emissions_pct_share_h1: ", emissions_pct_share_h1)
+        print("emissions_pct_share_h2: ", emissions_pct_share_h2)
+        print("emissions_pct_share_atlas: ", emissions_pct_share_atlas)
 
         print("user_pct_share_h1: ", user_pct_share_h1)
         print("user_pct_share_h2: ", user_pct_share_h2)
@@ -201,9 +201,9 @@ def plot_atlas_harvest_comparison_2(atlas_parts=0):
     ax1.grid(color='black', alpha=0.1)
 
     #### Plot 2
-    ax2.plot(x_mine_pct_share_h1, label="H1 Share")
-    ax2.plot(x_mine_pct_share_h2, label="H2 Share")
-    ax2.plot(x_mine_pct_share_atlas, label="Atlas Share", color='red')
+    ax2.plot(x_emissions_pct_share_h1, label="H1 Share")
+    ax2.plot(x_emissions_pct_share_h2, label="H2 Share")
+    ax2.plot(x_emissions_pct_share_atlas, label="Atlas Share", color='red')
     ax2.set(xlabel='Boost (x)', ylabel='% share of emissions')
     # plot 2 x-ticks
     boost_xticks = ["{:.1f}x".format(b) for b in [x_boost_h1[0], x_boost_h1[100], x_boost_h1[200], x_boost_h1[300], x_boost_h1[400], x_boost_h1[500]]]
