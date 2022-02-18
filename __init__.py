@@ -23,7 +23,6 @@ middleman = UtilizationMiddleman(
 	harvester_factory=harvester_factory
 )
 
-
 # 4. Create harvesters one by one, and watch utilization ratios change
 harvester_factory.create_harvester(id=0, aum_staked=5_000_000)
 harvester_factory.create_harvester(id=1, aum_staked=6_000_000)
