@@ -14,14 +14,11 @@ from parameters import EXTRACTOR_BOOST_PARAMS, TREASURES_BOOST_PARAMS
 
 
 
+## TODO
 # *Tweak Genesis Legion’s impact on harvester boosts:*
 # *Set legionBoost max legions = 3000 for max boost*
 # *increase avg_legion_rank’s effect on this boost*
 # *Increase all-class and uncommon’s impact on avg_legion_rank.*
-
-
-#### Have a cap based on wallet's boost
-# E.g. 3x max boost = 2.5mil MAGIC, default might be like 500k MAGIC
 
 
 

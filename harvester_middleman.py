@@ -113,7 +113,7 @@ class UtilizationMiddleman:
 
     def recalculate_emission_shares(self):
         #################################################
-        ### 1. Calculate Mining Power for each mine
+        ### 1. Calculate Mining Power for each ACTIVE mine
         #################################################
 
         # emissions_based_on_utilization() returns a number between [0, 1]
@@ -131,6 +131,8 @@ class UtilizationMiddleman:
             for h in self.harvester_factory.harvesters
             if h.is_active
         ]
+        ## if a mine gets disabled, does its AUM automatically affect Atlas's utilization?
+
 
         total_mining_power = atlas_boosted_mining_power + np.sum([h['mining_power'] for h in harvester_mining_powers])
 
