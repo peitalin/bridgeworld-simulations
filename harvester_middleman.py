@@ -116,7 +116,7 @@ class UtilizationMiddleman:
         ### 1. Calculate Mining Power for each ACTIVE mine
         #################################################
 
-        # emissions_based_on_utilization() returns a number between [0, 1]
+        # mining_power_based_on_utilization() returns a number between [0, 1]
         # then boost it according to their parts + legions + extractors
         atlas_mine = self.harvester_factory.atlas_mine
         atlas_mining_power = self.mining_power_based_on_utilization(atlas_mine.utilization)
@@ -131,8 +131,8 @@ class UtilizationMiddleman:
             for h in self.harvester_factory.harvesters
             if h.is_active
         ]
-        ## if a mine gets disabled, does its AUM automatically affect Atlas's utilization?
-
+        ## if a mine gets disabled, does it's AUM automatically affect Atlas's utilization?
+        ## or only when users withdraw (currently like this, probably better this way)
 
         total_mining_power = atlas_boosted_mining_power + np.sum([h['mining_power'] for h in harvester_mining_powers])
 
