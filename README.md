@@ -13,7 +13,6 @@
 └── "..."
 ```
 
-`parameters.py` contains all the configurable parameters
 
 `harvester_boost_count.py` contain the functions that work out harvester boosts
 
@@ -21,12 +20,15 @@
 
 `harvester_middleman` calculates the boost and share of emissions for an arbitrary number of harvesters. It works out the final percentage split of MAGIC emissions coming from MasterOfCoin.
 
-These three files will be most relevant to the emissions splitting middleware in Solidity.
+`parameters.py` contains all the configurable parameters
+
+These files will be relevant to the emissions splitting middleware in Solidity.
+
 
 ### Harvester Factory + Middleman
 
 run `ipython -i __init__.py` which runs:
-```
+```python
 # 1. Create MasterOfCoin
 master_of_coin = MasterOfCoin()
 
