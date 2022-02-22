@@ -5,7 +5,7 @@ from matplotlib.pyplot import plot
 
 #################################################
 #################################################
-##### Summoning Calculations
+##### Summoning Growh Rate Plots
 #################################################
 #################################################
 
@@ -21,7 +21,6 @@ cycles = np.linspace(0, 12, 13) # 1 to 13 cycles - 4 months
 # Legions Gen0	Rare	275
 # Legions Gen0	1 of 1	5
 # total: 3473 genesis legions
-
 
 # a legion can only do one of the follow at a time:
 #     1) mine boost
