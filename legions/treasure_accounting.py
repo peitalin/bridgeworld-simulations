@@ -44,12 +44,14 @@ class TreasureAccounting:
         }
 
     def add_to_created(self, treasures=[]):
-        if len(treasures) > 0:
-            self.created_treasures[t] += len(treasures)
+        """treasures=['t1', 't2', 't1']"""
+        for t in treasures:
+            self.created_treasures[t] += 1
 
     def add_to_broken(self, treasures=[]):
-        if len(treasures) > 0:
-            self.broken_treasures[t] += len(treasures)
+        """treasures=['t1', 't2', 't1']"""
+        for t in treasures:
+            self.broken_treasures[t] += 1
 
     def take_snapshot_of_treasure_balances(self):
         # takes the current balances, takes a snapshot, then appends to history

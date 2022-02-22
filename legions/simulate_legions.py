@@ -6,6 +6,8 @@ from matplotlib.animation import FuncAnimation
 
 from params import QUEST_TIMES, CRAFT_TIMES
 from legion import Legion
+from legion_populations import calculate_percentage_legion_questing
+from legion_populations import LegionPopulations
 from treasure_accounting import TreasureAccounting
 
 #################################################
@@ -14,61 +16,35 @@ from treasure_accounting import TreasureAccounting
 #################################################
 #################################################
 
-def calculate_percentage_legion_questing(
-    net_inflation_deflation = 0,
-    threshold_upper = 500,
-    threshold_lower = 500,
-    max_pct_upper = 0.8,
-    min_pct_lower = 0.4,
-):
-    """
-        net_inflation_deflation: net inflation/deflation of a particular tier of treasures
-        threshold_upper: upper threshold where 100% of legions are crafting
-        threshold_lower: lower threshold where 100% of legions are questing
-        offset: makes sure percentage_legion_questing stays within this thresholds
-    """
-
-    if net_inflation_deflation >= 0:
-        # too much inflation, less legions questing pls
-        pct = (100 - (threshold_lower + net_inflation_deflation)/10) / 100
-    else:
-        # too much burn, more legions questing pls
-        pct = (100 - (threshold_upper + net_inflation_deflation)/10) / 100
-
-    if pct >= max_pct_upper:
-        return max_pct_upper
-    elif pct <= min_pct_lower:
-        return min_pct_lower
-    else:
-        return pct
-
-
 
 
 
 days = [] # x-axis is days
-pct_crafting = []
-pct_questing = []
 
 fig, (ax1, ax2, ax3) = plt.subplots(1,3, gridspec_kw={'width_ratios': [1,1,1]})
 fig.set_size_inches(15, 8)
 
-## Initial numbers of legions crafting, questing, summoning
-NUM_LEGIONS_QUESTING = 50
-NUM_LEGIONS_CRAFTING = 50
-NUM_LEGIONS_SUMMONING = 0
-NUM_LEGIONS = 1000
-
-
 # Stores all treasure minted/broken balances and histories
 treasureAccounting = TreasureAccounting()
 
-legions_summoning = [Legion(treasureAccounting) for l in range(NUM_LEGIONS_SUMMONING)]
-# legions_questing = [Legion(treasureAccounting) for l in range(NUM_LEGIONS_QUESTING)]
-# legions_crafting = [Legion(treasureAccounting) for l in range(NUM_LEGIONS_CRAFTING)]
-legions_questing = []
-legions_crafting = []
-legions_all = [Legion(treasureAccounting) for l in range(NUM_LEGIONS)]
+NUM_LEGIONS_SUMMONING = 200
+NUM_LEGIONS = 4000
+ROLLING_MEAN_LAG = 3
+
+legionPopulations = LegionPopulations(
+    treasureAccounting,
+    num_legions=NUM_LEGIONS,
+    num_legions_summoning=NUM_LEGIONS_SUMMONING,
+    rolling_mean_lag=ROLLING_MEAN_LAG,
+    # number of days to average back T5 excess supply to decide when to switch from
+    # questing to crafting
+)
+
+# pct_crafting = []
+# pct_questing = []
+## Initial numbers of legions crafting, questing, summoning
+# legions_summoning = [Legion(treasureAccounting) for l in range(NUM_LEGIONS_SUMMONING)]
+# legions_all = [Legion(treasureAccounting) for l in range(NUM_LEGIONS)]
 
 
 FRAMES = 800
@@ -83,52 +59,40 @@ def func_animate(i):
     global days
     days.append(day) # 2 days per tick
 
-    # global legions_questing
-    # global legions_crafting
-    global legions_all
-    global pct_legions_to_questing
-
 
     broken_treasures_history = treasureAccounting.broken_treasures_history
     created_treasures_history = treasureAccounting.created_treasures_history
     net_diff_treasures_history = treasureAccounting.net_diff_treasures_history
 
+    legionPopulations.update_pct_legions_questing()
 
-    rolling_mean_t5_supply = np.mean(net_diff_treasures_history['t5'][-7:])
-    if not np.isnan(rolling_mean_t5_supply):
-        pct_legions_to_questing = calculate_percentage_legion_questing(rolling_mean_t5_supply)
-    else:
-        pct_legions_to_questing = 0.5
-    print("\n\npct_legions questing: ", pct_legions_to_questing)
-
-    pct_questing.append(pct_legions_to_questing)
-    pct_crafting.append(1-pct_legions_to_questing)
-
-
-    ## Reset population of legions crafting vs questing every iteration
-    ## to let legions freely switch between questing or crafting
+    legions_all = legionPopulations.legions_all
+    pct_legions_to_questing = legionPopulations.pct_legions_to_questing
 
     num_legions = len(legions_all)
     num_legions_questing = int(num_legions * pct_legions_to_questing)
     num_legions_crafting = int(num_legions * (1 - pct_legions_to_questing))
 
-    print('rolling mean t5 supply', rolling_mean_t5_supply)
-    print('#questing', num_legions_questing)
-    print('#crafting', num_legions_crafting)
-    legions_questing = legions_all[:num_legions_questing] if num_legions_questing > 0 else []
-    legions_crafting = legions_all[-num_legions_crafting:] if num_legions_crafting > 0 else []
+    legions_summoning = legionPopulations.legions_summoning
+    legions_questing = legionPopulations.legions_questing
+    legions_crafting = legionPopulations.legions_crafting
+
+    pct_crafting = legionPopulations.pct_crafting
+    pct_questing = legionPopulations.pct_questing
 
     len_legions_summoning = len(legions_summoning)
     len_legions_questing = len(legions_questing)
     len_legions_crafting = len(legions_crafting)
 
-    print('questing', len_legions_questing)
-    print('crafting', len_legions_crafting)
+    print('\nquesting', len_legions_questing)
+    print('crafting\n', len_legions_crafting)
 
     # every 7 days, add new summoned legions to questing
-    # number of new legions is just length of legions_summoning array they start at level 0 questing/crafting
-    # because every i is two days, mod 7 >= 1 will roughly count the passage of weeks
-    if (day % 7 >= 1) or (day % 7 == 0):
+    # number of new legions is just length of legions_summoning array
+    # because every i is two days,
+    # the first summon period will land on day = 8, then 14, then 22, then 28
+    # so need day % 7 == 1 or == 0
+    if (day % 7 == 1) or (day % 7 == 0):
         # new batch of summoned legions
         new_aux_legions = legions_summoning.copy()
         midpoint_new_legions = int(len(new_aux_legions)/2)
@@ -234,7 +198,7 @@ def func_animate(i):
     ax3.plot(days, net_diff_treasures_history['t1'], label="t1", color=colors['t1'])
 
     ax3.set_xlim([0,FRAMES])
-    ax3.set_ylim([-10000,10000])
+    ax3.set_ylim([-20000,20000])
     ax3.title.set_text("Net gain/burn in Treasures")
     ax3.grid(color='black', alpha=0.15)
 
@@ -299,9 +263,11 @@ def func_animate(i):
         #     len_legions_summoning,
         #     pct_legions_to_questing,
         # ),
-        'DAY: {} | {:.0%} questing'.format(
+        'DAY: {} | {:.0%} questing | {:.0f} legions | {:.0f} summoning'.format(
             day,
             pct_legions_to_questing,
+            len_legions_crafting + len_legions_questing + len_legions_summoning,
+            len_legions_summoning,
         ),
         fontsize=14
     )
