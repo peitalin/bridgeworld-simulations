@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import plot
 from matplotlib.animation import FuncAnimation
 
-from params import CRAFTING_EXP, QUESTING_EXP, PR_DROP_LOOT_FROM_QUEST
 from params import QUEST_TIMES, CRAFT_TIMES
 from legion import Legion
 from treasure_accounting import TreasureAccounting
@@ -61,6 +60,7 @@ NUM_LEGIONS_SUMMONING = 0
 NUM_LEGIONS = 1000
 
 
+# Stores all treasure minted/broken balances and histories
 treasureAccounting = TreasureAccounting()
 
 legions_summoning = [Legion(treasureAccounting) for l in range(NUM_LEGIONS_SUMMONING)]
@@ -70,27 +70,6 @@ legions_questing = []
 legions_crafting = []
 legions_all = [Legion(treasureAccounting) for l in range(NUM_LEGIONS)]
 
-created_treasures_array = {
-    't1': [],
-    't2': [],
-    't3': [],
-    't4': [],
-    't5': [],
-}
-broken_treasures_array = {
-    't1': [],
-    't2': [],
-    't3': [],
-    't4': [],
-    't5': [],
-}
-net_diff_treasures_array = {
-    't1': [],
-    't2': [],
-    't3': [],
-    't4': [],
-    't5': [],
-}
 
 FRAMES = 800
 
@@ -110,7 +89,12 @@ def func_animate(i):
     global pct_legions_to_questing
 
 
-    rolling_mean_t5_supply = np.mean(net_diff_treasures_array['t5'][-7:])
+    broken_treasures_history = treasureAccounting.broken_treasures_history
+    created_treasures_history = treasureAccounting.created_treasures_history
+    net_diff_treasures_history = treasureAccounting.net_diff_treasures_history
+
+
+    rolling_mean_t5_supply = np.mean(net_diff_treasures_history['t5'][-7:])
     if not np.isnan(rolling_mean_t5_supply):
         pct_legions_to_questing = calculate_percentage_legion_questing(rolling_mean_t5_supply)
     else:
@@ -198,26 +182,10 @@ def func_animate(i):
             num_times_craft = int(hours_in_2_days / CRAFT_TIMES['easy'])
             [l2.craft('easy') for x in range(num_times_craft)]
 
-    broken_treasures = treasureAccounting.broken_treasures
-    created_treasures = treasureAccounting.created_treasures
 
-    broken_treasures_array['t1'].append(broken_treasures['t1'])
-    broken_treasures_array['t2'].append(broken_treasures['t2'])
-    broken_treasures_array['t3'].append(broken_treasures['t3'])
-    broken_treasures_array['t4'].append(broken_treasures['t4'])
-    broken_treasures_array['t5'].append(broken_treasures['t5'])
+    # After all legions have crafted/quested, take a snapshot of net treasures created/broken
+    treasureAccounting.take_snapshot_of_treasure_balances()
 
-    created_treasures_array['t1'].append(created_treasures['t1'])
-    created_treasures_array['t2'].append(created_treasures['t2'])
-    created_treasures_array['t3'].append(created_treasures['t3'])
-    created_treasures_array['t4'].append(created_treasures['t4'])
-    created_treasures_array['t5'].append(created_treasures['t5'])
-
-    net_diff_treasures_array['t1'].append(created_treasures['t1'] - broken_treasures['t1'])
-    net_diff_treasures_array['t2'].append(created_treasures['t2'] - broken_treasures['t2'])
-    net_diff_treasures_array['t3'].append(created_treasures['t3'] - broken_treasures['t3'])
-    net_diff_treasures_array['t4'].append(created_treasures['t4'] - broken_treasures['t4'])
-    net_diff_treasures_array['t5'].append(created_treasures['t5'] - broken_treasures['t5'])
 
     colors = {
         't1': 'crimson',
@@ -230,17 +198,17 @@ def func_animate(i):
 
     # broken plots
     ax1.clear()
-    ax1.plot(days, np.log10(broken_treasures_array['t5']), label="t5 broken", color=colors['t5'], linestyle='--')
-    ax1.plot(days, np.log10(broken_treasures_array['t4']), label="t4 broken", color=colors['t4'], linestyle='--')
-    ax1.plot(days, np.log10(broken_treasures_array['t3']), label="t3 broken", color=colors['t3'], linestyle='--')
-    ax1.plot(days, np.log10(broken_treasures_array['t2']), label="t2 broken", color=colors['t2'], linestyle='--')
-    ax1.plot(days, np.log10(broken_treasures_array['t1']), label="t1 broken", color=colors['t1'], linestyle='--')
+    ax1.plot(days, np.log10(broken_treasures_history['t5']), label="t5 broken", color=colors['t5'], linestyle='--')
+    ax1.plot(days, np.log10(broken_treasures_history['t4']), label="t4 broken", color=colors['t4'], linestyle='--')
+    ax1.plot(days, np.log10(broken_treasures_history['t3']), label="t3 broken", color=colors['t3'], linestyle='--')
+    ax1.plot(days, np.log10(broken_treasures_history['t2']), label="t2 broken", color=colors['t2'], linestyle='--')
+    ax1.plot(days, np.log10(broken_treasures_history['t1']), label="t1 broken", color=colors['t1'], linestyle='--')
 
-    ax1.plot(days, np.log10(created_treasures_array['t5']), label="t5 minted", color=colors['t5'], linestyle=':')
-    ax1.plot(days, np.log10(created_treasures_array['t4']), label="t4 minted", color=colors['t4'], linestyle=':')
-    ax1.plot(days, np.log10(created_treasures_array['t3']), label="t3 minted", color=colors['t3'], linestyle=':')
-    ax1.plot(days, np.log10(created_treasures_array['t2']), label="t2 minted", color=colors['t2'], linestyle=':')
-    ax1.plot(days, np.log10(created_treasures_array['t1']), label="t1 minted", color=colors['t1'], linestyle=':')
+    ax1.plot(days, np.log10(created_treasures_history['t5']), label="t5 minted", color=colors['t5'], linestyle=':')
+    ax1.plot(days, np.log10(created_treasures_history['t4']), label="t4 minted", color=colors['t4'], linestyle=':')
+    ax1.plot(days, np.log10(created_treasures_history['t3']), label="t3 minted", color=colors['t3'], linestyle=':')
+    ax1.plot(days, np.log10(created_treasures_history['t2']), label="t2 minted", color=colors['t2'], linestyle=':')
+    ax1.plot(days, np.log10(created_treasures_history['t1']), label="t1 minted", color=colors['t1'], linestyle=':')
 
     ax1.set_xlim([0,FRAMES])
     ax1.set_ylim([0,10])
@@ -259,11 +227,11 @@ def func_animate(i):
 
     # diff plots
     ax3.clear()
-    ax3.plot(days, net_diff_treasures_array['t5'], label="t5", color=colors['t5'])
-    ax3.plot(days, net_diff_treasures_array['t4'], label="t4", color=colors['t4'])
-    ax3.plot(days, net_diff_treasures_array['t3'], label="t3", color=colors['t3'])
-    ax3.plot(days, net_diff_treasures_array['t2'], label="t2", color=colors['t2'])
-    ax3.plot(days, net_diff_treasures_array['t1'], label="t1", color=colors['t1'])
+    ax3.plot(days, net_diff_treasures_history['t5'], label="t5", color=colors['t5'])
+    ax3.plot(days, net_diff_treasures_history['t4'], label="t4", color=colors['t4'])
+    ax3.plot(days, net_diff_treasures_history['t3'], label="t3", color=colors['t3'])
+    ax3.plot(days, net_diff_treasures_history['t2'], label="t2", color=colors['t2'])
+    ax3.plot(days, net_diff_treasures_history['t1'], label="t1", color=colors['t1'])
 
     ax3.set_xlim([0,FRAMES])
     ax3.set_ylim([-10000,10000])

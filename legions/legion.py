@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import plot
 from matplotlib.animation import FuncAnimation
 
-from params import CRAFTING_EXP, QUESTING_EXP, PR_DROP_LOOT_FROM_QUEST
+from params import CRAFTING_EXP, QUESTING_EXP
 from questing_crafting import see_if_treasures_break, maybe_drop_loot_from_quest
 
 

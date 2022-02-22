@@ -132,7 +132,7 @@ class UtilizationMiddleman:
             if h.is_active
         ]
         ## if a mine gets disabled, does it's AUM automatically affect Atlas's utilization?
-        ## or only when users withdraw (currently like this, probably better this way)
+        ## or only when users withdraw? (it is currently like this, probably better this way)
 
         total_mining_power = atlas_boosted_mining_power + np.sum([h['mining_power'] for h in harvester_mining_powers])
 

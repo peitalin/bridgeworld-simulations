@@ -120,11 +120,11 @@ class HarvesterFactory:
 
     def update_atlas_cap_for_utilization(self):
         # Atlas mine does not have a cap, but we set the cap as total_circulating_supply
-        # to make utilisation easier to calculate
+        # to make utilisation easier to calculate.
         total_harvester_aums = np.sum([h.aum_staked for h in self.harvesters])
         total_supply_outside_harvesters = self.total_magic_supply - total_harvester_aums
-        # this supply needs to exclude wallets like ecosystem fund, etc
-        # the excludedWallets list
+        # this total_magic_supply needs to exclude wallets like ecosystem fund, etc.
+        # e.g. the excludedWallets list.
 
         self.atlas_mine.set_cap_for_atlas(total_supply_outside_harvesters)
         self.total_magic_supply_outside_harvesters = total_supply_outside_harvesters
