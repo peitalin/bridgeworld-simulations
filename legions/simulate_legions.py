@@ -28,7 +28,7 @@ fig.set_size_inches(15, 8)
 treasureAccounting = TreasureAccounting()
 
 NUM_LEGIONS_SUMMONING = 200
-NUM_LEGIONS = 4000
+NUM_LEGIONS = 2000
 ROLLING_MEAN_LAG = 3
 
 legionPopulations = LegionPopulations(
@@ -39,12 +39,6 @@ legionPopulations = LegionPopulations(
     # number of days to average back T5 excess supply to decide when to switch from
     # questing to crafting
 )
-
-# pct_crafting = []
-# pct_questing = []
-## Initial numbers of legions crafting, questing, summoning
-# legions_summoning = [Legion(treasureAccounting) for l in range(NUM_LEGIONS_SUMMONING)]
-# legions_all = [Legion(treasureAccounting) for l in range(NUM_LEGIONS)]
 
 
 FRAMES = 800
@@ -64,52 +58,18 @@ def func_animate(i):
     created_treasures_history = treasureAccounting.created_treasures_history
     net_diff_treasures_history = treasureAccounting.net_diff_treasures_history
 
-    legionPopulations.update_pct_legions_questing()
-
-    legions_all = legionPopulations.legions_all
-    pct_legions_to_questing = legionPopulations.pct_legions_to_questing
-
-    num_legions = len(legions_all)
-    num_legions_questing = int(num_legions * pct_legions_to_questing)
-    num_legions_crafting = int(num_legions * (1 - pct_legions_to_questing))
-
     legions_summoning = legionPopulations.legions_summoning
     legions_questing = legionPopulations.legions_questing
     legions_crafting = legionPopulations.legions_crafting
 
-    pct_crafting = legionPopulations.pct_crafting
-    pct_questing = legionPopulations.pct_questing
-
-    len_legions_summoning = len(legions_summoning)
-    len_legions_questing = len(legions_questing)
-    len_legions_crafting = len(legions_crafting)
-
-    print('\nquesting', len_legions_questing)
-    print('crafting\n', len_legions_crafting)
-
-    # every 7 days, add new summoned legions to questing
-    # number of new legions is just length of legions_summoning array
-    # because every i is two days,
-    # the first summon period will land on day = 8, then 14, then 22, then 28
+    # Every 7 days, add N new summoned legions
+    # Because every i is two days, the first summon period will
+    # land on day = 8, then 14, then 22, then 28
     # so need day % 7 == 1 or == 0
     if (day % 7 == 1) or (day % 7 == 0):
-        # new batch of summoned legions
-        new_aux_legions = legions_summoning.copy()
-        midpoint_new_legions = int(len(new_aux_legions)/2)
-
-        first_half_legions = new_aux_legions[:midpoint_new_legions] if midpoint_new_legions > 0 else []
-        last_half_legions = new_aux_legions[midpoint_new_legions:] if midpoint_new_legions > 0 else []
-
-        [legions_all.insert(0, s) for s in first_half_legions]
-        [legions_all.append(s) for s in last_half_legions]
-
-        # suppose % of new aux legions go into questing
-        # legions_to_questing = round(len_legions_summoning * pct_legions_to_questing)
-
-        # [legions_questing.append(s) for s in new_aux_legions[:legions_to_questing]]
-        # [legions_crafting.append(s) for s in new_aux_legions[legions_to_questing:]]
-        # print("len legions questing: ", len(legions_questing))
-        # print("len legions crafting: ", len(legions_crafting))
+        legionPopulations.update_legion_populations(summoning_cycle_complete=True)
+    else:
+        legionPopulations.update_legion_populations(summoning_cycle_complete=False)
 
 
     for l1 in legions_questing:
@@ -145,6 +105,25 @@ def func_animate(i):
             # how many times you can craft in 2 days
             num_times_craft = int(hours_in_2_days / CRAFT_TIMES['easy'])
             [l2.craft('easy') for x in range(num_times_craft)]
+
+
+    pct_legions_questing_now = legionPopulations.pct_questing[-1]
+
+    num_legions = len(legionPopulations.legions_all)
+    num_legions_questing = int(num_legions * pct_legions_questing_now)
+    num_legions_crafting = int(num_legions * (1 - pct_legions_questing_now))
+
+    pct_crafting = legionPopulations.pct_crafting
+    pct_questing = legionPopulations.pct_questing
+
+    len_legions_summoning = len(legions_summoning)
+    len_legions_questing = len(legions_questing)
+    len_legions_crafting = len(legions_crafting)
+
+    print('\nquesting', len_legions_questing)
+    print('crafting\n', len_legions_crafting)
+
+
 
 
     # After all legions have crafted/quested, take a snapshot of net treasures created/broken
@@ -261,11 +240,11 @@ def func_animate(i):
         #     len_legions_crafting,
         #     len_legions_questing,
         #     len_legions_summoning,
-        #     pct_legions_to_questing,
+        #     pct_legions_questing_now,
         # ),
         'DAY: {} | {:.0%} questing | {:.0f} legions | {:.0f} summoning'.format(
             day,
-            pct_legions_to_questing,
+            pct_legions_questing_now,
             len_legions_crafting + len_legions_questing + len_legions_summoning,
             len_legions_summoning,
         ),

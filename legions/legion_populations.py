@@ -40,9 +40,9 @@ class LegionPopulations:
     def __init__(
         self,
         treasureAccounting,
-        num_legions = 2000,
+        num_legions = 1000,
         num_legions_summoning = 50,
-        rolling_mean_lag = 3,
+        rolling_mean_lag = 7,
     ):
         self.treasureAccounting = treasureAccounting
         self.pct_crafting = []
@@ -77,7 +77,8 @@ class LegionPopulations:
         return rolling_mean_treasure_supply
 
 
-    def update_pct_legions_questing(self, tier='t5'):
+    def update_legion_populations(self, tier='t5', summoning_cycle_complete=False):
+
 
         lag = self.rolling_mean_lag
         rolling_mean_treasure_supply = self.get_rolling_mean_treasure_supply(tier)
@@ -101,6 +102,19 @@ class LegionPopulations:
 
         self.legions_questing = self.legions_all[:num_legions_questing] if num_legions_questing > 0 else []
         self.legions_crafting = self.legions_all[-num_legions_crafting:] if num_legions_crafting > 0 else []
+
+        if summoning_cycle_complete:
+            # new batch of summoned legions
+            new_aux_legions = self.legions_summoning.copy()
+            midpoint_new_legions = int(len(new_aux_legions)/2)
+
+            first_half_legions = new_aux_legions[:midpoint_new_legions] if midpoint_new_legions > 0 else []
+            last_half_legions = new_aux_legions[midpoint_new_legions:] if midpoint_new_legions > 0 else []
+
+            # half in front, half at back so we distribute new summons evenly across
+            # crafting and questing (which is split in middle)
+            [self.legions_all.insert(0, s) for s in first_half_legions]
+            [self.legions_all.append(s) for s in last_half_legions]
 
 
 
