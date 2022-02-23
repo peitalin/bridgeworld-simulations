@@ -1,6 +1,6 @@
 import numpy as np
 
-from params import QUEST_TIMES, CRAFT_TIMES
+from params import QUEST_TIMES, CRAFT_TIMES, PR_DROP_LOOT_FROM_QUEST
 from legion import Legion
 
 
@@ -35,6 +35,7 @@ def calculate_percentage_legion_questing(
 
 
 
+
 class LegionPopulations:
 
     def __init__(
@@ -62,9 +63,17 @@ class LegionPopulations:
         %Legions Crafting: {pct_crafting}
         %Legions Questing: {pct_questing}
 
+        #Craftors: {num_crafting}
+        #Questors: {num_questing}
+        #Summoners: {num_summoning}
+        Total Legions: {num_legions}
         """.format(
             pct_crafting=self.pct_crafting,
             pct_questing=self.pct_legions_to_questing,
+            num_craftors=len(self.legions_crafting),
+            num_questors=len(self.legions_questors),
+            num_summoners=len(self.legions_summoners),
+            num_legions=len(self.legions_all),
         )
 
     def get_rolling_mean_treasure_supply(self, tier='t5'):
@@ -78,7 +87,6 @@ class LegionPopulations:
 
 
     def update_legion_populations(self, tier='t5', summoning_cycle_complete=False):
-
 
         lag = self.rolling_mean_lag
         rolling_mean_treasure_supply = self.get_rolling_mean_treasure_supply(tier)
@@ -125,8 +133,8 @@ class LegionPopulations:
 # + crafting_in_ecosystem_partners + more_utility_for_treasures
 
 # treasure_supply = legions_questing * drop_rate
-# # supply is a function of treasure prices, there is no supply-side scarcity
-# # it depends on legions questing, in tun determined by summoning rates
+# supply is a function of treasure prices, there is no supply-side scarcity
+# it depends on legions questing, in tun determined by summoning rates
 
 # legions_questing = percentage_of_legions_questing * legions
 # legions = (n * (n - 1)) / 2
@@ -135,7 +143,7 @@ class LegionPopulations:
 
 # legions_questing = percentage_of_legions_questing * legions
 
-# Er[questing] = 0.2 * drop_rate_weighted_price of treasures
+# Er[questing] = PR_DROP_LOOT_FROM_QUEST * drop_rate_weighted_price of treasures
 # # [drop_rate * price for drop_rate, price in [t1, t2, t3, t4, t5 treasure tiers]]
 
 # Er[mining] = NFTBoost * user_wealth
@@ -144,3 +152,63 @@ class LegionPopulations:
 # Er[summoning] = -500MAGIC - opportunity_cost_of_questing_1_week + Er[questing at t+1]
 # # sacrifice 1 period of questing/mining and 500 MAGIC for 1x  lifetime value of a legion
 # # which is an income stream of questing 1 period from now = Er_t+1[questing]
+
+
+
+## Prices are a function of supply and demand
+prices = [
+    1000,
+    400,
+    315,
+    75,
+    10,
+]
+
+def pr_weighted_price_of_treasures(lvl='easy'):
+    # pr: probabilities of dropping t1, t2, t3, t4, t5 loot
+    # in percentages
+    if lvl=='easy':
+        pr = [0.0, 0.025, 0.05, 0.15, 0.775]
+    if lvl=='medium':
+        pr = [0.015, 0.05, 0.07, 0.17, 0.695]
+    if lvl=='hard':
+        pr = [0.025, 0.09, 0.08, 0.022, 0.0585]
+    return np.sum([price*prob for price,prob in zip(prices,pr)])
+
+
+
+
+
+
+## Weekly expected ROI on differnet legion pathways
+def expected_roi_questing(lvl='easy', days=7):
+    # Er[questing] = PR_DROP_LOOT_FROM_QUEST * drop_rate_weighted_price of treasures
+    # [drop_rate * price for drop_rate, price in [t1, t2, t3, t4, t5 treasure tiers]]
+
+    nquests = 24 / QUEST_TIMES[lvl] * days
+    roi = PR_DROP_LOOT_FROM_QUEST * nquests * pr_weighted_price_of_treasures(lvl)
+    return roi
+    # return 1 / population_questing
+
+
+def expected_roi_mining(aum=50_000, nftBoost=0.75):
+    # Er[mining] = NFTBoost * user_wealth
+    # legions are more useful in the mine for richer users
+    weeks = 52
+    return aum * nftBoost / weeks
+
+
+def expected_roi_summoning():
+    # Er[summoning] = -500MAGIC - opportunity_cost_of_questing_1_week + Er[questing at t+1...]
+    # sacrifice 1 period of questing/mining and 500 MAGIC for 1x  lifetime value of a legion
+    # which is an income stream of questing 1 period from now = Er_t+1[questing]
+
+    opportunity_cost_of_questing_1_week = expected_roi_questing()
+    ltv_questing = expected_roi_questing() / 0.08 # assume 8% discount rate or roughly 12 week return
+    return -500 - opportunity_cost_of_questing_1_week + ltv_questing
+
+
+print('expected_roi_questing', expected_roi_questing() * 12)
+print('expected_roi_mining' , expected_roi_mining())
+print('expected_roi_summoning' , expected_roi_summoning())
+

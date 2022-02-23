@@ -16,11 +16,7 @@ from treasure_accounting import TreasureAccounting
 #################################################
 #################################################
 
-
-
-
 days = [] # x-axis is days
-
 fig, (ax1, ax2, ax3) = plt.subplots(1,3, gridspec_kw={'width_ratios': [1,1,1]})
 fig.set_size_inches(15, 8)
 
@@ -53,15 +49,6 @@ def func_animate(i):
     global days
     days.append(day) # 2 days per tick
 
-
-    broken_treasures_history = treasureAccounting.broken_treasures_history
-    created_treasures_history = treasureAccounting.created_treasures_history
-    net_diff_treasures_history = treasureAccounting.net_diff_treasures_history
-
-    legions_summoning = legionPopulations.legions_summoning
-    legions_questing = legionPopulations.legions_questing
-    legions_crafting = legionPopulations.legions_crafting
-
     # Every 7 days, add N new summoned legions
     # Because every i is two days, the first summon period will
     # land on day = 8, then 14, then 22, then 28
@@ -71,8 +58,10 @@ def func_animate(i):
     else:
         legionPopulations.update_legion_populations(summoning_cycle_complete=False)
 
+    pct_legions_questing_now = legionPopulations.pct_questing[-1]
 
-    for l1 in legions_questing:
+
+    for l1 in legionPopulations.legions_questing:
         if l1.quest_lvl >= 5:
             # hard quests take 16hrs, 48/16 = 3 times
             num_times_quest = int(hours_in_2_days / QUEST_TIMES['hard'])
@@ -87,7 +76,7 @@ def func_animate(i):
             [l1.quest() for x in range(num_times_quest)]
 
 
-    for l2 in legions_crafting:
+    for l2 in legionPopulations.legions_crafting:
         if l2.craft_lvl >= 5:
             # hard craft take 48hrs, 48/48 = 1 times
             # how many times you can craft in 2 days
@@ -107,27 +96,14 @@ def func_animate(i):
             [l2.craft('easy') for x in range(num_times_craft)]
 
 
-    pct_legions_questing_now = legionPopulations.pct_questing[-1]
-
-    num_legions = len(legionPopulations.legions_all)
-    num_legions_questing = int(num_legions * pct_legions_questing_now)
-    num_legions_crafting = int(num_legions * (1 - pct_legions_questing_now))
-
-    pct_crafting = legionPopulations.pct_crafting
-    pct_questing = legionPopulations.pct_questing
-
-    len_legions_summoning = len(legions_summoning)
-    len_legions_questing = len(legions_questing)
-    len_legions_crafting = len(legions_crafting)
-
-    print('\nquesting', len_legions_questing)
-    print('crafting\n', len_legions_crafting)
-
-
-
-
+    #######################################################
     # After all legions have crafted/quested, take a snapshot of net treasures created/broken
     treasureAccounting.take_snapshot_of_treasure_balances()
+    #######################################################
+
+    broken_treasures_history = treasureAccounting.broken_treasures_history
+    created_treasures_history = treasureAccounting.created_treasures_history
+    net_diff_treasures_history = treasureAccounting.net_diff_treasures_history
 
 
     colors = {
@@ -137,7 +113,6 @@ def func_animate(i):
         't4': 'royalblue',
         't5': 'black',
     }
-
 
     # broken plots
     ax1.clear()
@@ -160,8 +135,8 @@ def func_animate(i):
 
     # minted plots
     ax2.clear()
-    ax2.plot(days, pct_crafting, label="%legions crafting", color='blue', linestyle='-', alpha=0.5)
-    ax2.plot(days, pct_questing, label="%legions questing", color='red', linestyle='-', alpha=0.5)
+    ax2.plot(days, legionPopulations.pct_crafting, label="%legions crafting", color='blue', linestyle='-', alpha=0.5)
+    ax2.plot(days, legionPopulations.pct_questing, label="%legions questing", color='red', linestyle='-', alpha=0.5)
 
     ax2.set_xlim([0,FRAMES])
     ax2.set_ylim([0,1])
@@ -181,10 +156,10 @@ def func_animate(i):
     ax3.title.set_text("Net gain/burn in Treasures")
     ax3.grid(color='black', alpha=0.15)
 
-    if day >= 14:
+    if day >= 33:
         ax3.axvline(x=6, color='black', linestyle=':', alpha=0.5, label="medium crafts start")
 
-    if day >= 40:
+    if day >= 60:
         ax3.axvline(x=32, color='black', linestyle='--', alpha=0.5, label="hard crafts start")
 
     ax1.legend()
@@ -235,18 +210,11 @@ def func_animate(i):
 
 
     fig.suptitle(
-        # 'DAY: {} | {} crafting | {} questing | {} summoning => {:.0%} to questing'.format(
-        #     day,
-        #     len_legions_crafting,
-        #     len_legions_questing,
-        #     len_legions_summoning,
-        #     pct_legions_questing_now,
-        # ),
         'DAY: {} | {:.0%} questing | {:.0f} legions | {:.0f} summoning'.format(
             day,
             pct_legions_questing_now,
-            len_legions_crafting + len_legions_questing + len_legions_summoning,
-            len_legions_summoning,
+            len(legionPopulations.legions_all),
+            len(legionPopulations.legions_summoning),
         ),
         fontsize=14
     )
