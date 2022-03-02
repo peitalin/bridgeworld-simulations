@@ -6,7 +6,7 @@ DISTANCE_BOOST_FACTOR = 1 # 100% is 2x boost (1 + 100%)
 # these boosts stack together multiplicatively to determine overall boost
 # parts_boost should probably be bigger than legions (as a craft item)
 
-ATLAS_MINE_BONUS = 5
+ATLAS_MINE_BONUS = 4
 # atlas mine gets a default boost
 
 EXPECTED_ATLAS_AUM = 90
@@ -134,8 +134,8 @@ TREASURES_BOOST_PARAMS = {
 }
 
 EXTRACTOR_BOOST_PARAMS = {
-    'small_extractor': 0.15, #  15%
-    'medium_extractor': 0.20, # 20%
-    'large_extractor': 0.25, # 25%
+    'small_extractor': 0.15,
+    'medium_extractor': 0.20,
+    'large_extractor': 0.25,
 }
 

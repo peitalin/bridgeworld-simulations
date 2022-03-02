@@ -116,14 +116,6 @@ NUM_MIL_USER_STAKES = 1
 
 
 
-extractors = [
-    'large_extractor',
-    'large_extractor',
-    'large_extractor',
-    'large_extractor',
-    'large_extractor',
-]
-
 active_from_day = {
     ## Launch with 2 harvesters, then 1 every 20 days after
     'h1': 30,
@@ -143,6 +135,11 @@ middleman = UtilizationMiddleman(
 )
 
 harvester_factory.create_harvester(id=0)
+
+# print("harvester_factory['harvesters'][0]", harvester_factory['harvesters'][0])
+##### 5x extractors for harvester 0
+harvester_factory['harvesters'][0].set_extractors(extractors=['large_extractor']*5)
+
 harvester_factory.create_harvester(id=1)
 harvester_factory.create_harvester(id=2)
 harvester_factory.create_harvester(id=3)
@@ -187,84 +184,44 @@ def draw_atlas_harvest_comparison(i):
     h5 = all_harvesters[4]
     h6 = all_harvesters[5]
 
-    # harvesters = [ h1, h2, h3, h4, h5 ]
 
     if day < active_from_day['h1']:
         expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER
     # elif active_from_day['h1'] <= day < active_from_day['h2']:
     #     h1.activate()
-    #     h1.increment_parts(parts_to_increment)
-    #     h1.increment_legions(legions_to_increment)
+    #     h1.stake_parts(parts_to_increment)
+    #     h1.stake_legions(legions_to_increment)
     #     expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER
     elif active_from_day['h2'] <= day < active_from_day['h3']:
-        h1.activate()
-        h2.activate()
-        h1.increment_parts(parts_to_increment)
-        h1.increment_legions(legions_to_increment)
-        h2.increment_parts(parts_to_increment)
-        h2.increment_legions(legions_to_increment)
+        [h.activate() for h in[h1, h2]]
+        [h.stake_parts(parts_to_increment) for h in [h1,h2]]
+        [h.stake_legions(legions_to_increment) for h in [h1,h2]]
         expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*2
+
     elif active_from_day['h3'] <= day < active_from_day['h4']:
-        h1.activate()
-        h2.activate()
-        h3.activate()
-        h1.increment_parts(parts_to_increment)
-        h1.increment_legions(legions_to_increment)
-        h2.increment_parts(parts_to_increment)
-        h2.increment_legions(legions_to_increment)
-        h3.increment_parts(parts_to_increment)
-        h3.increment_legions(legions_to_increment)
+        [h.activate() for h in[h1, h2, h3]]
+        [h.stake_parts(parts_to_increment) for h in [h1, h2, h3]]
+        [h.stake_legions(legions_to_increment) for h in [h1, h2, h3]]
         expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*3
+
     elif active_from_day['h4'] <= day < active_from_day['h5']:
-        h1.activate()
-        h2.activate()
-        h3.activate()
-        h4.activate()
-        h1.increment_parts(parts_to_increment)
-        h1.increment_legions(legions_to_increment)
-        h2.increment_parts(parts_to_increment)
-        h2.increment_legions(legions_to_increment)
-        h3.increment_parts(parts_to_increment)
-        h3.increment_legions(legions_to_increment)
-        h4.increment_parts(parts_to_increment)
-        h4.increment_legions(legions_to_increment)
+        [h.activate() for h in[h1, h2, h3, h4]]
+        [h.stake_parts(parts_to_increment) for h in [h1, h2, h3, h4]]
+        [h.stake_legions(legions_to_increment) for h in [h1, h2, h3, h4]]
         expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*3.5
+
     elif active_from_day['h5'] <= day < active_from_day['h6']:
-        h1.activate()
-        h2.activate()
-        h3.activate()
-        h4.activate()
-        h5.activate()
-        h1.increment_parts(parts_to_increment)
-        h1.increment_legions(legions_to_increment)
-        h2.increment_parts(parts_to_increment)
-        h2.increment_legions(legions_to_increment)
-        h3.increment_parts(parts_to_increment)
-        h3.increment_legions(legions_to_increment)
-        h4.increment_parts(parts_to_increment)
-        h4.increment_legions(legions_to_increment)
-        h5.increment_parts(parts_to_increment)
-        h5.increment_legions(legions_to_increment)
+        [h.activate() for h in[h1, h2, h3, h4, h5]]
+        [h.stake_parts(parts_to_increment) for h in [h1, h2, h3, h4, h5]]
+        [h.stake_legions(legions_to_increment) for h in [h1, h2, h3, h4, h5]]
         expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*4
     else:
-        h1.activate()
-        h2.activate()
-        h3.activate()
-        h4.activate()
-        h5.activate()
+        [h.activate() for h in[h1, h2, h3, h4, h5]]
+        [h.stake_parts(parts_to_increment) for h in [h1, h2, h3, h4, h5]]
+        [h.stake_legions(legions_to_increment) for h in [h1, h2, h3, h4, h5]]
         # h6.activate()
-        h1.increment_parts(parts_to_increment)
-        h1.increment_legions(legions_to_increment)
-        h2.increment_parts(parts_to_increment)
-        h2.increment_legions(legions_to_increment)
-        h3.increment_parts(parts_to_increment)
-        h3.increment_legions(legions_to_increment)
-        h4.increment_parts(parts_to_increment)
-        h4.increment_legions(legions_to_increment)
-        h5.increment_parts(parts_to_increment)
-        h5.increment_legions(legions_to_increment)
-        # h6.increment_parts(parts_to_increment)
-        # h6.increment_legions(legions_to_increment)
+        # h6.stake_parts(parts_to_increment)
+        # h6.stake_legions(legions_to_increment)
         # last harvester comes out, but not as much AUM flows from Atlas
         # because it's all already locked.
         # 85mil locked
@@ -272,8 +229,10 @@ def draw_atlas_harvest_comparison(i):
         # https://twitter.com/bjornsamuel/status/1486957771979427844
         expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*4
 
+    print('harvester_factory', harvester_factory.harvesters)
 
-    ( atlas_boost, harvester_boosts ) = middleman.recalculate_harvester_boosts()
+
+    ( atlas_boost, harvester_boosts ) = middleman.calculate_harvester_boosts()
 
     ( emissions_pct_share_atlas, emissions_pct_shares ) = middleman.recalculate_emission_shares()
 
@@ -296,7 +255,8 @@ def draw_atlas_harvest_comparison(i):
     y_user_magic_yield['atlas'].append(atlas_user_magic_yield)
 
     #### Plot 1 - Boosts
-    for h in all_harvesters:
+
+    for h in [h for h in all_harvesters if h.is_active]:
 
         active_from = round(active_from_day["h{}".format(h.id+1)] / 2)
         current_boost = h.getMiningBoost()
@@ -305,7 +265,7 @@ def draw_atlas_harvest_comparison(i):
         current_user_magic_yield = MAGIC_EMISSIONS * current_user_pct_share / (NUM_MIL_USER_STAKES * 1_000_000)
 
         y_boosts[h.id].append(current_boost)
-        y_emissions_pct_shares[h.id].append(current_emissions_pct_share)
+        y_emissions_pct_shares[h.id].append(current_emissions_pct_share['emission_share'])
         y_user_pct_shares[h.id].append(current_user_pct_share)
         y_user_magic_yield[h.id].append(current_user_magic_yield)
 
@@ -320,8 +280,8 @@ def draw_atlas_harvest_comparison(i):
 
             ax2.plot(
                 days[active_from:],
-                y_emissions_pct_shares[h.id][active_from:],
-                label="H{} {:.2f}x boost | Share {:.2%}".format(h.id, current_boost, current_emissions_pct_share),
+                y_emissions_pct_shares[h.id],
+                label="H{} {:.2f}x boost | Share {:.2%}".format(h.id, current_boost, current_emissions_pct_share['emission_share']),
                 color=harvester_colors[h.id],
                 linestyle=harvester_linestyle[h.id],
             )
@@ -329,7 +289,7 @@ def draw_atlas_harvest_comparison(i):
             ax3.plot(
                 days[active_from:],
                 # y_user_pct_shares[h.id][active_from:],
-                y_user_magic_yield[h.id][active_from:],
+                y_user_magic_yield[h.id],
                 label='H{} 1m/{}m: {:.2%}% APR in MAGIC'.format(h.id, AUM_CAP_HARVESTER, current_user_magic_yield),
                 color=harvester_colors[h.id],
             )
@@ -370,7 +330,7 @@ def draw_atlas_harvest_comparison(i):
     ax3.set_yticklabels(yticks_label, fontsize=7)
 
     # ax1.set_title('Harvester Boosts', size=10)
-    ax2.set_title('Harvesters share of total emissions'.format(current_boost), size=10)
+    ax2.set_title('Harvesters share of total emissions', size=10)
     ax3.set_title("User with 1m MAGIC: APR in different mines", size=10)
 
     ax2.set(xlabel='days | day {}'.format(day), ylabel='% share of emissions')
