@@ -170,16 +170,15 @@ class UtilizationMiddleman:
         # a user's share of total emission, staying inside Atlas mine, vs. another Harvester
         # ASSUMING the user has no individual-level boosts (e.g timeLock boost, etc)
 
-        ( emissions_pct_share_atlas, emissions_pct_shares ) = self.recalculate_emission_shares(
-            num_mil_user_stakes=num_mil_user_stakes,
-            debug=False,
-        )
+        ( emissions_pct_share_atlas, emissions_pct_shares ) = self.recalculate_emission_shares()
 
         user_pct_share_atlas = num_mil_user_stakes/expected_atlas_aum  * emissions_pct_share_atlas
         user_pct_shares = [
-            num_mil_user_stakes/AUM_CAP_HARVESTER * emissions_pct_share
+            num_mil_user_stakes/AUM_CAP_HARVESTER * emissions_pct_share['emission_share']
             for emissions_pct_share in emissions_pct_shares
         ]
+        print("user_pct_shares ", user_pct_shares )
+
         return (
             user_pct_share_atlas,
             user_pct_shares,

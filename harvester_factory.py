@@ -140,7 +140,7 @@ class Harvester:
         parts=0,
         legions=0,
         avg_legion_rank=1,
-        extractors=[],
+        init_extractors=[],
         is_atlas=False,
         is_active=False, # dormant by default
         aum_cap=10_000_000,
@@ -150,7 +150,7 @@ class Harvester:
         self.parts = 1
         self.legions = 1
         self.avg_legion_rank = avg_legion_rank
-        self.extractors = extractors
+        self.extractors = init_extractors
         self.is_atlas = is_atlas
         self.is_active = is_active
 
@@ -208,27 +208,35 @@ class Harvester:
         self.is_active = False
 
     def stake_parts(self, parts=1):
-        if 0 < self.parts + parts <= MAX_HARVESTER_PARTS:
+        if self.parts + parts >= MAX_HARVESTER_PARTS:
+            self.parts = MAX_HARVESTER_PARTS
+        elif 0 < self.parts + parts:
             self.parts += parts
 
     def stake_legions(self, legions=1):
-        if 0 < self.legions + legions <= MAX_LEGIONS:
+        if self.legions + legions >= MAX_LEGIONS:
+            self.legions = MAX_LEGIONS
+        elif 0 < self.legions + legions:
             self.legions += legions
 
     def unstake_parts(self, parts=1):
-        if 0 <= self.parts + parts <= MAX_HARVESTER_PARTS:
+        if self.parts - parts <= 0:
+            self.parts = 0
+        else:
             self.parts -= parts
 
     def unstake_legions(self, legions=1):
-        if 0 <= self.legions + legions <= MAX_LEGIONS:
+        if self.legions - legions <= 0:
+            self.legions = 0
+        else:
             self.legions -= legions
 
     def set_avg_legion_rank(self, avg_legion_rank):
         if avg_legion_rank <= 5:
             self.avg_legion_rank = avg_legion_rank
 
-    def stake_extractor(self, extractor):
-        self.extractors.append(extractor)
+    def set_extractors(self, extractors=[]):
+        self.extractors = extractors
 
     def get_user_aum_cap(self):
         userNftBoost = getNftBoost()
