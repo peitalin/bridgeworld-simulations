@@ -23,8 +23,8 @@ fig.set_size_inches(15, 8)
 # Stores all treasure minted/broken balances and histories
 treasureAccounting = TreasureAccounting()
 
-NUM_LEGIONS_SUMMONING = 200
-NUM_LEGIONS = 2000
+NUM_LEGIONS_SUMMONING = 0
+NUM_LEGIONS = 6000
 ROLLING_MEAN_LAG = 3
 
 legionPopulations = LegionPopulations(
@@ -40,14 +40,29 @@ legionPopulations = LegionPopulations(
 FRAMES = 800
 
 
+def check_durations_divisible_in_simulation(hours_in_period):
+    # Check that durations on questing and crafting are
+    # less than 1 simulation period, otherwise you get fractional
+    # quests/crafts and simulations round it to zero
+    assert QUEST_TIMES['easy'] <= hours_in_period
+    assert QUEST_TIMES['medium'] <= hours_in_period
+    assert QUEST_TIMES['hard'] <= hours_in_period
+    assert CRAFT_TIMES['easy'] <= hours_in_period
+    assert CRAFT_TIMES['medium'] <= hours_in_period
+    assert CRAFT_TIMES['hard'] <= hours_in_period
+
+
+
 def func_animate(i):
 
-    ## Every loop of i is 2 days
-    day = i * 2
-    hours_in_2_days = 24 * 2
+    ## Every loop of i (period) is 3 days or 72 hrs
+    day = i * 3
+    hours_in_period = 24 * 3
 
     global days
-    days.append(day) # 2 days per tick
+    days.append(day)
+
+    check_durations_divisible_in_simulation(hours_in_period)
 
     # Every 7 days, add N new summoned legions
     # Because every i is two days, the first summon period will
@@ -59,20 +74,21 @@ def func_animate(i):
         legionPopulations.update_legion_populations(summoning_cycle_complete=False)
 
     pct_legions_questing_now = legionPopulations.pct_questing[-1]
+    print("pct_legions_questing_now ", pct_legions_questing_now )
 
 
     for l1 in legionPopulations.legions_questing:
         if l1.quest_lvl >= 5:
             # hard quests take 16hrs, 48/16 = 3 times
-            num_times_quest = int(hours_in_2_days / QUEST_TIMES['hard'])
+            num_times_quest = int(hours_in_period / QUEST_TIMES['hard'])
             [l1.quest() for x in range(num_times_quest)]
         elif l1.quest_lvl >= 3:
             # medium quests take 12hrs, 48/12 = 4 times
-            num_times_quest = int(hours_in_2_days / QUEST_TIMES['medium'])
+            num_times_quest = int(hours_in_period / QUEST_TIMES['medium'])
             [l1.quest() for x in range(num_times_quest)]
         else:
             # easy quests take 8hrs, 48/8 = 6 times
-            num_times_quest = int(hours_in_2_days / QUEST_TIMES['easy'])
+            num_times_quest = int(hours_in_period / QUEST_TIMES['easy'])
             [l1.quest() for x in range(num_times_quest)]
 
 
@@ -80,19 +96,19 @@ def func_animate(i):
         if l2.craft_lvl >= 5:
             # hard craft take 48hrs, 48/48 = 1 times
             # how many times you can craft in 2 days
-            num_times_craft = int(hours_in_2_days / CRAFT_TIMES['hard'])
+            num_times_craft = int(hours_in_period / CRAFT_TIMES['hard'])
             [l2.craft('hard') for x in range(num_times_craft)]
 
         elif l2.craft_lvl >= 3:
             # medium craft take 16hrs, 48/16 = 3 times
             # how many times you can craft in 2 days
-            num_times_craft = int(hours_in_2_days / CRAFT_TIMES['medium'])
+            num_times_craft = int(hours_in_period / CRAFT_TIMES['medium'])
             [l2.craft('medium') for x in range(num_times_craft)]
 
         else:
             # easy craft take 12hrs, 48/12 = 4 times
             # how many times you can craft in 2 days
-            num_times_craft = int(hours_in_2_days / CRAFT_TIMES['easy'])
+            num_times_craft = int(hours_in_period / CRAFT_TIMES['easy'])
             [l2.craft('easy') for x in range(num_times_craft)]
 
 

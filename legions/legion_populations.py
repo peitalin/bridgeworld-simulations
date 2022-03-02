@@ -7,10 +7,10 @@ from legion import Legion
 ## Naive legion populations, based on net inflation/deflation of treasures
 def calculate_percentage_legion_questing(
     net_inflation_deflation = 0,
-    threshold_upper = 500,
-    threshold_lower = 500,
-    max_pct_upper = 0.8,
-    min_pct_lower = 0.4,
+    threshold_upper = 1000,
+    threshold_lower = 1000,
+    max_pct_upper = 0.95,
+    min_pct_lower = 0.30,
 ):
     """
         net_inflation_deflation: net inflation/deflation of a particular tier of treasures

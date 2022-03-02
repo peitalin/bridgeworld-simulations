@@ -1,6 +1,6 @@
 
 # 20%
-PR_DROP_LOOT_FROM_QUEST = 0.2
+PR_DROP_LOOT_FROM_QUEST = 0.1
 
 QUESTING_EXP = {
     "easy": 10,
@@ -15,15 +15,25 @@ CRAFTING_EXP = {
 }
 
 # hours it takes to complete quest
+# QUEST_TIMES = {
+#     "easy": 8,
+#     "medium": 12,
+#     "hard": 16,
+# }
 QUEST_TIMES = {
-    "easy": 8,
-    "medium": 12,
-    "hard": 16,
+    "easy": 24,
+    "medium": 30,
+    "hard": 36,
 }
 
 # hours it takes to complete craft
+# CRAFT_TIMES = {
+#     "easy": 24, # prisms
+#     "medium": 36, # parts
+#     "hard": 48, # extractors
+# }
 CRAFT_TIMES = {
-    "easy": 24,
-    "medium": 36,
-    "hard": 48,
+    "easy": 48, # prisms
+    "medium": 72, # parts
+    "hard": 72, # extractors
 }

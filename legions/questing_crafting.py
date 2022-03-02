@@ -19,9 +19,9 @@ def drop_loot_tiers(lvl='easy'):
     if lvl=='easy':
         pr = [0, 2.5, 5, 15, 77.5]
     if lvl=='medium':
-        pr = [1.5, 5, 7, 17, 69.5]
+        pr = [2, 5.5, 8, 17, 67.5]
     if lvl=='hard':
-        pr = [2.5, 9, 8, 22, 58.5]
+        pr = [4, 10, 11, 22, 53]
 
     score2 = np.random.uniform(0,100)
     # cutoffs for probability intervals
@@ -82,17 +82,21 @@ CRAFTING_RECIPES = {
     "medium": [
         't5', 't5', 't5', 't5', 't5',
         't4', 't4',
-        't3', 't3', 't3',
-        't2', 't2',
+        # 't3', 't3', 't3',
+        't3', 't3',
+        # 't2', 't2',
+        't2',
         't1',
     ],
 
     # Extractor
     "hard": [
-        't5', 't5', 't5', 't5', 't5',
+        # 't5', 't5', 't5', 't5', 't5',
+        't5', 't5', 't5', 't5',
         't4', 't4', 't4',
         't3',
-        't2', 't2',
+        # 't2', 't2',
+        't2',
     ],
 }
 
