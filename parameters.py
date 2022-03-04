@@ -6,7 +6,7 @@ DISTANCE_BOOST_FACTOR = 1 # 100% is 2x boost (1 + 100%)
 # these boosts stack together multiplicatively to determine overall boost
 # parts_boost should probably be bigger than legions (as a craft item)
 
-ATLAS_MINE_BONUS = 4
+ATLAS_MINE_BONUS = 6
 # atlas mine gets a default boost
 
 EXPECTED_ATLAS_AUM = 90
@@ -15,16 +15,16 @@ EXPECTED_ATLAS_AUM = 90
 # https://twitter.com/bjornsamuel/status/1486957771979427844
 # generally it will have a much larger AUM than other harvesters, 50mil~80mil vs 10mil
 
-AUM_CAP_HARVESTER = 10
+AUM_CAP_HARVESTER = 12
 # 10mil cap in harvesters
 
 MIN_LEGIONS = 1
-MAX_LEGIONS = 2000
+MAX_LEGIONS = 2100
 # legions boosts maxes out at 2000 staked legions
-MAX_HARVESTER_PARTS = 500
+MAX_HARVESTER_PARTS = 700
 # harvester parts boosts maxes out at 500
-MAX_EXTRACTORS = 5
-# extractor boosts maxes out at 5
+MAX_EXTRACTORS = 10
+# extractor boosts maxes out at N
 
 # Geographical Map params
 MAX_MAP_HEIGHT = 100
@@ -84,58 +84,60 @@ LEGION_RANK_PARAMS = {
 }
 
 TREASURES_BOOST_PARAMS = {
-    # buffed honeycomb + grin by 2x
-    "honeycomb":	0.02631*2,
-    "grin":	0.02619*2,
-    "bottomless_elixir":	0.02536,
-    "cap_of_invisibility":	0.02536,
-    "ancient_relic":	0.02508,
-    "castle":	0.02443,
-    "thread_of_divine_silk":	0.02443,
-    "mollusk_shell":	0.02240,
-    "bait_for_monsters":	0.02433,
-    "immovable_stone":	0.02412,
-    "snow_white_feather":	0.02134,
-    "red_feather":	0.02126,
-    "ivory_breastpin":	0.02122,
-    "divine_hourglass":	0.02114,
-    "military_stipend":	0.02076,
-    "bag_of_rare_mushrooms":	0.02053,
-    "carriage":	0.02024,
-    "small_bird":	0.01995,
-    "score_of_ivory":	0.01985,
-    "unbreakable_pocketwatch":	0.01978,
-    "framed_butterfly":	0.01947,
-    "cow":	0.01934,
-    "pot_of_gold":	0.01930,
-    "divine_mask":	0.01904,
-    "common_bead":	0.01879,
-    "favor_from_the_gods":	0.01848,
-    "jar_of_fairies":	0.01776,
-    "witches_broom":	0.01691,
-    "common_feather":	0.01126,
-    "green_rupee":	0.01090,
-    "grain":	0.01073,
-    "lumber":	0.01006,
-    "common_relic":	0.00718,
-    "ox":	0.00529,
-    "blue_rupee":	0.00509,
-    "donkey":	0.00406,
-    "half-penny":	0.00262,
-    "silver_coin":	0.00261,
-    "diamond":	0.00260,
-    "pearl":	0.00258,
-    "dragon_tail":	0.00257,
-    "red_rupee":	0.00257,
-    "gold_coin":	0.00256,
-    "emerald":	0.00253,
-    "beetle_wing":	0.00251,
-    "quarter_penny":	0.00250,
+    "honeycomb":	0.15785,
+    "grin":	0.15712,
+    "bottomless_elixir":	0.07609,
+    "cap_of_invisibility":	0.07609,
+    "ancient_relic":	0.07525,
+    "castle":	0.07330,
+    "thread_of_divine_silk":	0.07330,
+    "mollusk_shell":	0.06720,
+    "bait_for_monsters":	0.07298,
+    "immovable_stone":	0.07236,
+    "snow_white_feather":	0.06403,
+    "red_feather":	0.06379,
+    "ivory_breastpin":	0.06367,
+    "divine_hourglass":	0.06343,
+    "military_stipend":	0.06227,
+    "bag_of_rare_mushrooms":	0.06159,
+    "carriage":	0.06071,
+    "small_bird":	0.05985,
+    "score_of_ivory":	0.05954,
+    "unbreakable_pocketwatch":	0.05933,
+    "framed_butterfly":	0.05841,
+    "cow":	0.05801,
+    "pot_of_gold":	0.05791,
+    "divine_mask":	0.05713,
+    "common_bead":	0.05637,
+    "favor_from_the_gods":	0.05545,
+    "jar_of_fairies":	0.05328,
+    "witches_broom":	0.05073,
+    "common_feather":	0.03377,
+    "green_rupee":	0.03270,
+    "grain":	0.03220,
+    "lumber":	0.03017,
+    "common_relic":	0.02153,
+    "ox":	0.01587,
+    "blue_rupee":	0.01527,
+    "donkey":	0.01218,
+    "half_penny":	0.00785,
+    "silver_coin":	0.00784,
+    "diamond":	0.00781,
+    "pearl":	0.00775,
+    "dragon_tail":	0.00771,
+    "red_rupee":	0.00770,
+    "gold_coin":	0.00769,
+    "emerald":	0.00758,
+    "beetle_wing":	0.00752,
+    "quarter_penny":	0.00750,
 }
 
 EXTRACTOR_BOOST_PARAMS = {
     'small_extractor': 0.15,
     'medium_extractor': 0.20,
     'large_extractor': 0.25,
+    # 'small_extractor': 0.20,
+    # 'medium_extractor': 0.25,
+    # 'large_extractor': 0.30,
 }
 
