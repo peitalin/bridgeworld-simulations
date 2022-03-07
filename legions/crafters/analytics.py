@@ -150,6 +150,7 @@ missing_owners = []
 async def get_owner_from_arbiscan(tokenIds=[10180, 2298]):
 
     ARB_URL = "https://arbiscan.io"
+    # legions contract
     ARB_721_OWNER_QUERY = ARB_URL + "/token/0xfe8c1ac365ba6780aec5a985d989b327c27670a1"
     browser = await launch(headless=False)
     page = await browser.newPage()
