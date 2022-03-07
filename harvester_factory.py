@@ -240,7 +240,7 @@ class Harvester:
 
     def get_user_aum_cap(self):
         userNftBoost = getNftBoost()
-        # DEFAULT_USER_AUM_CAP = 200_00
+        # DEFAULT_USER_AUM_CAP = 200_000
         return DEFAULT_USER_AUM_CAP * (1 + userNftBoost)
 
     def deposit(self, amount, msg_sender_addr):

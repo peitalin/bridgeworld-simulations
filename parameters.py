@@ -133,11 +133,11 @@ TREASURES_BOOST_PARAMS = {
 }
 
 EXTRACTOR_BOOST_PARAMS = {
-    'small_extractor': 0.15,
-    'medium_extractor': 0.20,
-    'large_extractor': 0.25,
-    # 'small_extractor': 0.20,
-    # 'medium_extractor': 0.25,
-    # 'large_extractor': 0.30,
+    # 'small_extractor': 0.15,
+    # 'medium_extractor': 0.20,
+    # 'large_extractor': 0.25,
+    'small_extractor': 0.20,
+    'medium_extractor': 0.25,
+    'large_extractor': 0.30,
 }
 

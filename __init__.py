@@ -5,6 +5,7 @@ from plots.compare_distance import run_distance_boost_simulation
 from master_of_coin import MasterOfCoin
 from harvester_factory import Harvester, HarvesterFactory
 from harvester_middleman import UtilizationMiddleman
+from harvester_boost_count import total_user_boost_inside_harvester, getNftBoost
 
 
 
@@ -57,7 +58,7 @@ print(harvester_factory)
 
 
 ####### Harvesters Yield Wars Simulation #######
-# run_harvester_split_simulation_6()
+run_harvester_split_simulation_6()
 
 ####### Distance Boost Simulation ######
 # run_distance_boost_simulation()

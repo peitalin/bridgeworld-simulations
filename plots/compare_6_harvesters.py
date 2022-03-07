@@ -138,7 +138,7 @@ harvester_factory.create_harvester(id=0)
 
 # print("harvester_factory['harvesters'][0]", harvester_factory['harvesters'][0])
 ##### 5x extractors for harvester 0
-harvester_factory['harvesters'][0].set_extractors(extractors=['large_extractor']*5)
+harvester_factory['harvesters'][0].set_extractors(extractors=['large_extractor']*MAX_EXTRACTORS)
 
 harvester_factory.create_harvester(id=1)
 harvester_factory.create_harvester(id=2)
@@ -229,7 +229,7 @@ def draw_atlas_harvest_comparison(i):
         # https://twitter.com/bjornsamuel/status/1486957771979427844
         expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*4
 
-    print('harvester_factory', harvester_factory.harvesters)
+    print('harvester_factory!!!!!', harvester_factory.harvesters)
 
 
     ( atlas_boost, harvester_boosts ) = middleman.calculate_harvester_boosts()

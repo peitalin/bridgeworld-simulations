@@ -23,9 +23,9 @@ from parameters import EXTRACTOR_BOOST_PARAMS, TREASURES_BOOST_PARAMS
 
 
 
-def get_treasure_boost(name, boost=3):
+def get_treasure_boost(name, boost=1):
     """
-        Gets each treasures mining boost, default is multiplied by 3
+        Gets each treasures mining boost, default is multiplied by 1
 
         boost: adjustable boost parameter for devs to scale the boost
         treasures have when stacking them in the mine
@@ -87,11 +87,10 @@ def extractors_boost_harvester(extractors, max_extractors=MAX_EXTRACTORS):
     # assert len(extractors) <= max_parts
     ### For gas reasons, need a limit on number of extractors that can be deposited
 
-    # take the first 5 extractor boosts
-    top_five_extractors = extractors[:5]
+    top_extractors = extractors[:MAX_EXTRACTORS]
 
     extractors_boost = 0
-    for d in top_five_extractors:
+    for d in top_extractors:
         dboost = EXTRACTOR_BOOST_PARAMS[d]
         extractors_boost += dboost
 
@@ -202,7 +201,7 @@ def getNftBoost(legions=[], treasures=[]):
     ##### Treasures Boost
     treasures_boost = 0
     for t in treasures:
-        treasures_boost += get_treasure_boost(name=t, boost=3)
+        treasures_boost += get_treasure_boost(name=t, boost=1)
 
     total_nft_boost = legions_boost + treasures_boost
 
@@ -236,18 +235,17 @@ def total_user_boost_inside_harvester(time_lock_deposit='none', legions=[], trea
     return total_boost
 
 
-## Example: (matches example in Alex's excel)
-# user_boost_inside_harvester(
+# ## Example: (matches example in Alex's excel)
+# total_user_boost_inside_harvester(
 #     '6_months',
 #     # legions=['gen0_rare', 'gen0_rare', 'gen0_1_1'],
 #     legions=['gen0_rare', 'gen0_rare', 'gen0_rare'],
 #     # legions=['gen0_common'],
 #     treasures=[
-#        'honeycomb', 'honeycomb',
-#        'honeycomb', 'honeycomb', 'honeycomb',
 #        'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb',
-#     #    'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb',
-#     #    'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb',
+#        'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb',
+#        'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb',
+#        'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb',
 #     #    'grin',
 #     #    'bottomless_elixir', 'bottomless_elixir', 'bottomless_elixir',
 #     #    'cap_of_invisibility', 'cap_of_invisibility', 'cap_of_invisibility', 'cap_of_invisibility',
@@ -256,6 +254,55 @@ def total_user_boost_inside_harvester(time_lock_deposit='none', legions=[], trea
 #     #    'thread_of_divine_silk', 'thread_of_divine_silk',
 #     ],
 # )
+
+def print_nft_boost_examples():
+
+    print("1x 1/1 + 2x gen0_rare")
+    print("20x honeycomb")
+    print(
+        getNftBoost(
+            legions=['gen0_rare', 'gen0_rare', 'gen0_1_1'],
+            treasures=[
+                'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb',
+                'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb',
+                'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb',
+                'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb',
+            ],
+        )
+    )
+
+    print("\n\n3x gen0_rare")
+    print("20x honeycomb")
+    print(
+        getNftBoost(
+            legions=['gen0_rare', 'gen0_rare', 'gen0_rare'],
+            treasures=[
+                'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb',
+                'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb',
+                'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb',
+                'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb', 'honeycomb',
+            ],
+        )
+    )
+
+
+    print("\n\n1x gen0_common")
+    print("2x honeycomb")
+    print(
+        getNftBoost(
+            legions=['gen0_common'],
+            treasures=[ 'honeycomb', 'honeycomb' ],
+        )
+    )
+
+
+
+
+
+
+
+
+
 
 
 
