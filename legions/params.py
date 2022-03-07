@@ -1,6 +1,6 @@
 
 # 20%
-PR_DROP_LOOT_FROM_QUEST = 0.1
+PR_DROP_LOOT_FROM_QUEST = 0.15
 
 QUESTING_EXP = {
     "easy": 10,
@@ -22,8 +22,8 @@ CRAFTING_EXP = {
 # }
 QUEST_TIMES = {
     "easy": 24,
-    "medium": 30,
-    "hard": 36,
+    "medium": 36,
+    "hard": 48,
 }
 
 # hours it takes to complete craft

@@ -56,8 +56,9 @@ def check_durations_divisible_in_simulation(hours_in_period):
 def func_animate(i):
 
     ## Every loop of i (period) is 3 days or 72 hrs
-    day = i * 3
-    hours_in_period = 24 * 3
+    ## Every loop of i (period) is 4 days or 96 hrs
+    day = i * 4
+    hours_in_period = 24 * 4
 
     global days
     days.append(day)
