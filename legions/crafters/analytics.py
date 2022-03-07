@@ -173,7 +173,8 @@ get_owner_from_arbiscan()
 
 def get_user_balance(addr='0xEF7B11bb7d88D3B42e866Fd40D0A974C9Ed78188'):
     ARB_API_URL = "https://api.arbiscan.io/api"
-    API_KEY = "ZPBCKJN1SD9WI1KYKXKF8313U9UJZNTHS1"
+    # arbiscane API key, can just revoke
+    API_KEY = ""
     ARB_BALANCE_QUERY =  ARB_API_URL + "?module=account&action=tokenbalance&tag=latest&apikey={}".format(API_KEY)
     MAGIC_ERC20 = "0x539bdE0d7Dbd336b79148AA742883198BBF60342"
     ARB_BALANCE_QUERY += "&contractaddress={}&address={}".format(MAGIC_ERC20, addr)
