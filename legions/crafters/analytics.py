@@ -4,9 +4,9 @@ import time
 import pandas as pd
 import asyncio
 from pyppeteer import launch
-from dotenv import load_dotenv
 
-load_dotenv()  # take environment variables from .env.
+ARBISCAN_API_KEY=""
+
 
 url = 'https://api.thegraph.com/subgraphs/name/treasureproject/bridgeworld'
 
