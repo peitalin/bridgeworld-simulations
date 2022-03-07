@@ -171,7 +171,7 @@ async def get_owner_from_arbiscan(tokenIds=[10180, 2298]):
 get_owner_from_arbiscan()
 
 
-def get_user_balance(addr='0xEF7B11bb7d88D3B42e866Fd40D0A974C9Ed78188'):
+def get_user_balance(addr=''):
     ARB_API_URL = "https://api.arbiscan.io/api"
     # arbiscane API key, can just revoke
     API_KEY = ""
