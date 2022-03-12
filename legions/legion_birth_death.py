@@ -24,16 +24,17 @@ def legion_growth_rate(
     return (b * f(N, k) - d) * N
 
 
-def linear(N = 100, k = 100):
+def linear(N=100, k=100):
     return (1 - N/k)
 
-def inverse_linear(N = 100, k = 100):
+def inverse_linear(N=100, k=100):
     return 1 / (1 + N/k)
 
-def inverse_quad(N = 100, k = 100, s=1):
-    return 1 / (1 + (N/(k*s))**2)
+def inverse_quad(N=100, k=100, s=1):
+    ONE = 100_000
+    return ONE / (ONE + ((N*ONE)/(k*ONE*s))**2*ONE)
 
-def inverse_exp(N = 100, k = 100):
+def inverse_exp(N=100, k=100):
     return np.exp(-np.log(2) * N / k)
 
 
@@ -69,9 +70,9 @@ def draw_legion_paths(i):
     N_k400 = [n/400 for n in N]
     N_k800 = [n/800 for n in N]
 
-    growth_rate_1 = [legion_growth_rate(N=n, k=200, f=inverse_exp) for n in N]
-    growth_rate_2 = [legion_growth_rate(N=n, k=400, f=inverse_exp) for n in N]
-    growth_rate_3 = [legion_growth_rate(N=n, k=800, f=inverse_exp) for n in N]
+    growth_rate_1 = [legion_growth_rate(N=n, k=200, f=inverse_quad) for n in N]
+    growth_rate_2 = [legion_growth_rate(N=n, k=400, f=inverse_quad) for n in N]
+    growth_rate_3 = [legion_growth_rate(N=n, k=800, f=inverse_quad) for n in N]
 
     success_rate_1 = [inverse_quad(N=n, k=200) for n in N]
     success_rate_2 = [inverse_quad(N=n, k=400) for n in N]
