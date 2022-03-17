@@ -117,6 +117,7 @@ def get_legions_on_brink_of_parts():
 
     legions_crafters_raw_data = json.loads(legions_crafters.text)
     legions = legions_crafters_raw_data ["data"]["legionInfos"]
+    return legions
 
 
 def get_owner_of_legion(legions=[]):
@@ -141,17 +142,20 @@ def get_owner_of_legion(legions=[]):
         legion['ownerId'] = owner_id
         time.sleep(0.25)
 
+    return legions
 
 
-async def get_owner_from_arbiscan(tokenIds=[10180, 2298]):
 
+async def get_owner_from_arbiscan(tokenIds=[], found_owners=[]):
+
+    ARB_URL = "https://arbiscan.io"
     ARB_URL = "https://arbiscan.io"
     # legions contract
     ARB_721_OWNER_QUERY = ARB_URL + "/token/0xfe8c1ac365ba6780aec5a985d989b327c27670a1"
     browser = await launch(headless=False)
     page = await browser.newPage()
     # tokenIds = [10018, 10019, 10120, 10180, 16321, 138]
-    # tokenIds = legions_missing_owners
+    tokenIds = legions_missing_owners
 
     for tokenId in tokenIds:
         query = ARB_721_OWNER_QUERY + "?a={}#inventory".format(tokenId)
@@ -166,6 +170,7 @@ async def get_owner_from_arbiscan(tokenIds=[10180, 2298]):
         print(new_addr)
 
     await browser.close()
+    return [tokenIds, found_owners]
 
 
 
@@ -191,13 +196,13 @@ def get_user_balance(addr='0x08ef1a3a2428c7a0ca92fa248b012f07f676ba95'):
 # 1. get legions close to lvl3 crafting or above
 legions = get_legions_on_brink_of_parts()
 # 2. get the owner's address of each legion
-get_owner_of_legion()
+legions2 = get_owner_of_legion(legions)
 # 3. for the missing owners not in quest/craft/summon/mine (in wallet),
 ## track down their owner address by scraping arbiscan
 ## with the get_owner_from_arbiscan() function
 
 ## 4. Import legions into a dataframe
-ddat = pd.DataFrame(legions)
+ddat = pd.DataFrame(legions2)
 ddat = ddat.set_index('id')
 
 ## 5. Match the legions missing owners from arbiscan to the legions
@@ -209,7 +214,9 @@ for owner in found_owners:
     ownerAddr = owner[1]
     ddat.loc[ddat["tokenId"] == tokenId, 'ownerId'] = ownerAddr
 
+[legions_missing_owners, found_owners] = get_owner_from_arbiscan(legions_missing_owners)
 ddat.to_csv("crafter_without_balances.csv")
+
 
 
 
@@ -306,14 +313,23 @@ ddat_no_dupes = ddat_no_dupes.set_index('ownerId')
 # ddat_no_dupes = ddat_no_dupes.set_index('ownerId')
 
 
-def get_wallet_balances(ddat_no_dupes):
-    ### Get Wallet magic balances
-    for ownerId in ddat_no_dupes.index:
-        balance = get_user_balance(ownerId)
-        ddat_no_dupes.loc[ddat_no_dupes.index == ownerId, 'wallet_balance'] = balance
-    return ddat_no_dupes
+# def get_wallet_balances(ddat_no_dupes):
+#     ### Get Wallet magic balances
+#     for ownerId in ddat_no_dupes.index:
+#         balance = get_user_balance(ownerId)
+#         ddat_no_dupes.loc[ddat_no_dupes.index == ownerId, 'wallet_balance'] = balance
+#     return ddat_no_dupes
 
-ddat_no_dupes = get_wallet_balances(ddat_no_dupes)
+# ddat_no_dupes = get_wallet_balances(ddat_no_dupes)
+
+for ownerId in ddat_no_dupes.index[:100]:
+    if not ownerId:
+        print("ownerId missing")
+        balance = 0
+    else:
+        balance = get_user_balance(ownerId)
+
+    ddat_no_dupes.loc[ddat_no_dupes.index == ownerId, 'wallet_balance'] = balance
 
 ddat_no_dupes.to_csv("crafter_balances.csv")
 
