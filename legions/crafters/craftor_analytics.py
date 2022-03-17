@@ -322,7 +322,7 @@ ddat_no_dupes = ddat_no_dupes.set_index('ownerId')
 
 # ddat_no_dupes = get_wallet_balances(ddat_no_dupes)
 
-for ownerId in ddat_no_dupes.index[:100]:
+for ownerId in ddat_no_dupes.index:
     if not ownerId:
         print("ownerId missing")
         balance = 0
