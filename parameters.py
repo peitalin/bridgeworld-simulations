@@ -6,7 +6,7 @@ DISTANCE_BOOST_FACTOR = 1 # 100% is 2x boost (1 + 100%)
 # these boosts stack together multiplicatively to determine overall boost
 # parts_boost should probably be bigger than legions (as a craft item)
 
-ATLAS_MINE_BONUS = 6
+ATLAS_MINE_BONUS = 3
 # atlas mine gets a default boost
 
 EXPECTED_ATLAS_AUM = 90
@@ -15,7 +15,7 @@ EXPECTED_ATLAS_AUM = 90
 # https://twitter.com/bjornsamuel/status/1486957771979427844
 # generally it will have a much larger AUM than other harvesters, 50mil~80mil vs 10mil
 
-AUM_CAP_HARVESTER = 12
+AUM_CAP_HARVESTER = 10
 # 10mil cap in harvesters
 
 MIN_LEGIONS = 1

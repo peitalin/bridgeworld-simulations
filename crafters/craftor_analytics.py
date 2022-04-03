@@ -44,6 +44,25 @@ def get_crafting_legions(crafting_level=2):
     """.format(crafting_level)
 
 
+def get_crafting_legions_exp(crafting_level=2, crafting_exp_gte=110):
+    return """
+        query {{
+            legionInfos(
+                first: 500
+                where: {{
+                    crafting_gte: {},
+                    craftingXp_gte: {}
+                }}
+            ) {{
+                id
+                craftingXp
+                crafting
+                role
+                rarity
+            }}
+        }}
+    """.format(crafting_level, crafting_exp_gte)
+
 def get_user_from_legion_id(legion_id="0xfe8c1ac365ba6780aec5a985d989b327c27670a1-0x5fdd"):
     legion_id = legion_id.replace('-metadata', '')
     return """
@@ -106,12 +125,15 @@ def get_legion_id(id):
 
 
 
-def get_legions_on_brink_of_parts():
+def get_legions_on_brink_of_parts(crafting_level=2, crafting_exp_gte=0):
     ## 1. get legions on the brink of becoming lvl 3
     legions_crafters = requests.post(
         url,
         json={
-            'query': get_crafting_legions(),
+            'query': get_crafting_legions_exp(
+                crafting_level=crafting_level,
+                crafting_exp_gte=crafting_exp_gte,
+            ),
         },
     )
 
@@ -195,6 +217,28 @@ def get_user_balance(addr='0x08ef1a3a2428c7a0ca92fa248b012f07f676ba95'):
 
 # 1. get legions close to lvl3 crafting or above
 legions = get_legions_on_brink_of_parts()
+legions70 = get_legions_on_brink_of_parts(crafting_exp_gte=70)
+legions80 = get_legions_on_brink_of_parts(crafting_exp_gte=80)
+legions90 = get_legions_on_brink_of_parts(crafting_exp_gte=90)
+legions100 = get_legions_on_brink_of_parts(crafting_exp_gte=100)
+legions110 = get_legions_on_brink_of_parts(crafting_exp_gte=110)
+legions120 = get_legions_on_brink_of_parts(crafting_exp_gte=120)
+legions130 = get_legions_on_brink_of_parts(crafting_exp_gte=130)
+legions140 = get_legions_on_brink_of_parts(crafting_exp_gte=140)
+legions150 = get_legions_on_brink_of_parts(crafting_exp_gte=150)
+print("Crafters Level2 with 70 EXP: ", len(legions70))
+print("Crafters Level2 with 80 EXP: ", len(legions80))
+print("Crafters Level2 with 90 EXP: ", len(legions90))
+print("Crafters Level2 with 100 EXP: ", len(legions100))
+print("Crafters Level2 with 110 EXP: ", len(legions110))
+print("Crafters Level2 with 120 EXP: ", len(legions120))
+print("Crafters Level2 with 130 EXP: ", len(legions130))
+print("Crafters Level2 with 140 EXP: ", len(legions140))
+print("Crafters Level2 with 150 EXP: ", len(legions150))
+print("Crafters hit Level3 at 160 EXP and begin producing parts")
+# legions3 = get_legions_on_brink_of_parts(crafting_level=3, crafting_exp_gte=0)
+
+
 # 2. get the owner's address of each legion
 legions2 = get_owner_of_legion(legions)
 # 3. for the missing owners not in quest/craft/summon/mine (in wallet),
