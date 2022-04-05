@@ -142,14 +142,16 @@ EXTRACTOR_BOOST_PARAMS = {
 }
 
 LEGION_WEIGHTS = {
-    'gen0_common': 10, # commons 10kg
-    'gen0_special': 15, # includes riverman, Numeraire 15kg
-    'gen0_uncommon': 20, # Assasin etc 20kg
-    'gen0_rare': 40, # all-class 40kg
+    # Genesis Legions
     'gen0_1_1': 120, # 1/1 120kg
-    'gen1_common': 1.5, # 1.5kg
-    'gen1_uncommon': 2.5, # 2.5kg
-    'gen1_rare': 5, # 5kg
+    'gen0_rare': 40, # all-class 40kg
+    'gen0_uncommon': 20, # Assasin etc 20kg
+    'gen0_special': 15, # includes riverman, Numeraire 15kg
+    'gen0_common': 10, # commons 10kg
+    # Aux legions
+    'gen1_rare': 5.5, #
+    'gen1_uncommon': 3, #
+    'gen1_common': 3, #
 }
 
 
