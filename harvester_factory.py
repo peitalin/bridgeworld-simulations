@@ -11,6 +11,7 @@ from parameters import MAX_MAP_HEIGHT, MAX_MAP_WIDTH
 from parameters import TIME_LOCK_BOOST_PARAMS, LEGION_BOOST_PARAMS, LEGION_RANK_PARAMS
 from parameters import EXTRACTOR_BOOST_PARAMS, TREASURES_BOOST_PARAMS
 from parameters import TOTAL_MAGIC_SUPPLY, DEFAULT_USER_AUM_CAP
+from parameters import DEPOSIT_AMOUNT_PER_PART, MAX_PARTS_PER_ADRESS
 
 from harvester_boost_count import total_harvester_boost
 from harvester_boost_count import getNftBoost
@@ -160,6 +161,7 @@ class Harvester:
         # only harvesters have utilization at harvester-level, Atlas utilization
         # is calculated on total_circulating_supply of MAGIC
         self.user_aums = {}
+        self.user_parts_staked = {}
 
     def __repr__(self):
         ### Prints Harvester Details
@@ -207,22 +209,33 @@ class Harvester:
     def deactivate(self):
         self.is_active = False
 
-    def stake_parts(self, parts=1):
+    def stake_parts(self, parts=1, msg_sender_addr='pta.eth'):
         if self.parts + parts >= MAX_HARVESTER_PARTS:
-            self.parts = MAX_HARVESTER_PARTS
+            return
+            # throw error
         elif 0 < self.parts + parts:
-            self.parts += parts
+            if self.user_parts_staked[msg_sender_addr] + parts > MAX_PARTS_PER_ADRESS:
+                # max parts per wallet is 36 parts
+                return
+            else:
+                self.parts += parts
+                self.user_parts_staked[msg_sender_addr] += parts
 
     def stake_legions(self, legions=1):
+        # if we transition to legion weight system, insteadof 3 legions per wallet
+        # we would need to increase legion cap quite a bit
+        # or make it so legion boost maxes out, but you can stake more legions if you like
         if self.legions + legions >= MAX_LEGIONS:
             self.legions = MAX_LEGIONS
         elif 0 < self.legions + legions:
             self.legions += legions
 
-    def unstake_parts(self, parts=1):
+    def unstake_parts(self, parts=1, msg_sender_addr="pta.eth"):
         if self.parts - parts <= 0:
-            self.parts = 0
+            return
+            # throw error
         else:
+            self.user_parts_staked[msg_sender_addr] -= parts
             self.parts -= parts
 
     def unstake_legions(self, legions=1):
@@ -239,9 +252,7 @@ class Harvester:
         self.extractors = extractors
 
     def get_user_aum_cap(self):
-        userNftBoost = getNftBoost()
-        # DEFAULT_USER_AUM_CAP = 200_000
-        return DEFAULT_USER_AUM_CAP * (1 + userNftBoost)
+        return DEPOSIT_AMOUNT_PER_PART * self.user_parts_staked(msg_sender_addr)
 
     def deposit(self, amount, msg_sender_addr):
 
