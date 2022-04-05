@@ -149,9 +149,9 @@ LEGION_WEIGHTS = {
     'gen0_special': 15, # includes riverman, Numeraire 15kg
     'gen0_common': 10, # commons 10kg
     # Aux legions
-    'gen1_rare': 5.5, #
-    'gen1_uncommon': 3, #
-    'gen1_common': 3, #
+    'gen1_rare': 5, #
+    'gen1_uncommon': 4, #
+    'gen1_common': 2.5, #
 }
 
 
