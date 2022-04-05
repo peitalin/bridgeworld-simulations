@@ -77,7 +77,7 @@ LEGION_RANK_PARAMS = {
     'gen0_special': 2, # includes riverman, Numeraire 50%
     'gen0_uncommon': 3, # Assasin etc 100%
     'gen0_rare': 4, # all-class 200%
-    'gen0_1_1': 5,  # 1/1
+    'gen0_1_1': 4,  # 1/1
     'gen1_common': 1,
     'gen1_uncommon': 2,
     'gen1_rare': 3,
@@ -141,3 +141,13 @@ EXTRACTOR_BOOST_PARAMS = {
     'large_extractor': 0.30,
 }
 
+LEGION_WEIGHTS = {
+    'gen0_common': 10, # commons 10kg
+    'gen0_special': 15, # includes riverman, Numeraire 15kg
+    'gen0_uncommon': 20, # Assasin etc 20kg
+    'gen0_rare': 40, # all-class 40kg
+    'gen0_1_1': 120, # 1/1 120kg
+    'gen1_common': 1.5, # 1.5kg
+    'gen1_uncommon': 2.5, # 2.5kg
+    'gen1_rare': 5, # 5kg
+}

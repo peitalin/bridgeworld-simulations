@@ -235,8 +235,8 @@ print("Crafters Level2 with 120 EXP: ", len(legions120))
 print("Crafters Level2 with 130 EXP: ", len(legions130))
 print("Crafters Level2 with 140 EXP: ", len(legions140))
 print("Crafters Level2 with 150 EXP: ", len(legions150))
-print("Crafters hit Level3 at 160 EXP and begin producing parts")
-# legions3 = get_legions_on_brink_of_parts(crafting_level=3, crafting_exp_gte=0)
+legions3 = get_legions_on_brink_of_parts(crafting_level=3, crafting_exp_gte=0)
+print("Crafters hit Level3 and begin producing parts", len(legions3))
 
 
 # 2. get the owner's address of each legion

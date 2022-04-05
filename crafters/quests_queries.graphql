@@ -1,0 +1,250 @@
+
+{
+  questingStats(where: { interval: Weekly, startTimestamp: 1648339200 }) {
+    startTimestamp
+    endTimestamp
+    questsStarted
+    questsFinished
+    questingTreasuresEarned
+    treasureStats {
+      name
+      tier
+      questingEarned
+    }
+  }
+}
+{
+  "data": {
+    "questingStats": [
+      {
+        "startTimestamp": "1648339200",
+        "endTimestamp": "1648943999",
+        "questsStarted": 67609,
+        "questsFinished": 66348,
+        "questingTreasuresEarned": 7438,
+        "treasureStats": [
+          {
+            "name": "Ancient Relic",
+            "tier": 1,
+            "questingEarned": 18
+          },
+          {
+            "name": "Bag of Rare Mushrooms",
+            "tier": 2,
+            "questingEarned": 18
+          },
+          {
+            "name": "Bait for Monsters",
+            "tier": 2,
+            "questingEarned": 27
+          },
+          {
+            "name": "Beetle-wing",
+            "tier": 5,
+            "questingEarned": 552
+          },
+          {
+            "name": "Blue Rupee",
+            "tier": 4,
+            "questingEarned": 147
+          },
+          {
+            "name": "Bottomless Elixir",
+            "tier": 1,
+            "questingEarned": 14
+          },
+          {
+            "name": "Cap of Invisibility",
+            "tier": 1,
+            "questingEarned": 8
+          },
+          {
+            "name": "Carriage",
+            "tier": 2,
+            "questingEarned": 15
+          },
+          {
+            "name": "Castle",
+            "tier": 1,
+            "questingEarned": 16
+          },
+          {
+            "name": "Common Bead",
+            "tier": 3,
+            "questingEarned": 56
+          },
+          {
+            "name": "Common Feather",
+            "tier": 4,
+            "questingEarned": 127
+          },
+          {
+            "name": "Common Relic",
+            "tier": 4,
+            "questingEarned": 112
+          },
+          {
+            "name": "Cow",
+            "tier": 3,
+            "questingEarned": 44
+          },
+          {
+            "name": "Diamond",
+            "tier": 5,
+            "questingEarned": 573
+          },
+          {
+            "name": "Divine Hourglass",
+            "tier": 2,
+            "questingEarned": 21
+          },
+          {
+            "name": "Divine Mask",
+            "tier": 3,
+            "questingEarned": 57
+          },
+          {
+            "name": "Donkey",
+            "tier": 4,
+            "questingEarned": 142
+          },
+          {
+            "name": "Dragon Tail",
+            "tier": 5,
+            "questingEarned": 537
+          },
+          {
+            "name": "Emerald",
+            "tier": 5,
+            "questingEarned": 545
+          },
+          {
+            "name": "Favor from the Gods",
+            "tier": 3,
+            "questingEarned": 50
+          },
+          {
+            "name": "Framed Butterfly",
+            "tier": 3,
+            "questingEarned": 51
+          },
+          {
+            "name": "Gold Coin",
+            "tier": 5,
+            "questingEarned": 527
+          },
+          {
+            "name": "Grain",
+            "tier": 4,
+            "questingEarned": 124
+          },
+          {
+            "name": "Green Rupee",
+            "tier": 4,
+            "questingEarned": 114
+          },
+          {
+            "name": "Half-Penny",
+            "tier": 5,
+            "questingEarned": 527
+          },
+          {
+            "name": "Immovable Stone",
+            "tier": 2,
+            "questingEarned": 17
+          },
+          {
+            "name": "Ivory Breastpin",
+            "tier": 2,
+            "questingEarned": 23
+          },
+          {
+            "name": "Jar of Fairies",
+            "tier": 3,
+            "questingEarned": 47
+          },
+          {
+            "name": "Lumber",
+            "tier": 4,
+            "questingEarned": 115
+          },
+          {
+            "name": "Military Stipend",
+            "tier": 2,
+            "questingEarned": 17
+          },
+          {
+            "name": "Mollusk Shell",
+            "tier": 2,
+            "questingEarned": 24
+          },
+          {
+            "name": "Ox",
+            "tier": 4,
+            "questingEarned": 129
+          },
+          {
+            "name": "Pearl",
+            "tier": 5,
+            "questingEarned": 598
+          },
+          {
+            "name": "Pot of Gold",
+            "tier": 3,
+            "questingEarned": 41
+          },
+          {
+            "name": "Quarter-Penny",
+            "tier": 5,
+            "questingEarned": 544
+          },
+          {
+            "name": "Red Feather",
+            "tier": 2,
+            "questingEarned": 27
+          },
+          {
+            "name": "Red Rupee",
+            "tier": 5,
+            "questingEarned": 546
+          },
+          {
+            "name": "Score of Ivory",
+            "tier": 3,
+            "questingEarned": 50
+          },
+          {
+            "name": "Silver Coin",
+            "tier": 5,
+            "questingEarned": 544
+          },
+          {
+            "name": "Small Bird",
+            "tier": 3,
+            "questingEarned": 45
+          },
+          {
+            "name": "Snow White Feather",
+            "tier": 2,
+            "questingEarned": 28
+          },
+          {
+            "name": "Thread of Divine Silk",
+            "tier": 2,
+            "questingEarned": 34
+          },
+          {
+            "name": "Unbreakable Pocketwatch",
+            "tier": 3,
+            "questingEarned": 41
+          },
+          {
+            "name": "Witches Broom",
+            "tier": 4,
+            "questingEarned": 146
+          }
+        ]
+      }
+    ]
+  }
+}

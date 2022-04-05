@@ -10,27 +10,10 @@ from parameters import MIN_LEGIONS, MAX_LEGIONS
 from parameters import MAX_MAP_HEIGHT, MAX_MAP_WIDTH
 from parameters import TIME_LOCK_BOOST_PARAMS, LEGION_BOOST_PARAMS, LEGION_RANK_PARAMS
 from parameters import EXTRACTOR_BOOST_PARAMS, TREASURES_BOOST_PARAMS
+from parameters import LEGION_WEIGHTS
 
 
 
-
-## TODO
-# *Tweak Genesis Legion’s impact on harvester boosts:*
-# *Set legionBoost max legions = 3000 for max boost*
-# *increase avg_legion_rank’s effect on this boost*
-# *Increase all-class and uncommon’s impact on avg_legion_rank.*
-
-
-
-
-def get_treasure_boost(name, boost=1):
-    """
-        Gets each treasures mining boost, default is multiplied by 1
-
-        boost: adjustable boost parameter for devs to scale the boost
-        treasures have when stacking them in the mine
-    """
-    return TREASURES_BOOST_PARAMS[name] * boost
 
 
 
@@ -51,7 +34,7 @@ def parts_boost_harvester(num_parts, max_parts=MAX_HARVESTER_PARTS, boost_factor
 
 
 
-def legions_boost_harvester(num, max=MAX_LEGIONS, avg_legion_rank=1, boost_factor=LEGIONS_BOOST_FACTOR):
+def legions_boost_harvester(num, max_legions=MAX_LEGIONS, avg_legion_rank=1, boost_factor=LEGIONS_BOOST_FACTOR):
     """
         quadratic function in the interval: [1, (1 + boost_factor)] based on number of parts staked.
         exhibits diminishing returns on boosts as more legions are added
@@ -65,8 +48,8 @@ def legions_boost_harvester(num, max=MAX_LEGIONS, avg_legion_rank=1, boost_facto
     """
 
     # if over max, treat as if you have max legions
-    if num > max:
-        n = max
+    if num > max_legions:
+        n = max_legions
     else:
         n = num
 
@@ -74,7 +57,7 @@ def legions_boost_harvester(num, max=MAX_LEGIONS, avg_legion_rank=1, boost_facto
     # if avg rank is commons (rank 1),
     # then 0.9 + 1/10 = 1 so there is no boost
 
-    return 1 + (2*n - n**2/max) / max * legion_rank_modifier * boost_factor
+    return 1 + (2*n - n**2/max_legions) / max_legions * legion_rank_modifier * boost_factor
 
 
 
@@ -97,7 +80,6 @@ def extractors_boost_harvester(extractors, max_extractors=MAX_EXTRACTORS):
     return 1 + extractors_boost
 
 
-
 def calculate_avg_legion_rank(legions):
     """
         Calculates the avg rank of a group of legions. Used to determine the avg legion rank of
@@ -116,68 +98,77 @@ def calculate_avg_legion_rank(legions):
     return avg_rank
 
 
-def calculate_distance_from_atlas(
-    h_coordinates={ 'x': 0, 'y': 0 },
-    atlas_coordinates={ 'x': 0, 'y': 0 },
+def corruption_negative_boost(corruption_erc20_balance = 0):
+    """negative boost modifier"""
+    c = corruption_erc20_balance
+
+    balance_thresholds = [
+        60_000,
+        50_000,
+        40_000,
+        30_000,
+        20_000,
+        10_000,
+    ]
+    corruption_neg_boosts = [
+        0.4,
+        0.5,
+        0.6,
+        0.7,
+        0.8,
+        0.9,
+    ]
+
+    assert len(balance_thresholds) == len(corruption_neg_boosts)
+
+    if c > balance_thresholds[0]:
+        return corruption_neg_boosts[0]
+    elif c > balance_thresholds[1]:
+        return corruption_neg_boosts[1]
+    elif c > balance_thresholds[2]:
+        return corruption_neg_boosts[2]
+    elif c > balance_thresholds[3]:
+        return corruption_neg_boosts[3]
+    elif c > balance_thresholds[4]:
+        return corruption_neg_boosts[4]
+    elif c > balance_thresholds[5]:
+        return corruption_neg_boosts[5]
+    else:
+        return 1
+
+
+
+
+def total_harvester_boost(
+    num_parts,
+    num_legions,
+    extractors=[],
+    avg_legion_rank=1,
+    is_atlas=False,
+    corruption_erc20_balance=0,
 ):
-    """
-        calculates the euclidean distance between a harvester, and atlas mine
-        h_coordinates: position of harvester on map
-        atlas_coordinates: position of atlas on map, default center on (0, 0)
-    """
-    h = h_coordinates
-    a = atlas_coordinates
-    # calculate euclidean distance 2 dimensions
-    d2 = np.sqrt( (h['x'] - a['x'])**2 + (h['y'] - a['y'])**2 )
-    return d2
-    # euclidean distance 3 dimensions, flying harvesters like Laputa?
-    # d3 = np.sqrt( (h['x'] - a['x'])**2 + (h['y'] - a['y'])**2 + (h['z'] - a['z'])**2 )
-
-
-def distance_boost_harvester(
-    h_coordinates={ 'x': 0, 'y': 0},
-    map_height=MAX_MAP_HEIGHT,
-    map_width=MAX_MAP_WIDTH,
-    boost_factor=DISTANCE_BOOST_FACTOR
-):
-    """
-        harvester coordinates: (x, y)
-
-        map_height: number of tiles the map is in height
-        map_width: number of tiles the map is in width
-            used to calculate max_distance for boosts
-    """
-
-    # store once on initialize(), and maybe recalc on map resize function
-    max_distance = calculate_distance_from_atlas({ 'x': map_width/2, 'y': map_height/2 })
-
-    h = h_coordinates
-    d = calculate_distance_from_atlas({
-        'x': h['x'],
-        'y': h['y'],
-    })
-
-    return 1 + (2*d - d**2/max_distance) / max_distance * boost_factor
-
-
-
-def total_harvester_boost(num_parts, num_legions, extractors=[], avg_legion_rank=1, is_atlas=False):
     """calculates both parts_boost * legions_boost together"""
 
-    modifier_legions_boost = legions_boost_harvester(num_legions, MAX_LEGIONS, avg_legion_rank)
-    modifier_parts_boost = parts_boost_harvester(num_parts)
-    modifier_extractors_boost = extractors_boost_harvester(extractors)
+    _legions_boost = legions_boost_harvester(num_legions, MAX_LEGIONS, avg_legion_rank)
+    _parts_boost = parts_boost_harvester(num_parts)
+    _extractors_boost = extractors_boost_harvester(extractors)
+    _corruption_boost = corruption_negative_boost(corruption_erc20_balance)
 
     if (is_atlas) :
-        return modifier_legions_boost * modifier_parts_boost * modifier_extractors_boost * ATLAS_MINE_BONUS
+        return _legions_boost * _parts_boost * _extractors_boost * _corruption_boost * ATLAS_MINE_BONUS
     else:
-        return modifier_legions_boost * modifier_parts_boost * modifier_extractors_boost
+        return _legions_boost * _parts_boost * _extractors_boost * _corruption_boost
 
 
 
 #######################################
 ######## Individual Level Boosts
 #######################################
+
+def get_treasure_boost(name, boost=1):
+    """Gets each treasures mining boost, default is multiplied by 1 """
+    return TREASURES_BOOST_PARAMS[name] * boost
+
 
 def getNftBoost(legions=[], treasures=[]):
     """
@@ -188,7 +179,8 @@ def getNftBoost(legions=[], treasures=[]):
         treasures: ['honeycomb', 'grin']
     """
 
-    assert len(legions) <= 3
+    # assert len(legions) <= 3
+    assert isLegionTonnageUnder200kg(legions)
     assert len(treasures) <= 20
 
     ##### Legion Boost
@@ -208,6 +200,20 @@ def getNftBoost(legions=[], treasures=[]):
     return total_nft_boost
 
 
+def isTotalLegionTonnageUnder200kg(legions=[]):
+    """ can stack as many legions as you like, so long as total tonnage is under 200kg """
+
+    ##### Legions total tonnage
+    legions_tonnage = 0
+    for l in legions:
+        # additively sum the weight of each legion
+        legions_tonnage += LEGION_WEIGHTS[l]
+        # errors if key in dict not found
+
+    if legions_tonnage > 200:
+        return False
+    else:
+        return True
 
 
 
@@ -233,6 +239,59 @@ def total_user_boost_inside_harvester(time_lock_deposit='none', legions=[], trea
     total_boost = 1 + time_lock_boost + nft_boost
 
     return total_boost
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def calculate_distance_from_atlas(
+    h_coordinates={ 'x': 0, 'y': 0 },
+    atlas_coordinates={ 'x': 0, 'y': 0 },
+):
+    """
+        calculates the euclidean distance between a harvester, and atlas mine
+        h_coordinates: position of harvester on map
+        atlas_coordinates: position of atlas on map, default center on (0, 0)
+    """
+    h = h_coordinates
+    a = atlas_coordinates
+    # calculate euclidean distance 2 dimensions
+    d2 = np.sqrt( (h['x'] - a['x'])**2 + (h['y'] - a['y'])**2 )
+    return d2
+
+def distance_boost_harvester(
+    h_coordinates={ 'x': 0, 'y': 0},
+    map_height=MAX_MAP_HEIGHT,
+    map_width=MAX_MAP_WIDTH,
+    boost_factor=DISTANCE_BOOST_FACTOR
+):
+    """
+        harvester coordinates: (x, y)
+        map_height: number of tiles the map is in height
+        map_width: number of tiles the map is in width
+            used to calculate max_distance for boosts
+    """
+    # store once on initialize(), and maybe recalc on map resize function
+    max_distance = calculate_distance_from_atlas({ 'x': map_width/2, 'y': map_height/2 })
+    h = h_coordinates
+    d = calculate_distance_from_atlas({
+        'x': h['x'],
+        'y': h['y'],
+    })
+    return 1 + (2*d - d**2/max_distance) / max_distance * boost_factor
 
 
 # ## Example: (matches example in Alex's excel)
