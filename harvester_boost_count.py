@@ -180,7 +180,7 @@ def getNftBoost(legions=[], treasures=[]):
     """
 
     # assert len(legions) <= 3
-    assert isLegionTonnageUnder200kg(legions)
+    assert isTotalLegionWeightUnder200kg(legions)
     assert len(treasures) <= 20
 
     ##### Legion Boost
@@ -200,7 +200,7 @@ def getNftBoost(legions=[], treasures=[]):
     return total_nft_boost
 
 
-def isTotalLegionTonnageUnder200kg(legions=[]):
+def isTotalLegionWeightUnder200kg(legions=[]):
     """ can stack as many legions as you like, so long as total tonnage is under 200kg """
 
     ##### Legions total tonnage
@@ -355,6 +355,7 @@ def print_nft_boost_examples():
     )
 
 
+# isTotalLegionWeightUnder200kg(legions=['gen0_rare', 'gen0_rare', 'gen0_1_1'])
 
 
 
