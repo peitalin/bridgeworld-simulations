@@ -145,11 +145,11 @@ LEGION_WEIGHTS = {
     # Genesis Legions
     'gen0_1_1': 120, # 1/1 120kg
     'gen0_rare': 40, # all-class 40kg
-    'gen0_uncommon': 20, # Assasin etc 20kg
-    'gen0_special': 15, # includes riverman, Numeraire 15kg
-    'gen0_common': 10, # commons 10kg
+    'gen0_uncommon': 21, # Assasin etc 20kg
+    'gen0_special': 16, # includes riverman, Numeraire 15kg
+    'gen0_common': 11, # commons 10kg
     # Aux legions
-    'gen1_rare': 5, #
+    'gen1_rare': 5.5, #
     'gen1_uncommon': 4, #
     'gen1_common': 2.5, #
 }
