@@ -17,7 +17,7 @@ from harvester_boost_count import total_harvester_boost
 class UtilizationMiddleman:
     """
         # Middleman
-        * Implements Ptas math to calculate current rewards for each harvester and atlas mine
+        * Implements Peita's math to calculate current rewards for each harvester and atlas mine
         * Takes for account utilization of each harvester
         * If harvester has utilization below 100%, its “leftover” rewards are distributed automatically to other harvesters
         * Pulls data of active harvesters directly from the factory to support Harvester disabling
@@ -41,12 +41,19 @@ class UtilizationMiddleman:
         # pull data from HarvesterFactory first and update
         self.recalculate_emission_shares()
 
+        boosts = self.calculate_harvester_boosts()
+        atlas_boost = boosts[0]
+        harvesters_boosts = boosts[1]
+
         return """
         ========== Utilization Middleman ==========
         Magic Balance in Middleman Contract: {balance:,} MAGIC
 
         Atlas Emission Share: {atlas_emissions_share:.2%}
         Active Harvesters Emission Shares: {h_emissions_share}
+
+        Atlas Boost: {atlas_boost:.2f}x
+        Harvesters Boosts: {h_boosts}
 
         """.format(
             balance=self.magic_balance,
@@ -55,6 +62,8 @@ class UtilizationMiddleman:
                 "{}: {:.2%}".format(s['id'], s['emission_share'])
                 for s in self.harvester_emission_shares
             ],
+            atlas_boost=atlas_boost,
+            h_boosts=["{:.2f}x".format(b) for b in harvesters_boosts],
         )
 
     def pull_magic_from_master_of_coin(self):
@@ -127,6 +136,9 @@ class UtilizationMiddleman:
             {
                 'id': "h{}".format(h['id']),
                 'mining_power': self.mining_power_based_on_utilization(h.utilization) * h.getMiningBoost()
+                ## return a percent with getMiningBoost()
+                ## such that sum of all the boosts is 1
+                ##
             }
             for h in self.harvester_factory.harvesters
             if h.is_active
@@ -135,6 +147,15 @@ class UtilizationMiddleman:
         ## or only when users withdraw? (it is currently like this, probably better this way)
 
         total_mining_power = atlas_boosted_mining_power + np.sum([h['mining_power'] for h in harvester_mining_powers])
+
+
+        ### how to remove this loop above
+        ## total_mining_power is a parameter that is pre-calculated by MasterOfCoin
+        ## just need to get the individual harvester's mining power
+        ## without loopin
+        ## can we do this in a single loop
+
+        ## loops are dangerous
 
 
         #################################################

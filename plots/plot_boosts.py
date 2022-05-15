@@ -14,9 +14,9 @@ from parameters import MAX_MAP_HEIGHT, MAX_MAP_WIDTH
 from parameters import TIME_LOCK_BOOST_PARAMS, LEGION_BOOST_PARAMS, LEGION_RANK_PARAMS
 from parameters import EXTRACTOR_BOOST_PARAMS, TREASURES_BOOST_PARAMS
 
-from harvester_boosts import get_treasure_boost, parts_boost_harvester, legions_boost_harvester
-from harvester_boosts import extractors_boost_harvester, total_harvester_boost
-from harvester_boosts import distance_boost_harvester, calculate_distance_from_atlas
+from harvester_boost_count import get_treasure_boost, parts_boost_harvester, legions_boost_harvester
+from harvester_boost_count import extractors_boost_harvester, total_harvester_boost
+from harvester_boost_count import distance_boost_harvester, calculate_distance_from_atlas
 
 
 ################ Varying legion numbers, fixed parts
@@ -117,3 +117,38 @@ def graph_distance_boost():
     plt.grid(color='black', alpha=0.1)
     plt.legend()
     plt.show()
+
+
+
+
+
+
+
+nobs=100
+xx = np.linspace(0, MAX_HARVESTER_PARTS, nobs)
+yy = np.linspace(0, MAX_LEGIONS, nobs)
+
+
+@np.vectorize
+def f2(x, y):
+    return total_harvester_boost(x, y)
+
+X, Y = np.meshgrid(xx, yy)
+Z = f2(X, Y)
+
+fig = plt.figure()
+ax = plt.axes(projection='3d')
+
+ax.set_xlabel('#Parts')
+ax.set_ylabel('#Legions')
+ax.set_zlabel('Harvester Boost');
+
+ax.plot_surface(X, Y, Z, rstride=1, cstride=1,
+                cmap='binary', edgecolor='none')
+
+# ax.contour3D(X, Y, Z, 100, cmap='binary')
+
+ax.set_title('Harvester Boosts');
+
+# ax.view_init(20, 35)
+plt.show()

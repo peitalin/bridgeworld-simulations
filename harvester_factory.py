@@ -11,7 +11,7 @@ from parameters import MAX_MAP_HEIGHT, MAX_MAP_WIDTH
 from parameters import TIME_LOCK_BOOST_PARAMS, LEGION_BOOST_PARAMS, LEGION_RANK_PARAMS
 from parameters import EXTRACTOR_BOOST_PARAMS, TREASURES_BOOST_PARAMS
 from parameters import TOTAL_MAGIC_SUPPLY, DEFAULT_USER_AUM_CAP
-from parameters import DEPOSIT_AMOUNT_PER_PART, MAX_PARTS_PER_ADRESS
+from parameters import DEPOSIT_AMOUNT_PER_PART, MAX_PARTS_PER_ADDRESS
 
 from harvester_boost_count import total_harvester_boost
 from harvester_boost_count import getNftBoost
@@ -133,6 +133,20 @@ class HarvesterFactory:
 
 
 
+
+
+
+
+
+################################
+################################
+### Harvester
+################################
+################################
+
+
+
+
 class Harvester:
 
     def __init__(
@@ -148,8 +162,8 @@ class Harvester:
         aum_staked=10_000_000, # assume its full when created for demo purposes
     ):
         self.id = id
-        self.parts = 1
-        self.legions = 1
+        self.parts = parts
+        self.legions = parts
         self.avg_legion_rank = avg_legion_rank
         self.extractors = init_extractors
         self.is_atlas = is_atlas
@@ -209,17 +223,29 @@ class Harvester:
     def deactivate(self):
         self.is_active = False
 
-    def stake_parts(self, parts=1, msg_sender_addr='pta.eth'):
-        if self.parts + parts >= MAX_HARVESTER_PARTS:
+    def stake_parts(self, parts=0, msg_sender_addr='pta.eth'):
+        if self.parts + parts > MAX_HARVESTER_PARTS:
+            print("max parts for harvester reached")
             return
             # throw error
-        elif 0 < self.parts + parts:
-            if self.user_parts_staked[msg_sender_addr] + parts > MAX_PARTS_PER_ADRESS:
-                # max parts per wallet is 36 parts
-                return
-            else:
+        if parts < 0:
+            print("can't stake negative parts")
+            return
+
+        if self.user_parts_staked.get(msg_sender_addr) is None:
+            print("adding parts")
+            if parts <= MAX_PARTS_PER_ADDRESS:
                 self.parts += parts
-                self.user_parts_staked[msg_sender_addr] += parts
+                self.user_parts_staked.update({ msg_sender_addr: parts })
+            else:
+                print("exceeded MAX_PARTS_PER_ADDRESS")
+        elif self.user_parts_staked[msg_sender_addr] + parts <= MAX_PARTS_PER_ADDRESS:
+            print("adding more parts")
+            self.parts += parts
+            self.user_parts_staked[msg_sender_addr] += parts
+        else:
+            print(" max parts per wallet is 40 parts")
+
 
     def stake_legions(self, legions=1):
         # if we transition to legion weight system, insteadof 3 legions per wallet

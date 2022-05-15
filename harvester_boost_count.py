@@ -41,7 +41,6 @@ def legions_boost_harvester(num, max_legions=MAX_LEGIONS, avg_legion_rank=1, boo
 
         num: number of legions staked on harvester
         max: number of legions where you achieve max boost
-        avg_legion_rank: avg legion rank on your harvester
 
         boost_factor: the amount of boost you want to apply to parts
         default is 1 = 50% boost (1.5x) if num = max
@@ -53,9 +52,12 @@ def legions_boost_harvester(num, max_legions=MAX_LEGIONS, avg_legion_rank=1, boo
     else:
         n = num
 
-    legion_rank_modifier = (0.90 + avg_legion_rank/10)
+    # legion_rank_modifier = (0.90 + avg_legion_rank/10)
     # if avg rank is commons (rank 1),
     # then 0.9 + 1/10 = 1 so there is no boost
+
+    ## Disable for now. Bit annoying to implement in solidity
+    legion_rank_modifier = 1
 
     return 1 + (2*n - n**2/max_legions) / max_legions * legion_rank_modifier * boost_factor
 
