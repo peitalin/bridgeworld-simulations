@@ -79,7 +79,7 @@ class UtilizationMiddleman:
         atlas_boost = total_harvester_boost(
             num_parts=atlas_mine.parts,
             num_legions=atlas_mine.legions,
-            avg_legion_rank=atlas_mine.avg_legion_rank,
+            total_rank=atlas_mine.total_rank,
             extractors=atlas_mine.extractors,
             is_atlas=True
         )
@@ -88,7 +88,7 @@ class UtilizationMiddleman:
             total_harvester_boost(
                 num_parts=h.parts,
                 num_legions=h.legions,
-                avg_legion_rank=h.avg_legion_rank,
+                total_rank=h.total_rank,
                 extractors=h.extractors,
             )
             if h.is_active else 0

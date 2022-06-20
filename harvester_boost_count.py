@@ -34,7 +34,12 @@ def parts_boost_harvester(num_parts, max_parts=MAX_HARVESTER_PARTS, boost_factor
 
 
 
-def legions_boost_harvester(num, max_legions=MAX_LEGIONS, avg_legion_rank=1, boost_factor=LEGIONS_BOOST_FACTOR):
+def legions_boost_harvester(
+    num,
+    max_legions=MAX_LEGIONS,
+    total_rank=1,
+    boost_factor=LEGIONS_BOOST_FACTOR
+):
     """
         quadratic function in the interval: [1, (1 + boost_factor)] based on number of parts staked.
         exhibits diminishing returns on boosts as more legions are added
@@ -52,12 +57,17 @@ def legions_boost_harvester(num, max_legions=MAX_LEGIONS, avg_legion_rank=1, boo
     else:
         n = num
 
-    # legion_rank_modifier = (0.90 + avg_legion_rank/10)
+
+    staked = num
+    if staked == 0:
+        avg_legion_rank = 0
+    else:
+        avg_legion_rank = total_rank / staked
+    # uint256 avgLegionRank = staked == 0 ? 0 : totalRank / staked;
+
+    legion_rank_modifier = (0.90 + avg_legion_rank/10)
     # if avg rank is commons (rank 1),
     # then 0.9 + 1/10 = 1 so there is no boost
-
-    ## Disable for now. Bit annoying to implement in solidity
-    legion_rank_modifier = 1
 
     return 1 + (2*n - n**2/max_legions) / max_legions * legion_rank_modifier * boost_factor
 
@@ -145,13 +155,17 @@ def total_harvester_boost(
     num_parts,
     num_legions,
     extractors=[],
-    avg_legion_rank=1,
+    total_rank=0,
     is_atlas=False,
     corruption_erc20_balance=0,
 ):
     """calculates both parts_boost * legions_boost together"""
 
-    _legions_boost = legions_boost_harvester(num_legions, MAX_LEGIONS, avg_legion_rank)
+    if total_rank == 0:
+        total_rank = num_legions
+        ## sets avg_legion_rank to 1 if total_rank wasn't provided
+
+    _legions_boost = legions_boost_harvester(num_legions, MAX_LEGIONS, total_rank)
     _parts_boost = parts_boost_harvester(num_parts)
     _extractors_boost = extractors_boost_harvester(extractors)
     _corruption_boost = corruption_negative_boost(corruption_erc20_balance)

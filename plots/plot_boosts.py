@@ -25,9 +25,9 @@ def graph_total_harvester_boost_varying_legions():
     x1_num_parts = np.linspace(0, MAX_HARVESTER_PARTS, MAX_HARVESTER_PARTS+1)
     x2_num_legions = np.linspace(0, MAX_LEGIONS, MAX_HARVESTER_PARTS+1)
 
-    total_boosted_max_hi_legion_rank = [total_harvester_boost(500, x2, [], 4) for x2 in x2_num_legions]
-    total_boosted_max = [total_harvester_boost(500, x2, [], 1) for x2 in x2_num_legions]
-    total_boosted_min = [total_harvester_boost(1, x2, [], 1)   for x2 in x2_num_legions]
+    total_boosted_max_hi_legion_rank = [total_harvester_boost(500, x2, []) for x2 in x2_num_legions]
+    total_boosted_max = [total_harvester_boost(500, x2, []) for x2 in x2_num_legions]
+    total_boosted_min = [total_harvester_boost(1, x2, [])   for x2 in x2_num_legions]
 
     plt.plot(x2_num_legions, total_boosted_max_hi_legion_rank, label="Harvester with 500 parts; high legion rank", color="orange", linestyle=":")
     plt.plot(x2_num_legions, total_boosted_max, label="Harvester with 500 parts", color="orange", linestyle="-")
@@ -124,7 +124,7 @@ def graph_distance_boost():
 
 
 
-nobs=100
+nobs = 100
 xx = np.linspace(0, MAX_HARVESTER_PARTS, nobs)
 yy = np.linspace(0, MAX_LEGIONS, nobs)
 

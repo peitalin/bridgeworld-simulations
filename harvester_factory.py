@@ -154,7 +154,7 @@ class Harvester:
         id,
         parts=0,
         legions=0,
-        avg_legion_rank=1,
+        total_rank=0,
         init_extractors=[],
         is_atlas=False,
         is_active=False, # dormant by default
@@ -164,7 +164,7 @@ class Harvester:
         self.id = id
         self.parts = parts
         self.legions = parts
-        self.avg_legion_rank = avg_legion_rank
+        self.total_rank = total_rank
         self.extractors = init_extractors
         self.is_atlas = is_atlas
         self.is_active = is_active
@@ -194,7 +194,7 @@ class Harvester:
             id=self.id,
             parts=self.parts,
             legions=self.legions,
-            avg_legion_rank=self.avg_legion_rank,
+            avg_legion_rank= 0 if self.legions == 0 else self.total_rank/self.legions,
             extractors=self.extractors,
             aum_staked=self.aum_staked,
             aum_cap=self.aum_cap,
@@ -210,8 +210,8 @@ class Harvester:
             return self.parts
         if item == 'legions':
             return self.legions
-        if item == 'avg_legion_rank':
-            return self.avg_legion_rank
+        if item == 'total_rank':
+            return self.total_rank
         if item == 'extractors':
             return self.extractors
         if item == 'utilization':
@@ -270,9 +270,8 @@ class Harvester:
         else:
             self.legions -= legions
 
-    def set_avg_legion_rank(self, avg_legion_rank):
-        if avg_legion_rank <= 5:
-            self.avg_legion_rank = avg_legion_rank
+    def set_total_legion_rank(self, legion_rank):
+        self.total_rank = legion_rank
 
     def set_extractors(self, extractors=[]):
         self.extractors = extractors
@@ -312,7 +311,7 @@ class Harvester:
             return total_harvester_boost(
                 num_parts=self.parts,
                 num_legions=self.legions,
-                avg_legion_rank=self.avg_legion_rank,
+                total_rank=self.total_rank,
                 extractors=self.extractors,
                 is_atlas=self.is_atlas,
             )
