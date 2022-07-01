@@ -51,6 +51,11 @@ y_boosts = {
     3: [],
     4: [],
     5: [],
+    6: [],
+    7: [],
+    8: [],
+    9: [],
+    10: [],
     'atlas': [],
 }
 
@@ -61,6 +66,11 @@ y_emissions_pct_shares = {
     3: [],
     4: [],
     5: [],
+    6: [],
+    7: [],
+    8: [],
+    9: [],
+    10: [],
     'atlas': [],
 }
 
@@ -71,6 +81,11 @@ y_user_pct_shares = {
     3: [],
     4: [],
     5: [],
+    6: [],
+    7: [],
+    8: [],
+    9: [],
+    10: [],
     'atlas': [],
 }
 
@@ -81,12 +96,22 @@ y_user_magic_yield = {
     3: [],
     4: [],
     5: [],
+    6: [],
+    7: [],
+    8: [],
+    9: [],
+    10: [],
     'atlas': [],
 }
 
 
 harvester_linestyle = [
     '--',
+    ':',
+    ':',
+    ':',
+    ':',
+    ':',
     ':',
     ':',
     ':',
@@ -99,6 +124,11 @@ harvester_colors = [
     'mediumseagreen',
     'gold',
     'darkorange',
+    'violet',
+    'black',
+    'black',
+    'black',
+    'black',
     'black',
 ]
 
@@ -124,6 +154,10 @@ active_from_day = {
     'h4': 70,
     'h5': 90,
     'h6': 110,
+    'h7': 130,
+    'h8': 130,
+    'h9': 130,
+    'h10': 130,
 }
 
 
@@ -136,16 +170,26 @@ middleman = UtilizationMiddleman(
 
 harvester_factory.create_harvester(id=0)
 
-# print("harvester_factory['harvesters'][0]", harvester_factory['harvesters'][0])
-##### 5x extractors for harvester 0
-harvester_factory['harvesters'][0].set_extractors(extractors=['large_extractor']*MAX_EXTRACTORS)
-
 harvester_factory.create_harvester(id=1)
 harvester_factory.create_harvester(id=2)
 harvester_factory.create_harvester(id=3)
 harvester_factory.create_harvester(id=4)
 harvester_factory.create_harvester(id=5)
+harvester_factory.create_harvester(id=6)
+harvester_factory.create_harvester(id=7)
+harvester_factory.create_harvester(id=8)
+harvester_factory.create_harvester(id=9)
 
+
+# print("harvester_factory['harvesters'][0]", harvester_factory['harvesters'][0])
+##### 5x extractors for harvester 0
+harvester_factory['harvesters'][0].set_extractors(extractors=['large_extractor']*MAX_EXTRACTORS)
+harvester_factory['harvesters'][1].set_extractors(extractors=['large_extractor']*MAX_EXTRACTORS)
+harvester_factory['harvesters'][2].set_extractors(extractors=['large_extractor']*MAX_EXTRACTORS)
+harvester_factory['harvesters'][3].set_extractors(extractors=['large_extractor']*MAX_EXTRACTORS)
+harvester_factory['harvesters'][4].set_extractors(extractors=['large_extractor']*MAX_EXTRACTORS)
+harvester_factory['harvesters'][5].set_extractors(extractors=['large_extractor']*MAX_EXTRACTORS)
+harvester_factory['harvesters'][6].set_extractors(extractors=['large_extractor']*MAX_EXTRACTORS)
 
 def init_plot(i=0):
     # do nothing, prevents FuncAnim calling initialization twice
@@ -183,6 +227,9 @@ def draw_atlas_harvest_comparison(i):
     h4 = all_harvesters[3]
     h5 = all_harvesters[4]
     h6 = all_harvesters[5]
+    h7 = all_harvesters[6]
+    h8 = all_harvesters[7]
+    h9 = all_harvesters[8]
 
 
     if day < active_from_day['h1']:
@@ -208,17 +255,22 @@ def draw_atlas_harvest_comparison(i):
         [h.activate() for h in[h1, h2, h3, h4]]
         [h.stake_parts(parts_to_increment) for h in [h1, h2, h3, h4]]
         [h.stake_legions(legions_to_increment) for h in [h1, h2, h3, h4]]
-        expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*3.5
+        expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*4
 
     elif active_from_day['h5'] <= day < active_from_day['h6']:
         [h.activate() for h in[h1, h2, h3, h4, h5]]
         [h.stake_parts(parts_to_increment) for h in [h1, h2, h3, h4, h5]]
         [h.stake_legions(legions_to_increment) for h in [h1, h2, h3, h4, h5]]
-        expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*4
+        expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*5
+    elif active_from_day['h6'] <= day < active_from_day['h7']:
+        [h.activate() for h in[h1, h2, h3, h4, h5, h6]]
+        [h.stake_parts(parts_to_increment) for h in [h1, h2, h3, h4, h5, h6]]
+        [h.stake_legions(legions_to_increment) for h in [h1, h2, h3, h4, h5, h6]]
+        expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*6
     else:
-        [h.activate() for h in[h1, h2, h3, h4, h5]]
-        [h.stake_parts(parts_to_increment) for h in [h1, h2, h3, h4, h5]]
-        [h.stake_legions(legions_to_increment) for h in [h1, h2, h3, h4, h5]]
+        [h.activate() for h in[h1, h2, h3, h4, h5, h6, h7, h8, h9]]
+        [h.stake_parts(parts_to_increment) for h in [h1, h2, h3, h4, h5, h6, h7, h8, h9]]
+        [h.stake_legions(legions_to_increment) for h in [h1, h2, h3, h4, h5, h6, h7, h8, h9]]
         # h6.activate()
         # h6.stake_parts(parts_to_increment)
         # h6.stake_legions(legions_to_increment)
@@ -227,7 +279,7 @@ def draw_atlas_harvest_comparison(i):
         # 85mil locked
         # 45mil MAGIC locked for 1 year
         # https://twitter.com/bjornsamuel/status/1486957771979427844
-        expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*4
+        expected_atlas_aum = EXPECTED_ATLAS_AUM - AUM_CAP_HARVESTER*7
 
     print('harvester_factory!!!!!', harvester_factory.harvesters)
 
@@ -274,14 +326,14 @@ def draw_atlas_harvest_comparison(i):
             # ax1.plot(
             #     days[active_from:],
             #     y_boosts[h.id][active_from:],
-            #     label="H{} boost {:.2f}x | {:.0f} parts {:.0f} legions".format(h.id, current_boost, h.parts, h.legions),
+            #     label="H{} boost {:.2f}x | {:.0f} parts {:.0f} legions".format(h.id + 1, current_boost, h.parts, h.legions),
             #     color=harvester_colors[h.id],
             # )
 
             ax2.plot(
                 days[active_from:],
                 y_emissions_pct_shares[h.id],
-                label="H{} {:.2f}x boost | Share {:.2%}".format(h.id, current_boost, current_emissions_pct_share['emission_share']),
+                label="Harvester {} {:.2f}x boost | Share {:.2%}".format(h.id + 1, current_boost, current_emissions_pct_share['emission_share']),
                 color=harvester_colors[h.id],
                 linestyle=harvester_linestyle[h.id],
             )
@@ -290,7 +342,7 @@ def draw_atlas_harvest_comparison(i):
                 days[active_from:],
                 # y_user_pct_shares[h.id][active_from:],
                 y_user_magic_yield[h.id],
-                label='H{} 1m/{}m: {:.2%}% APR in MAGIC'.format(h.id, AUM_CAP_HARVESTER, current_user_magic_yield),
+                label='Harvester {} 1/{}m: {:.2%}% APR MAGIC'.format(h.id + 1, AUM_CAP_HARVESTER, current_user_magic_yield),
                 color=harvester_colors[h.id],
             )
 
@@ -319,12 +371,12 @@ def draw_atlas_harvest_comparison(i):
     ax3.plot(
         days,
         y_user_magic_yield['atlas'],
-        label='Atlas: 1m/{:.0f}m: {:.2%}% APR in MAGIC'.format(expected_atlas_aum, atlas_user_magic_yield),
+        label='Atlas: 1m/{:.0f}m: {:.2%}% APR MAGIC'.format(expected_atlas_aum, atlas_user_magic_yield),
         color='red',
         linestyle="--",
     )
     # plot 3 y-ticks
-    yticks_pct = [0, 0.5, 1, 1.5, 2, 2.5]
+    yticks_pct = [0, 0.5, 1, 1.5, 2]
     yticks_label = ["{:.0%}".format(b) for b in yticks_pct]
     ax3.set_yticks(yticks_pct)
     ax3.set_yticklabels(yticks_label, fontsize=7)
@@ -333,8 +385,8 @@ def draw_atlas_harvest_comparison(i):
     ax2.set_title('Harvesters share of total emissions', size=10)
     ax3.set_title("User with 1m MAGIC: APR in different mines", size=10)
 
-    ax2.set(xlabel='days | day {}'.format(day), ylabel='% share of emissions')
-    ax3.set(xlabel='days | day {}'.format(day), ylabel='APR % in MAGIC')
+    ax2.set(xlabel='day {}'.format(day), ylabel='% share of emissions')
+    ax3.set(xlabel='day {}'.format(day), ylabel='APR% in MAGIC')
 
     # ax1.grid(color='black', alpha=0.1)
     ax2.grid(color='black', alpha=0.1)
@@ -359,7 +411,7 @@ def run_harvester_split_simulation_6():
 
     fig, (ax2, ax3) = plt.subplots(2)
     # fig, (ax1, ax2, ax3) = plt.subplots(3)
-    fig.suptitle('Atlas {}x Boost (45m locked 12months) vs. 6 Harvesters'.format(ATLAS_MINE_BONUS))
+    fig.suptitle('Atlas {}x Boost (45m locked 12months) vs Harvesters'.format(ATLAS_MINE_BONUS))
     fig.set_size_inches(12, 9)
 
     ani = FuncAnimation(

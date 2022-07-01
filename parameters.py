@@ -1,22 +1,21 @@
 
 # for devs/team to calibrate
-PARTS_BOOST_FACTOR = 1 # 100% is 2x boost (1 + 100%)
-LEGIONS_BOOST_FACTOR = 0.5 # 50% is 1.5x boost (1 + 50%)
+PARTS_BOOST_FACTOR = 0.5 # 50% is 1.5x boost (1 + 50%)
+LEGIONS_BOOST_FACTOR = 1 # 100% is 2x boost (1 + 100%)
 DISTANCE_BOOST_FACTOR = 1 # 100% is 2x boost (1 + 100%)
 # these boosts stack together multiplicatively to determine overall boost
 # parts_boost should probably be bigger than legions (as a craft item)
 
-ATLAS_MINE_BONUS = 4
+ATLAS_MINE_BONUS = 5
 # atlas mine gets a default boost
 
 EXPECTED_ATLAS_AUM = 80
 # Estimated AUM for Atlas Mine in millions
 # 85mil locked, 45mil MAGIC locked for 1 year
-# https://twitter.com/bjornsamuel/status/1486957771979427844
 # generally it will have a much larger AUM than other harvesters, 50mil~80mil vs 10mil
 
-AUM_CAP_HARVESTER = 10
-# 10mil cap in harvesters
+AUM_CAP_HARVESTER = 6
+# 6mil cap in harvesters
 
 MIN_LEGIONS = 1
 MAX_LEGIONS = 2400
