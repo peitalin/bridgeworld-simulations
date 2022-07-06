@@ -1,4 +1,4 @@
-from plots.compare_6_harvesters import run_harvester_split_simulation_6
+from plots.compare_many_harvesters import run_harvester_split_simulation_9
 from plots.compare_distance import run_distance_boost_simulation
 
 ## contracts
@@ -70,7 +70,7 @@ print(harvester_factory)
 
 
 ####### Harvesters Yield Wars Simulation #######
-run_harvester_split_simulation_6()
+run_harvester_split_simulation_9()
 
 # ####### Distance Boost Simulation ######
 # # run_distance_boost_simulation()

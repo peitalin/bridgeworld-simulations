@@ -402,7 +402,7 @@ def draw_atlas_harvest_comparison(i):
 
 
 
-def run_harvester_split_simulation_6():
+def run_harvester_split_simulation_9():
 
     global fig
     global ax1
