@@ -10,7 +10,7 @@ from parameters import MIN_LEGIONS, MAX_LEGIONS
 from parameters import MAX_MAP_HEIGHT, MAX_MAP_WIDTH
 from parameters import TIME_LOCK_BOOST_PARAMS, LEGION_BOOST_PARAMS, LEGION_RANK_PARAMS
 from parameters import EXTRACTOR_BOOST_PARAMS, TREASURES_BOOST_PARAMS
-from parameters import TOTAL_MAGIC_SUPPLY, DEFAULT_USER_AUM_CAP
+from parameters import TOTAL_MAGIC_SUPPLY
 from parameters import DEPOSIT_AMOUNT_PER_PART, MAX_PARTS_PER_ADDRESS
 
 from harvester_boost_count import total_harvester_boost

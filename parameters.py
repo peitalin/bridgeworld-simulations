@@ -33,7 +33,11 @@ MAX_MAP_WIDTH = 100
 TOTAL_MAGIC_SUPPLY = 140_000_000
 
 # A cap on total AUM a user can deposit in a harvester
-DEFAULT_USER_AUM_CAP = 100_000
+DEPOSIT_AMOUNT_PER_PART = 30_000
+MAX_PARTS_PER_ADDRESS = 800
+## should be 40, relax this assumption for simulation purposes only
+# MAX_PARTS_PER_ADDRESS = 40
+
 
 ## Double check these MAGIC emission numbers
 MAGIC_EMISSIONS_BY_YEAR = {
@@ -154,7 +158,3 @@ LEGION_WEIGHTS = {
     'gen1_common': 2.5, #
 }
 
-
-DEPOSIT_AMOUNT_PER_PART = 30_000
-MAX_PARTS_PER_ADDRESS = 800
-# MAX_PARTS_PER_ADDRESS = 40
