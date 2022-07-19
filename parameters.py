@@ -37,7 +37,8 @@ DEFAULT_USER_AUM_CAP = 100_000
 
 ## Double check these MAGIC emission numbers
 MAGIC_EMISSIONS_BY_YEAR = {
-    1: 43_464_251,
+    # 1: 43_464_251,
+    1: 23_464_251, # 20mil already mined for atlas
     2: 21_732_125,
     3: 10_866_063,
     4: 5_433_031,
