@@ -35,7 +35,7 @@ from harvester_middleman import UtilizationMiddleman
 
 # In the beginning there will only be 1 aux harvester, with low parts and legions
 # over time, the harvester will get larger boosts (more parts + legions)
-# and more harvesters will come online (6 in total)
+# and more harvesters will come online (~9 in total)
 # harvesters will launch roughly every month
 
 # initialize plot variables, overwritten on 1st pass of simulation

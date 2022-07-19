@@ -20,7 +20,7 @@ AUM_CAP_HARVESTER = 6
 MIN_LEGIONS = 1
 MAX_LEGIONS = 2400
 # legions boosts maxes out at 2000 staked legions
-MAX_HARVESTER_PARTS = 800
+MAX_HARVESTER_PARTS = 500
 # harvester parts boosts maxes out at 500
 MAX_EXTRACTORS = 10
 # extractor boosts maxes out at N
