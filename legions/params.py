@@ -1,6 +1,8 @@
 
-# 20%
-PR_DROP_LOOT_FROM_QUEST = 0.15
+
+PR_DROP_LOOT_FROM_QUEST = 0.05
+## Questing v2 = ~%60 drop rate for a fragment
+## you need 12 fragments therefore drop rate is approx %60/12 = %5
 
 QUESTING_EXP = {
     "easy": 10,
