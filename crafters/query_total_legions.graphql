@@ -1,0 +1,30 @@
+
+# https://thegraph.com/hosted-service/subgraph/treasureproject/marketplace
+
+{
+  collections(where: { id_in: ["0xfe8c1ac365ba6780aec5a985d989b327c27670a1-0", "0xfe8c1ac365ba6780aec5a985d989b327c27670a1-1"] }) {
+    name
+    stats {
+      items
+    }
+  }
+}
+
+{
+  "data": {
+    "collections": [
+      {
+        "name": "Legion Genesis",
+        "stats": {
+          "items": 3276
+        }
+      },
+      {
+        "name": "Legion Auxiliary",
+        "stats": {
+          "items": 17064
+        }
+      }
+    ]
+  }
+}

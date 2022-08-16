@@ -125,12 +125,21 @@ harvester_colors = [
     'gold',
     'darkorange',
     'violet',
-    'black',
-    'black',
-    'black',
-    'black',
-    'black',
+    'slategrey',
+    'slategrey',
+    'slategrey',
+    'slategrey',
+    'slategrey',
 ]
+
+brown = '#AC8F59'
+offwhite = '#E7E8E9'
+grey = '#a6a8ab'
+gold = '#a48955'
+darkblue = '#0e171b'
+lightblue = '#182329'
+
+
 
 ## x-axis is days
 days = []
@@ -181,15 +190,15 @@ harvester_factory.create_harvester(id=8)
 harvester_factory.create_harvester(id=9)
 
 
-# print("harvester_factory['harvesters'][0]", harvester_factory['harvesters'][0])
-##### 5x extractors for harvester 0
-harvester_factory['harvesters'][0].set_extractors(extractors=['large_extractor']*MAX_EXTRACTORS)
-harvester_factory['harvesters'][1].set_extractors(extractors=['large_extractor']*MAX_EXTRACTORS)
-harvester_factory['harvesters'][2].set_extractors(extractors=['large_extractor']*MAX_EXTRACTORS)
-harvester_factory['harvesters'][3].set_extractors(extractors=['large_extractor']*MAX_EXTRACTORS)
-harvester_factory['harvesters'][4].set_extractors(extractors=['large_extractor']*MAX_EXTRACTORS)
-harvester_factory['harvesters'][5].set_extractors(extractors=['large_extractor']*MAX_EXTRACTORS)
-harvester_factory['harvesters'][6].set_extractors(extractors=['large_extractor']*MAX_EXTRACTORS)
+# # print("harvester_factory['harvesters'][0]", harvester_factory['harvesters'][0])
+# ##### 5x extractors for harvester 0
+# harvester_factory['harvesters'][0].set_extractors(extractors=['large_extractor']*MAX_EXTRACTORS)
+# harvester_factory['harvesters'][1].set_extractors(extractors=['large_extractor']*MAX_EXTRACTORS)
+# harvester_factory['harvesters'][2].set_extractors(extractors=['large_extractor']*MAX_EXTRACTORS)
+# harvester_factory['harvesters'][3].set_extractors(extractors=['large_extractor']*MAX_EXTRACTORS)
+# harvester_factory['harvesters'][4].set_extractors(extractors=['large_extractor']*MAX_EXTRACTORS)
+# harvester_factory['harvesters'][5].set_extractors(extractors=['large_extractor']*MAX_EXTRACTORS)
+# harvester_factory['harvesters'][6].set_extractors(extractors=['large_extractor']*MAX_EXTRACTORS)
 
 def init_plot(i=0):
     # do nothing, prevents FuncAnim calling initialization twice
@@ -357,44 +366,78 @@ def draw_atlas_harvest_comparison(i):
         days,
         y_emissions_pct_shares['atlas'],
         label="Atlas {:.2f}x boost | Share {:.2%}".format(ATLAS_MINE_BONUS, emissions_pct_share_atlas),
-        color='red',
+        color='crimson',
         linestyle="--",
     )
     ax2.set(xlabel='', ylabel='% share of emissions')
     # plot 2 y-ticks
     yticks_pct = [0, 0.2, 0.4, 0.6, 0.8, 1]
     yticks_label = ["{:.0%}".format(b) for b in yticks_pct]
-    ax2.set_yticks(yticks_pct)
-    ax2.set_yticklabels(yticks_label, fontsize=7)
+    ax2.set_yticks(yticks_pct, color=gold)
+    ax2.set_yticklabels(yticks_label, fontsize=7, color=gold)
 
     #### Plot 3 - Users MAGIC yield in the Mine (APR)
     ax3.plot(
         days,
         y_user_magic_yield['atlas'],
         label='Atlas: 1m/{:.0f}m: {:.2%}% APR MAGIC'.format(expected_atlas_aum, atlas_user_magic_yield),
-        color='red',
+        color='crimson',
         linestyle="--",
     )
     # plot 3 y-ticks
     yticks_pct = [0, 0.5, 1, 1.5, 2]
     yticks_label = ["{:.0%}".format(b) for b in yticks_pct]
-    ax3.set_yticks(yticks_pct)
-    ax3.set_yticklabels(yticks_label, fontsize=7)
+    ax3.set_yticks(yticks_pct, color=gold)
+    ax3.set_yticklabels(yticks_label, fontsize=7, color=gold)
 
     # ax1.set_title('Harvester Boosts', size=10)
-    ax2.set_title('Harvesters share of total emissions', size=10)
-    ax3.set_title("User with 1m MAGIC: APR in different mines", size=10)
+    ax2.set_title('Harvesters share of total emissions', size=10, color=gold)
+    ax3.set_title("User with 1m MAGIC: APR in different mines", size=10, color=gold)
 
-    ax2.set(xlabel='day {}'.format(day), ylabel='% share of emissions')
-    ax3.set(xlabel='day {}'.format(day), ylabel='APR% in MAGIC')
+    ax2.set_ylabel('% share of emissions', color=gold)
+    ax2.set_xlabel('day {}'.format(day), color=gold)
+
+    ax3.set_ylabel('APR% in MAGIC', color=gold)
+    ax3.set_xlabel('day {}'.format(day), color=gold)
 
     # ax1.grid(color='black', alpha=0.1)
-    ax2.grid(color='black', alpha=0.1)
-    ax3.grid(color='black', alpha=0.1)
+    ax2.grid(color=gold, alpha=0.1)
+    ax3.grid(color=gold, alpha=0.1)
+
+    ax2.spines['bottom'].set_color(gold)
+    ax2.spines['top'].set_color(gold)
+    ax2.spines['left'].set_color(gold)
+    ax2.spines['right'].set_color(gold)
+    ax2.xaxis.label.set_color(gold)
+    ax2.tick_params(axis='x', colors=gold)
+    ax2.tick_params(axis='y', colors=gold)
+
+    ax3.spines['bottom'].set_color(gold)
+    ax3.spines['top'].set_color(gold)
+    ax3.spines['left'].set_color(gold)
+    ax3.spines['right'].set_color(gold)
+    ax3.xaxis.label.set_color(gold)
+    ax3.tick_params(axis='x', colors=gold)
+    ax3.tick_params(axis='y', colors=gold)
 
     # ax1.legend(bbox_to_anchor=(1.48, 1), loc="upper right")
-    ax2.legend(bbox_to_anchor=(1.4, 1), loc="upper right")
-    ax3.legend(bbox_to_anchor=(1.47, 1), loc="upper right")
+    ax2.legend(
+        bbox_to_anchor=(1.47, 1),
+        loc="lower center",
+        labelcolor=grey,
+        # edgecolor=lightblue,
+        # facecolor=lightblue
+        edgecolor=darkblue,
+        facecolor=darkblue
+    )
+
+    ax3.legend(bbox_to_anchor=(1.47, 1), loc="lower center",
+        labelcolor=grey,
+        # edgecolor=lightblue,
+        # facecolor=lightblue
+        edgecolor=darkblue,
+        facecolor=darkblue
+    )
 
 
 
@@ -409,9 +452,10 @@ def run_harvester_split_simulation_9():
     global ax2
     global ax3
 
-    fig, (ax2, ax3) = plt.subplots(2)
+    fig, (ax2, ax3) = plt.subplots(2, facecolor=darkblue)
     # fig, (ax1, ax2, ax3) = plt.subplots(3)
-    fig.suptitle('Atlas {}x Boost (45m locked 12months) vs Harvesters'.format(ATLAS_MINE_BONUS))
+    fig.suptitle('Atlas {}x Boost vs Harvesters (no Extractors)'.format(ATLAS_MINE_BONUS),
+        color=gold)
     fig.set_size_inches(12, 9)
 
     ani = FuncAnimation(
@@ -424,6 +468,8 @@ def run_harvester_split_simulation_9():
     )
 
     plt.subplots_adjust(left=0.08, right=0.7, top=0.9, bottom=0.1, hspace=0.3)
+    ax2.set_facecolor(lightblue)
+    ax3.set_facecolor(lightblue)
 
     plt.show()
 

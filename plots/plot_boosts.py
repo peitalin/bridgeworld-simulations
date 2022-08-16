@@ -111,10 +111,10 @@ def graph_distance_boost():
         distance_boosts,
         label="distance boost"
     )
-    plt.xlabel("Distance")
-    plt.ylabel("Boost multiplier")
-    plt.title("Harvester Distance Boost")
-    plt.grid(color='black', alpha=0.1)
+    plt.xlabel("Distance", color=gold)
+    plt.ylabel("Boost multiplier", color=gold)
+    plt.title("Harvester Distance Boost", color=gold)
+    plt.grid(color=gold, alpha=0.1)
     plt.legend()
     plt.show()
 
@@ -122,6 +122,16 @@ def graph_distance_boost():
 
 
 
+
+brown = '#AC8F59'
+offwhite = '#E7E8E9'
+grey = '#a6a8ab'
+gold = '#a48955'
+fadegold = '#4c4b3f'
+darkblue = '#0e171b'
+lightblue = '#182329'
+
+plt.rcParams['grid.color'] = fadegold
 
 
 nobs = 100
@@ -136,19 +146,58 @@ def f2(x, y):
 X, Y = np.meshgrid(xx, yy)
 Z = f2(X, Y)
 
-fig = plt.figure()
+fig = plt.figure(facecolor=darkblue)
 ax = plt.axes(projection='3d')
 
-ax.set_xlabel('#Parts')
-ax.set_ylabel('#Legions')
-ax.set_zlabel('Harvester Boost');
+ax.set_xlabel('#Parts', color=gold)
+ax.set_ylabel('#Legions', color=gold)
+ax.set_zlabel('Harvester Boost', color=gold)
+ax.set_facecolor(darkblue)
 
-ax.plot_surface(X, Y, Z, rstride=1, cstride=1,
-                cmap='binary', edgecolor='none')
+ax.plot_surface(X, Y, Z,
+    rstride=1, cstride=1,
+    # linewidth=2,
+    # cmap='binary',
+    cmap='copper',
+    edgecolors='none'
+)
 
 # ax.contour3D(X, Y, Z, 100, cmap='binary')
 
-ax.set_title('Harvester Boosts');
+ax.set_title('Harvester Boosts', color=gold);
+
+ax.spines['bottom'].set_color(gold)
+ax.spines['top'].set_color(gold)
+ax.spines['left'].set_color(gold)
+ax.spines['right'].set_color(gold)
+ax.xaxis.label.set_color(gold)
+ax.tick_params(axis='x', colors=gold)
+ax.tick_params(axis='y', colors=gold)
+ax.tick_params(axis='z', colors=gold)
+
+ax.xaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
+ax.yaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
+ax.zaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
+
+xticks_pct = [100, 200, 300, 400, 500]
+xticks_label = [100, 200, 300, 400, 500]
+yticks_pct = [0, 500, 1000, 1500, 2000, 2500]
+yticks_label = [0, 500, 1000, 1500, 2000, 2500]
+zticks_pct = [1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3]
+zticks_label = [1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3]
+
+ax.set_xticks(xticks_pct, color=gold)
+ax.set_xticklabels(xticks_label, fontsize=7, color=gold)
+ax.set_yticks(yticks_pct, color=gold)
+ax.set_yticklabels(yticks_label, fontsize=7, color=gold)
+ax.set_zticks(zticks_pct, color=gold)
+ax.set_zticklabels(zticks_label, fontsize=7, color=gold)
+
+
+
+
+for axis in [ax.w_xaxis, ax.w_yaxis, ax.w_zaxis]:
+    axis.line.set_color(fadegold)
 
 # ax.view_init(20, 35)
 plt.show()

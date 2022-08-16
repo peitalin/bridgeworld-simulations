@@ -1,6 +1,28 @@
 
+## last 4 weeks, sunday GMT 00:00:00
+1656201600
+1656806400
+1657411200
+1658016000
+
+        "questsStarted": 457,
+        "questsFinished": 459,
+
+        "questsStarted": 470,
+        "questsFinished": 519,
+
+        "questsStarted": 470,
+        "questsFinished": 472,
+
+        "questsStarted": 375,
+        "questsFinished": 402,
+
+
+
+# https://thegraph.com/hosted-service/subgraph/treasureproject/bridgeworld-stats?version=current
+
 {
-  questingStats(where: { interval: Weekly, startTimestamp: 1648339200 }) {
+  questingStats(where: { interval: Weekly, startTimestamp: 1658016000 }) {
     startTimestamp
     endTimestamp
     questsStarted
@@ -13,6 +35,7 @@
     }
   }
 }
+
 {
   "data": {
     "questingStats": [
