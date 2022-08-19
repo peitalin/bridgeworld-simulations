@@ -129,6 +129,7 @@ grey = '#a6a8ab'
 gold = '#a48955'
 fadegold = '#4c4b3f'
 darkblue = '#0e171b'
+darkdarkblue = '#0c1519'
 lightblue = '#182329'
 
 plt.rcParams['grid.color'] = fadegold
@@ -146,13 +147,13 @@ def f2(x, y):
 X, Y = np.meshgrid(xx, yy)
 Z = f2(X, Y)
 
-fig = plt.figure(facecolor=darkblue)
+fig = plt.figure(facecolor=darkdarkblue)
 ax = plt.axes(projection='3d')
 
 ax.set_xlabel('#Parts', color=gold)
 ax.set_ylabel('#Legions', color=gold)
 ax.set_zlabel('Harvester Boost', color=gold)
-ax.set_facecolor(darkblue)
+ax.set_facecolor(darkdarkblue)
 
 ax.plot_surface(X, Y, Z,
     rstride=1, cstride=1,
