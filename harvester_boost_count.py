@@ -260,7 +260,8 @@ def total_user_boost_inside_harvester(time_lock_deposit='none', legions=[], trea
 
 
 
-
+def legions_boost_marginal(i):
+    return legions_boost_harvester(i+1) - legions_boost_harvester(i)
 
 
 
